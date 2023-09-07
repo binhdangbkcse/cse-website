@@ -1,0 +1,147 @@
+@import "inline-mixin.less";
+@import "parts/carousel/arrows";
+
+.@{unique-shortcode-class-name} {
+  @import "parts/carousel/bullets";
+}
+
+.defalt-top-padding (@padding) when (@padding = ~"") {
+  @padding: 10px;
+}
+@icon-padding-right-columns: @icon-padding-right;
+.defalt-top-padding(@icon-padding-right-columns);
+
+@icon-padding-right: 10px;
+@icon-padding-bottom: 10px;
+@icon-padding-left: 10px;
+// Copied from icons.less
+.dt-icon-hover-off {
+  .@{unique-shortcode-class-name}& {
+    .dt-owl-item-icon:hover:before {
+      opacity: 1;
+    }
+
+    .dt-owl-item-icon:after {
+      display: none;
+    }
+  }
+}
+ .icon-size(@i, @left-gap, @right-gap) when (ispercentage(@i)) {
+    width: calc(100% ~'-' @left-gap ~'-' @right-gap);
+    padding-top: calc(100% ~'-' @left-gap ~'-' @right-gap );
+  }
+  .img-size(@i) when not (ispercentage(@i)) {
+    width: @i;
+  }
+  
+ 
+//@media screen and (min-width: @elementor-lg-breakpoint) {
+
+   .@{unique-shortcode-class-name} {
+    --the7-slider-layout-1-margin: @icon-padding-top @icon-padding-right @icon-padding-bottom @icon-padding-left;
+    --the7-slider-layout-4-columns: minmax(0,1fr) calc(@icon-bg-size ~'+' @icon-padding-right );
+    --the7-slider-layout-4-gap: @icon-padding-left;
+    --the7-slider-layout-4-margin: @icon-padding-top @icon-padding-right @icon-padding-bottom 0;
+    --the7-slider-layout-3-columns: calc(@icon-bg-size~'+' @icon-padding-left) minmax(0,1fr);
+    --the7-slider-layout-3-gap: @icon-padding-right;
+    --the7-slider-layout-3-margin: @icon-padding-top 0 @icon-padding-bottom @icon-padding-left;
+     --the7-slider-layout-2-columns: calc(@icon-bg-size ~'+' @icon-padding-right  ~'+' @icon-padding-left) minmax(0,1fr);
+  }
+  
+
+.@{unique-shortcode-class-name} {
+  .owl-nav {
+    a, a:hover {
+      color: var(--the7-accent-color);
+    }
+  }
+
+  .owl-carousel-nav-left-position(@arrow-left-v-position, @arrow-left-h-position, @l-arrow-v-position, @l-arrow-h-position);
+  .owl-carousel-nav-right-position(@arrow-right-v-position, @arrow-right-h-position, @r-arrow-v-position, @r-arrow-h-position);
+}
+.@{unique-shortcode-class-name}.carousel-nav-display-never .owl-nav a {
+    display: none;
+  }
+ .@{unique-shortcode-class-name}.carousel-nav-display-hover .owl-nav {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-hover:hover .owl-nav {
+    opacity: 1;
+  }
+@media screen and (max-width: @elementor-lg-breakpoint - 1) {
+  
+.@{unique-shortcode-class-name} {
+    --the7-slider-layout-1-margin: @icon-padding-top-tablet @icon-padding-right-tablet @icon-padding-bottom-tablet @icon-padding-left-tablet;
+    --the7-slider-layout-4-columns: minmax(0,1fr) calc(@icon-bg-size-tablet ~'+' @icon-padding-right-tablet );
+    --the7-slider-layout-4-gap: @icon-padding-left-tablet;
+    --the7-slider-layout-4-margin: @icon-padding-top-tablet @icon-padding-right-tablet @icon-padding-bottom-tablet 0;
+    --the7-slider-layout-3-columns: calc(@icon-bg-size-tablet ~'+' @icon-padding-left-tablet) minmax(0,1fr);
+    --the7-slider-layout-3-gap: @icon-padding-right-tablet;
+    --the7-slider-layout-3-margin: @icon-padding-top-tablet 0 @icon-padding-bottom-tablet @icon-padding-left-tablet;
+     --the7-slider-layout-2-columns: calc(@icon-bg-size-tablet ~'+' @icon-padding-right-tablet  ~'+' @icon-padding-left-tablet) minmax(0,1fr);
+  }
+  
+  .@{unique-shortcode-class-name} {
+    .owl-carousel-nav-left-position(@arrow-left-v-position-tablet, @arrow-left-h-position-tablet, @l-arrow-v-position-tablet, @l-arrow-h-position-tablet);
+    .owl-carousel-nav-right-position(@arrow-right-v-position-tablet, @arrow-right-h-position-tablet, @r-arrow-v-position-tablet, @r-arrow-h-position-tablet);
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-tablet-never .owl-nav a {
+    display: none;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-tablet-hover .owl-nav a {
+    display: inline-flex;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-tablet-hover .owl-nav {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-tablet-always .owl-nav a,
+  .@{unique-shortcode-class-name}.carousel-nav-display-tablet-hover .owl-nav a {
+    display: inline-flex;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-tablet-always .owl-nav,
+  .@{unique-shortcode-class-name}.carousel-nav-display-tablet-hover:hover .owl-nav {
+    opacity: 1;
+  }
+}
+@media screen and (max-width: @elementor-md-breakpoint - 1) {
+
+  
+  .@{unique-shortcode-class-name} {
+    --the7-slider-layout-1-margin: @icon-padding-top-mobile @icon-padding-right-mobile @icon-padding-bottom-mobile @icon-padding-left-mobile;
+    --the7-slider-layout-4-columns: minmax(0,1fr) calc(@icon-bg-size-mobile ~'+' @icon-padding-right-mobile );
+    --the7-slider-layout-4-gap: @icon-padding-left-mobile;
+    --the7-slider-layout-4-margin: @icon-padding-top-mobile @icon-padding-right-mobile @icon-padding-bottom-mobile 0;
+    --the7-slider-layout-3-columns: calc(@icon-bg-size-mobile ~'+' @icon-padding-left-mobile) minmax(0,1fr);
+    --the7-slider-layout-3-gap: @icon-padding-right-mobile;
+    --the7-slider-layout-3-margin: @icon-padding-top-mobile 0 @icon-padding-bottom-mobile @icon-padding-left-mobile;
+     --the7-slider-layout-2-columns: calc(@icon-bg-size-mobile ~'+' @icon-padding-right-mobile  ~'+' @icon-padding-left-mobile) minmax(0,1fr);
+  }
+  
+
+   .@{unique-shortcode-class-name} {
+    .owl-carousel-nav-left-position(@arrow-left-v-position-mobile, @arrow-left-h-position-mobile, @l-arrow-v-position-mobile, @l-arrow-h-position-mobile);
+    .owl-carousel-nav-right-position(@arrow-right-v-position-mobile, @arrow-right-h-position-mobile, @r-arrow-v-position-mobile, @r-arrow-h-position-mobile);
+  }
+   .@{unique-shortcode-class-name}.carousel-nav-display-mobile-never .owl-nav a {
+    display: none;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-mobile-hover .owl-nav a {
+    display: inline-flex;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-mobile-hover .owl-nav {
+    opacity: 0;
+    transition: opacity 0.3s;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-mobile-always .owl-nav a,
+  .@{unique-shortcode-class-name}.carousel-nav-display-mobile-hover .owl-nav a {
+    display: inline-flex;
+  }
+  .@{unique-shortcode-class-name}.carousel-nav-display-mobile-always .owl-nav,
+  .@{unique-shortcode-class-name}.carousel-nav-display-mobile-hover:hover .owl-nav {
+    opacity: 1;
+  }
+}
+
+// DYNAMIC_IMPORT_BOTTOM
