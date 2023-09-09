@@ -92,6 +92,8 @@ define( 'WP_SITEURL', 'https://cse.hcmut.edu.vn' );
 define( 'WP_HOME', 'https://cse.hcmut.edu.vn/' );
 define( 'WP_CONTENT_URL', 'https://cse.hcmut.edu.vn/wp-content');
 define(' WP_CONTENT_DIR', '/bitnami/wordpress/wp-content');
+define( 'WP_INCLUDES_URL', 'https://cse.hcmut.edu.vn/wp-includes');
+define(' WP_INCLUDES_DIR', '/bitnami/wordpress/wp-includes');
 define( 'WP_PLUGIN_DIR', '/bitnami/wordpress/wp-content/plugins' );
 define( 'PLUGINDIR', 'bitnami/wordpress/wp-content/plugins' );
 define( 'WP_PLUGIN_URL', 'https://cse.hcmut.edu.vn/wp-content/plugins' );
