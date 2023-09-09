@@ -100,6 +100,8 @@ define( 'WP_PLUGIN_URL', 'https://cse.hcmut.edu.vn/wp-content/plugins' );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
+if (strpos($_SERVER['HTTP_X_FORWARDED_PROTO'], 'https') !== false)
+   $_SERVER['HTTPS']='on';
 
 
 /* That's all, stop editing! Happy publishing. */
