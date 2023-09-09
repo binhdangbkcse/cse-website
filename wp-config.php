@@ -88,6 +88,13 @@ $table_prefix = 'wp_';
  * @link https://wordpress.org/documentation/article/debugging-in-wordpress/
  */
 define( 'WP_DEBUG', false );
+define( 'WP_SITEURL', 'https://cse.hcmut.edu.vn' );
+define( 'WP_HOME', 'https://cse.hcmut.edu.vn/' );
+define( 'WP_CONTENT_URL', 'https://cse.hcmut.edu.vn/wp-content');
+define(' WP_CONTENT_DIR', '/bitnami/wordpress/wp-content');
+define( 'WP_PLUGIN_DIR', '/bitnami/wordpress/wp-content/plugins' );
+define( 'PLUGINDIR', 'bitnami/wordpress/wp-content/plugins' );
+define( 'WP_PLUGIN_URL', 'https://cse.hcmut.edu.vn/wp-content/plugins' );
 
 /* Add any custom values between this line and the "stop editing" line. */
 
