@@ -58,6 +58,10 @@
     font-size: 24px;
 }
 
+.the7-e-tabs-wrapper .the7-e-tabs-nav .elementor-icon svg {
+    transition: all 0.3s ease;
+}
+
 .elementor-widget-the7-tabs .the7-e-tab-title{
     --icon-title-spacing: 10px;
     --icon-title-margin: 0 0 0 var(--icon-title-spacing);

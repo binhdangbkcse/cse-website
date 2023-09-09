@@ -134,7 +134,7 @@ abstract class The7_Elementor_Widget_Base extends Widget_Base {
 	 * @return string Element title.
 	 */
 	public function get_title() {
-		return 'The7 ' . $this->the7_title();
+		return $this->the7_title();
 	}
 
 	/**
@@ -320,12 +320,23 @@ abstract class The7_Elementor_Widget_Base extends Widget_Base {
 	 *
 	 * @return T
 	 */
-	protected function template( $name ) {
+	public function template( $name ) {
 		if ( ! isset( $this->widget_templates[ $name ] ) ) {
 			$this->widget_templates[ $name ] = new $name( $this );
 		}
 
 		return $this->widget_templates[ $name ];
+	}
+
+	/**
+	 * Check if widget has template.
+	 *
+	 * @param class-string $name Template name.
+	 *
+	 * @return bool
+	 */
+	public function has_template( $name ) {
+		return isset( $this->widget_templates[ $name ] );
 	}
 
 	/**
@@ -465,6 +476,11 @@ abstract class The7_Elementor_Widget_Base extends Widget_Base {
 	 */
 	public function get_elementor_icon_html( $icon, $tag = 'i', $attributes = [] ) {
 		$attributes = (array) wp_parse_args( $attributes, [ 'aria-hidden' => 'true' ] );
+
+		if ( isset( $attributes['class'] ) && ! is_array( $attributes['class'] ) ) {
+			$attributes['class'] = [ $attributes['class'] ];
+		}
+
 		ob_start();
 		Icons_Manager::render_icon( $icon, $attributes, $tag );
 
@@ -509,14 +525,50 @@ abstract class The7_Elementor_Widget_Base extends Widget_Base {
 	 */
 	final public function add_basic_responsive_control( $id, array $args, $options = [] ) {
 		if ( the7_is_elementor3_4() ) {
-			$devices         = [
+			$args['the7_is_basic_responsive'] = true;
+			$args['devices']                  = [
 				Breakpoints_Manager::BREAKPOINT_KEY_DESKTOP,
 				Breakpoints_Manager::BREAKPOINT_KEY_TABLET,
 				Breakpoints_Manager::BREAKPOINT_KEY_MOBILE,
 			];
-			$args['devices'] = $devices;
 		}
 		parent::add_responsive_control( $id, $args, $options );
+	}
+
+	/**
+	 * Get active settings.
+	 *
+	 * Retrieve the settings from all the active controls.
+	 *
+	 * @param  array  $controls  Optional. An array of controls. Default is null.
+	 * @param  array  $settings  Optional. Controls settings. Default is null.
+	 *
+	 * @return array Active settings.
+	 */
+	public function get_active_settings( $settings = null, $controls = null ) {
+		$active_settings     = parent::get_active_settings( $settings, $controls );
+		$mod_active_settings = $active_settings;
+
+		if ( is_array( $controls ) ) {
+			foreach ( $active_settings as $setting => $value ) {
+				if ( ! isset( $controls[ $setting ] ) ) {
+					continue;
+				}
+
+				$control = $controls[ $setting ];
+
+				if ( ! empty( $control['the7_is_basic_responsive'] ) ) {
+					if ( ! array_key_exists( "{$setting}_tablet", $active_settings ) ) {
+						$mod_active_settings[ "{$setting}_tablet" ] = null;
+					}
+					if ( ! array_key_exists( "{$setting}_mobile", $active_settings ) ) {
+						$mod_active_settings[ "{$setting}_mobile" ] = null;
+					}
+				}
+			}
+		}
+
+		return $mod_active_settings;
 	}
 
 	/**
@@ -596,8 +648,9 @@ abstract class The7_Elementor_Widget_Base extends Widget_Base {
 
 		$megaselectors = [];
 		foreach ( $values as $selector_prefix => $value ) {
+			$updated_selectors = $selectors;
 			if ( $selector_prefix ) {
-				$selectors = array_map(
+				$updated_selectors = array_map(
 					static function ( $e ) use ( $selector_prefix ) {
 						return $e . $selector_prefix;
 					},
@@ -605,7 +658,7 @@ abstract class The7_Elementor_Widget_Base extends Widget_Base {
 				);
 			}
 
-			$megaselectors += array_fill_keys( $selectors, $value );
+			$megaselectors += array_fill_keys( $updated_selectors, $value );
 		}
 
 		return $megaselectors;

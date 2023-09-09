@@ -1,0 +1,13 @@
+.elementor-widget-the7-woocommerce-product-sale-flash .the7-onsale {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 3.236em;
+  min-width: max-content;
+  width: 100%;
+  padding: 0.202em;
+  font-size: 1em;
+  background-color: #77a464;
+  color: #fff;
+}

@@ -16,6 +16,8 @@ use Elementor\Icons_Manager;
 use Elementor\Utils;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Button;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -43,6 +45,13 @@ class Image_Box extends The7_Elementor_Widget_Base {
 	 */
 	protected function the7_icon() {
 		return 'eicon-icon-box';
+	}
+
+	/**
+	 * @return string[]
+	 */
+	protected function the7_keywords() {
+		return [ 'image', 'box' ];
 	}
 
 	/**
@@ -99,6 +108,8 @@ class Image_Box extends The7_Elementor_Widget_Base {
 				],
 			]
 		);
+
+		$this->template( Image_Size::class )->add_style_controls();
 
 		$this->add_control(
 			'title_heading',
@@ -264,7 +275,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'box_height',
 			[
-				'label'      => esc_html__( 'Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -283,6 +294,31 @@ class Image_Box extends The7_Elementor_Widget_Base {
 				],
 				'selectors'  => [
 					'{{WRAPPER}} .the7-box-wrapper' => 'min-height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+		$this->add_basic_responsive_control(
+			'box_fixed_height',
+			[
+				'label'      => esc_html__( 'Height', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'size_units' => [ 'px', 'vh' ],
+				'range'      => [
+					'px' => [
+						'min' => 1,
+						'max' => 500,
+					],
+					'vh' => [
+						'min' => 1,
+						'max' => 100,
+					],
+				],
+				'selectors'  => [
+					'{{WRAPPER}} .the7-box-wrapper' => 'height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -486,101 +522,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 			]
 		);
 
-		$this->add_responsive_control(
-			'image_ratio',
-			[
-				'label'       => esc_html__( 'Image Box Ratio', 'the7mk2' ),
-				'description' => esc_html__( 'Lieve empty to use original proportions', 'the7mk2' ),
-				'type'        => Controls_Manager::SLIDER,
-				'default'     => [
-					'size' => '',
-				],
-				'range'       => [
-					'px' => [
-						'min'  => 0.1,
-						'max'  => 2,
-						'step' => 0.01,
-					],
-				],
-				'selectors'   => [
-					'{{WRAPPER}}' => '--aspect-ratio: {{SIZE}};',
-				],
-			]
-		);
-
-		$object_fit_options            = [
-			'fill'    => esc_html__( 'Fill', 'the7mk2' ),
-			'cover'   => esc_html__( 'Cover', 'the7mk2' ),
-			'contain' => esc_html__( 'Contain', 'the7mk2' ),
-		];
-		$object_fit_options_on_devices = [ '' => esc_html__( 'Default', 'the7mk2' ) ] + $object_fit_options;
-		$this->add_responsive_control(
-			'object_fit',
-			[
-				'label'                => esc_html__( 'Object Fit', 'the7mk2' ),
-				'type'                 => Controls_Manager::SELECT,
-				'condition'            => [
-					'image_ratio[size]!' => '',
-				],
-				'options'              => $object_fit_options,
-				'device_args'          => [
-					'tablet' => [
-						'default' => '',
-						'options' => $object_fit_options_on_devices,
-					],
-					'mobile' => [
-						'default' => '',
-						'options' => $object_fit_options_on_devices,
-					],
-				],
-				'selectors_dictionary' => [
-					'fill'    => $this->combine_to_css_vars_definition_string(
-						[
-							'position'         => 'static',
-							'object-fit'       => 'fill',
-							'width'            => 'initial',
-							'svg-width'        => '100%',
-							'height'           => 'auto',
-							'max-height'       => 'unset',
-							'max-width'        => '100%',
-							'img-aspect-ratio' => 'var(--aspect-ratio)',
-							'box-width'        => 'var(--image-size, auto)',
-						]
-					),
-					'cover'   => $this->combine_to_css_vars_definition_string(
-						[
-							'position'         => 'absolute',
-							'object-fit'       => 'cover',
-							'width'            => '100%',
-							'svg-width'        => '100%',
-							'height'           => '100%',
-							'max-height'       => '100%',
-							'max-width'        => '100%',
-							'img-aspect-ratio' => 'var(--aspect-ratio)',
-							'box-width'        => 'var(--image-size, var(--img-width))',
-						]
-					),
-					'contain' => $this->combine_to_css_vars_definition_string(
-						[
-							'position'         => 'static',
-							'object-fit'       => 'contain',
-							'width'            => 'auto',
-							'svg-width'        => '100%',
-							'height'           => 'auto',
-							'max-height'       => '100%',
-							'max-width'        => '100%',
-							'img-aspect-ratio' => 'var(--aspect-ratio)',
-							'box-width'        => 'var(--image-size, auto)',
-						]
-					),
-				],
-				'default'              => 'cover',
-				'selectors'            => [
-					'{{WRAPPER}}' => '{{VALUE}};',
-				],
-				'prefix_class'         => 'preserve-img-ratio-',
-			]
-		);
+		$this->template( Image_Aspect_Ratio::class )->add_style_controls();
 
 		$this->add_responsive_control(
 			'position',
@@ -759,7 +701,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 				'default'   => '#FFFFFF',
 				'selectors' => [
 					'{{WRAPPER}} .the7-hover-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .the7-hover-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .the7-hover-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'hover_icon[value]!' => '',
@@ -872,7 +814,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_opacity',
 			[
-				'label'      => esc_html__( 'Image opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Image opacity (%)', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => '%',
@@ -971,7 +913,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_hover_opacity',
 			[
-				'label'      => esc_html__( 'Image opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Image opacity (%)', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => '%',
@@ -1081,7 +1023,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .box-heading, {{WRAPPER}} .box-heading a { transition: color 0.3s ease; } {{WRAPPER}} .the7-box-wrapper .box-heading:hover, {{WRAPPER}} .the7-box-wrapper .box-heading:hover a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .the7-box-wrapper .box-heading:hover, {{WRAPPER}} .the7-box-wrapper .box-heading:hover a' => 'color: {{VALUE}};',
 					'{{WRAPPER}} a.the7-box-wrapper:hover .box-heading, {{WRAPPER}} a.the7-box-wrapper:hover .box-heading a' => 'color: {{VALUE}};',
 				],
 			]
@@ -1153,7 +1095,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .box-description { transition: color 0.3s ease; } {{WRAPPER}} .box-description:hover, {{WRAPPER}} a.the7-box-wrapper:hover .box-description' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .box-description:hover, {{WRAPPER}} a.the7-box-wrapper:hover .box-description' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -1205,35 +1147,36 @@ class Image_Box extends The7_Elementor_Widget_Base {
 		$title_link_close     = '';
 
 		$this->add_link_attributes( 'link', $settings['link'] );
-		$btn_attributes = $this->get_render_attribute_string( 'link' );
+		$btn_attributes    = $this->get_render_attribute_string( 'link' );
+		$img_wrapper_class = implode( ' ', array_filter( [
+			'post-thumbnail-rollover',
+			$this->template( Image_Size::class )->get_wrapper_class(),
+			$this->template( Image_Aspect_Ratio::class )->get_wrapper_class(),
+		] ) );
 
 		if ( 'button' === $settings['link_click'] ) {
 			$title_link         = '<a ' . $btn_attributes . '>';
 			$title_link_close   = '</a>';
-			$icon_wrapper       = '<a class="post-thumbnail-rollover" ' . $btn_attributes . '>';
+			$icon_wrapper       = '<a class="' . $img_wrapper_class . '" ' . $btn_attributes . '>';
 			$icon_wrapper_close = '</a>';
 		} else {
 			$parent_wrapper       = '<a class="the7-box-wrapper the7-elementor-widget box-hover ' . $this->get_unique_class() . '" ' . $btn_attributes . '>';
 			$parent_wrapper_close = '</a>';
-			$icon_wrapper         = '<div class="post-thumbnail-rollover">';
+			$icon_wrapper         = '<div class="' . $img_wrapper_class . '">';
 			$icon_wrapper_close   = '</div>';
 		}
 		?>
 
 		<?php echo $parent_wrapper; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<div class="box-content-wrapper">
-				<?php if ( ! empty( $settings['image']['id'] ) ) {?>
+				<?php if ( ! empty( $settings['image']['id'] ) ) { ?>
 				<div class="elementor-image-div ">
 					<?php
 					echo $icon_wrapper; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					dt_get_thumb_img(
-						[
-							'img_id' => empty( $settings['image']['id'] ) ? 0 : $settings['image']['id'],
-							'wrap'   => '<img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% />',
-							'echo'   => true,
-						]
-					);
-					
+
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					echo $this->template( Image_Size::class )->get_image( $settings['image']['id'] );
+
 					echo '<span class="the7-hover-icon">';
 					Icons_Manager::render_icon(
 						$this->get_settings_for_display( 'hover_icon' ),
@@ -1245,7 +1188,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 					echo $icon_wrapper_close; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
 				</div>
-				<?php }	?>
+				<?php } ?>
 
 				<div class="box-content">
 					<?php
@@ -1270,7 +1213,7 @@ class Image_Box extends The7_Elementor_Widget_Base {
 						$this->remove_render_attribute( 'box-button' );
 
 						$tag = 'div';
-						if ( 'button' === $settings['link_click'] ) {
+						if ( $settings['link_click'] === 'button' ) {
 							$tag = 'a';
 							$this->add_render_attribute( 'box-button', $this->get_render_attributes( 'link' ) ?: [] );
 						}

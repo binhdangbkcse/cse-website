@@ -20,7 +20,7 @@ class Product_Related extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Product Related', 'the7mk2' );
+		return esc_html__( 'Product Related', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -49,20 +49,20 @@ class Product_Related extends The7_Elementor_Widget_Base {
 
 	protected function register_controls() {
 		$this->start_controls_section( 'section_product_tabs_style', [
-			'label' => __( 'Styles', 'the7mk2' ),
+			'label' => esc_html__( 'Styles', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
 		$this->add_control( 'wc_style_warning', [
 			'type'            => Controls_Manager::RAW_HTML,
-			'raw'             => __( 'The style of this widget is often can be affected by thirdparty plugins. If you experience any such issue, try to deactivate related plugins.', 'the7mk2' ),
+			'raw'             => esc_html__( 'The style of this widget is often can be affected by thirdparty plugins. If you experience any such issue, try to deactivate related plugins.', 'the7mk2' ),
 			'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
 		] );
 
 		$this->add_control( 'heading_title', [
-			'label'   => __( 'Title', 'the7mk2' ),
+			'label'   => esc_html__( 'Title', 'the7mk2' ),
 			'type'    => Controls_Manager::TEXT,
-			'description' => __( 'Leave empty to use default text', 'the7mk2' ),
+			'description' => esc_html__( 'Leave empty to use default text', 'the7mk2' ),
 			'default' => '',
 		] );
 		$this->end_controls_section();

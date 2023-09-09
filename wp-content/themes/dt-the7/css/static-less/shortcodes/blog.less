@@ -266,13 +266,13 @@ article {
 		}
 		.content-align-right & {
 			text-align: right;
-			.justify-content(@justify: right);
-			.align-self(@align: right);
+			.justify-content(@justify: flex-end);
+			.align-self(@align: flex-end);
 		}
 		.content-align-left & {
 			text-align: left;
-			.justify-content(@justify: left);
-			.align-self(@align: left);
+			.justify-content(@justify: flex-start);
+			.align-self(@align: flex-start);
 		}
 
 		@media all and (-ms-high-contrast: none) {

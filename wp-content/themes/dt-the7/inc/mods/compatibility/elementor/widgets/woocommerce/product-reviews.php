@@ -21,7 +21,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 	}
 
 	public function the7_title() {
-		return __( 'Product Reviews', 'the7mk2' );
+		return esc_html__( 'Product Reviews', 'the7mk2' );
 	}
 
 	public function the7_icon() {
@@ -32,7 +32,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		return [ 'woocommerce-elements-single' ];
 	}
 
-	public function the7_keywords() {
+	protected function the7_keywords() {
 		return [ 'comments', 'post', 'response', 'form' ];
 	}
 
@@ -97,7 +97,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 	public function display_fake_notice() {
 		?>
-        <p class="comment-notes elementor-field-group"><?php echo __( 'This notice would be visible only when not logged in', 'the7mk2' ); ?></p>
+        <p class="comment-notes elementor-field-group"><?php echo esc_html__( 'This notice would be visible only when not logged in', 'the7mk2' ); ?></p>
 		<?php
 	}
 
@@ -163,7 +163,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 				return '<p class="elementor-field-group comment-form-comment ' . $repeater_id . '">
                             <label for="comment">' . esc_html( $item['field_label'] ) . '&nbsp;<span class="required">*</span>
                             </label>
-                            <textarea id="comment" name="comment" class="elementor-field elementor-field-textual elementor-size-' . $settings['input_size'] . '" cols="45" placeholder= "' . __( $item['placeholder'], 'the7mk2' ) . '" rows="' . $item['rows'] . '" required></textarea>
+                            <textarea id="comment" name="comment" class="elementor-field elementor-field-textual elementor-size-' . $settings['input_size'] . '" cols="45" placeholder="' . esc_attr( $item['placeholder'] ) . '" rows="' . esc_attr( $item['rows'] ) . '" required></textarea>
                         </p>';
 			}
 			default:
@@ -240,15 +240,15 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 	}
 	protected function add_layout_controls() {
 		$this->start_controls_section( 'section_layout', [
-			'label' => __( 'Layout', 'the7mk2' ),
+			'label' => esc_html__( 'Layout', 'the7mk2' ),
 		] );
 
 		$text_columns = range( 1, 2 );
 		$text_columns = array_combine( $text_columns, $text_columns );
-		$text_columns[''] = __( 'Default', 'the7mk2' );
+		$text_columns[''] = esc_html__( 'Default', 'the7mk2' );
 
 		$this->add_basic_responsive_control( 'text_columns', [
-			'label'     => __( 'Columns', 'the7mk2' ),
+			'label'     => esc_html__( 'Columns', 'the7mk2' ),
 			'type'      => Controls_Manager::SELECT,
 			'options'   => $text_columns,
 			'selectors' => [
@@ -264,7 +264,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_basic_responsive_control( 'review_column_gap', [
-			'label'      => __( 'Rows(Columns) Gap', 'the7mk2' ),
+			'label'      => esc_html__( 'Rows(Columns) Gap', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', '%', 'em', 'vw' ],
 			'range'      => [
@@ -306,10 +306,10 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'hide_comments_if_empty', [
-			'label'        => __( 'Comments Section If Empty', 'the7mk2' ),
+			'label'        => esc_html__( 'Comments Section If Empty', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_on'     => __( 'Show', 'the7mk2' ),
-			'label_off'    => __( 'Hide', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+			'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 			'return_value' => 'y',
 			'default'      => '',
 			'separator'    => 'before',
@@ -319,39 +319,39 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
     }
 	protected function add_form_fields_controls() {
 		$this->start_controls_section( 'section_content', [
-			'label' => __( 'Form Fields', 'the7mk2' ),
+			'label' => esc_html__( 'Form Fields', 'the7mk2' ),
 		] );
 
 		$this->add_form_fields_repeater();
 
 		$this->add_control( 'input_size', [
-			'label'     => __( 'Input Size', 'the7mk2' ),
+			'label'     => esc_html__( 'Input Size', 'the7mk2' ),
 			'type'      => Controls_Manager::SELECT,
 			'options'   => [
-				'xs' => __( 'Extra Small', 'the7mk2' ),
-				'sm' => __( 'Small', 'the7mk2' ),
-				'md' => __( 'Medium', 'the7mk2' ),
-				'lg' => __( 'Large', 'the7mk2' ),
-				'xl' => __( 'Extra Large', 'the7mk2' ),
+				'xs' => esc_html__( 'Extra Small', 'the7mk2' ),
+				'sm' => esc_html__( 'Small', 'the7mk2' ),
+				'md' => esc_html__( 'Medium', 'the7mk2' ),
+				'lg' => esc_html__( 'Large', 'the7mk2' ),
+				'xl' => esc_html__( 'Extra Large', 'the7mk2' ),
 			],
 			'default'   => 'sm',
 			'separator' => 'before',
 		] );
 
 		$this->add_control( 'show_labels', [
-			'label'        => __( 'Label', 'the7mk2' ),
+			'label'        => esc_html__( 'Label', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_on'     => __( 'Show', 'the7mk2' ),
-			'label_off'    => __( 'Hide', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+			'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 			'return_value' => 'yes',
 			'default'      => 'yes',
 			'separator'    => 'before',
 		] );
 		$this->add_control( 'mark_required', [
-			'label'        => __( 'Required Mark', 'the7mk2' ),
+			'label'        => esc_html__( 'Required Mark', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_on'     => __( 'Show', 'the7mk2' ),
-			'label_off'    => __( 'Hide', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+			'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 			'default'      => 'yes',
 			'return_value' => 'yes',
 		] );
@@ -362,27 +362,27 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		$repeater = new Repeater();
 
 		$field_types = [
-			'author' => __( 'Name', 'the7mk2' ),
-			'email'  => __( 'Email', 'the7mk2' ),
-			'review' => __( 'Review', 'the7mk2' ),
-			'rating' => __( 'Rating', 'the7mk2' ),
+			'author' => esc_html__( 'Name', 'the7mk2' ),
+			'email'  => esc_html__( 'Email', 'the7mk2' ),
+			'review' => esc_html__( 'Review', 'the7mk2' ),
+			'rating' => esc_html__( 'Rating', 'the7mk2' ),
 		];
 
 		$repeater->add_control( 'field_type', [
-			'label'   => __( 'Type', 'the7mk2' ),
+			'label'   => esc_html__( 'Type', 'the7mk2' ),
 			'type'    => Controls_Manager::HIDDEN,
 			'options' => $field_types,
 			'default' => 'author',
 		] );
 
 		$repeater->add_control( 'field_label', [
-			'label'   => __( 'Label', 'the7mk2' ),
+			'label'   => esc_html__( 'Label', 'the7mk2' ),
 			'type'    => Controls_Manager::TEXT,
 			'default' => '',
 		] );
 
 		$repeater->add_control( 'placeholder', [
-			'label'      => __( 'Placeholder', 'the7mk2' ),
+			'label'      => esc_html__( 'Placeholder', 'the7mk2' ),
 			'type'       => Controls_Manager::TEXT,
 			'default'    => '',
 			'conditions' => [
@@ -399,7 +399,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$repeater->add_responsive_control( 'width', [
-			'label'     => __( 'Column Width', 'the7mk2' ),
+			'label'     => esc_html__( 'Column Width', 'the7mk2' ),
 			'type'      => Controls_Manager::SELECT,
 			'options'   => $this->get_field_width_options(),
 			'default'   => '100',
@@ -409,7 +409,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$repeater->add_control( 'rows', [
-			'label'      => __( 'Rows', 'the7mk2' ),
+			'label'      => esc_html__( 'Rows', 'the7mk2' ),
 			'type'       => Controls_Manager::NUMBER,
 			'default'    => 4,
 			'conditions' => [
@@ -428,24 +428,24 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			'default'      => [
 				[
 					'field_type'  => 'rating',
-					'field_label' => __( 'Your rating', 'the7mk2' ),
+					'field_label' => esc_html__( 'Your rating', 'the7mk2' ),
 				],
 				[
 					'field_type'  => 'author',
-					'field_label' => __( 'Name', 'the7mk2' ),
-					'placeholder' => __( 'Name', 'the7mk2' ),
+					'field_label' => esc_html__( 'Name', 'the7mk2' ),
+					'placeholder' => esc_html__( 'Name', 'the7mk2' ),
 					'width'       => '100',
 				],
 				[
 					'field_type'  => 'email',
-					'field_label' => __( 'Email', 'the7mk2' ),
-					'placeholder' => __( 'Email', 'the7mk2' ),
+					'field_label' => esc_html__( 'Email', 'the7mk2' ),
+					'placeholder' => esc_html__( 'Email', 'the7mk2' ),
 					'width'       => '100',
 				],
 				[
 					'field_type'  => 'review',
-					'field_label' => __( 'Message', 'the7mk2' ),
-					'placeholder' => __( 'Message', 'the7mk2' ),
+					'field_label' => esc_html__( 'Message', 'the7mk2' ),
+					'placeholder' => esc_html__( 'Message', 'the7mk2' ),
 					'width'       => '100',
 				],
 			],
@@ -465,7 +465,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 	 */
 	protected function get_field_width_options() {
 		return [
-			''    => __( 'Default', 'the7mk2' ),
+			''    => esc_html__( 'Default', 'the7mk2' ),
 			'100' => '100%',
 			'80'  => '80%',
 			'75'  => '75%',
@@ -483,11 +483,11 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 	protected function add_button_controls() {
 		$this->start_controls_section( 'section_btn', [
-			'label' => __( 'Button', 'the7mk2' ),
+			'label' => esc_html__( 'Button', 'the7mk2' ),
 		] );
 
 		$this->add_basic_responsive_control( 'button_width', [
-			'label'              => __( 'Column Width', 'the7mk2' ),
+			'label'              => esc_html__( 'Column Width', 'the7mk2' ),
 			'type'               => Controls_Manager::SELECT,
 			'options'            => $this->get_field_width_options(),
 			'default'            => '100',
@@ -497,23 +497,23 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_basic_responsive_control( 'button_align', [
-			'label'        => __( 'Alignment', 'the7mk2' ),
+			'label'        => esc_html__( 'Alignment', 'the7mk2' ),
 			'type'         => Controls_Manager::CHOOSE,
 			'options'      => [
 				'start'   => [
-					'title' => __( 'Left', 'the7mk2' ),
+					'title' => esc_html__( 'Left', 'the7mk2' ),
 					'icon'  => 'eicon-text-align-left',
 				],
 				'center'  => [
-					'title' => __( 'Center', 'the7mk2' ),
+					'title' => esc_html__( 'Center', 'the7mk2' ),
 					'icon'  => 'eicon-text-align-center',
 				],
 				'end'     => [
-					'title' => __( 'Right', 'the7mk2' ),
+					'title' => esc_html__( 'Right', 'the7mk2' ),
 					'icon'  => 'eicon-text-align-right',
 				],
 				'stretch' => [
-					'title' => __( 'Justified', 'the7mk2' ),
+					'title' => esc_html__( 'Justified', 'the7mk2' ),
 					'icon'  => 'eicon-text-align-justify',
 				],
 			],
@@ -521,34 +521,34 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			'prefix_class' => 'elementor%s-button-align-',
 		] );
 		$this->add_control( 'button_text', [
-			'label'       => __( 'Text', 'the7mk2' ),
+			'label'       => esc_html__( 'Text', 'the7mk2' ),
 			'type'        => Controls_Manager::TEXT,
-			'default'     => __( 'Send', 'the7mk2' ),
-			'placeholder' => __( 'Send', 'the7mk2' ),
+			'default'     => esc_html__( 'Send', 'the7mk2' ),
+			'placeholder' => esc_html__( 'Send', 'the7mk2' ),
 		] );
 		$this->end_controls_section();
 	}
 
 	protected function add_content_style_controls() {
 		$this->start_controls_section( 'section_product_reviews_style', [
-			'label' => __( 'Content', 'the7mk2' ),
+			'label' => esc_html__( 'Content', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
 		$this->add_basic_responsive_control( 'alignment', [
-			'label'                => __( 'Alignment', 'the7mk2' ),
+			'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 			'type'                 => Controls_Manager::CHOOSE,
 			'options'              => [
 				'left'   => [
-					'title' => __( 'Left', 'the7mk2' ),
+					'title' => esc_html__( 'Left', 'the7mk2' ),
 					'icon'  => 'eicon-text-align-left',
 				],
 				'center' => [
-					'title' => __( 'Center', 'the7mk2' ),
+					'title' => esc_html__( 'Center', 'the7mk2' ),
 					'icon'  => 'eicon-text-align-center',
 				],
 				'right'  => [
-					'title' => __( 'Right', 'the7mk2' ),
+					'title' => esc_html__( 'Right', 'the7mk2' ),
 					'icon'  => 'eicon-text-align-right',
 				],
 			],
@@ -564,14 +564,14 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'titles_title', [
-			'label'     => __( 'Titles', 'the7mk2' ),
+			'label'     => esc_html__( 'Titles', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		] );
 		$selector = '{{WRAPPER}} #comments .woocommerce-Reviews-title, {{WRAPPER}} #reply-title';
 		$this->add_group_control( Group_Control_Typography::get_type(), [
 			'name'           => 'titles_typography',
-			'label'          => __( 'Typography', 'the7mk2' ),
+			'label'          => esc_html__( 'Typography', 'the7mk2' ),
 			'selector'       => $selector,
 			'fields_options' => [
 				'font_family' => [
@@ -595,7 +595,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_control( 'titles_color', [
-			'label'     => __( 'Font Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'alpha'     => true,
 			'default'   => '',
@@ -605,7 +605,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'titles_spacing', [
-			'label'      => __( 'Bottom Spacing', 'the7mk2' ),
+			'label'      => esc_html__( 'Bottom Spacing', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -625,7 +625,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'notices_title', [
-			'label'     => __( 'Notices', 'the7mk2' ),
+			'label'     => esc_html__( 'Notices', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		] );
@@ -635,7 +635,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 		$this->add_group_control( Group_Control_Typography::get_type(), [
 			'name'           => 'notices_typography',
-			'label'          => __( 'Typography', 'the7mk2' ),
+			'label'          => esc_html__( 'Typography', 'the7mk2' ),
 			'fields_options' => [
 				'font_family' => [
 					'default' => '',
@@ -660,7 +660,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'notices_color', [
-			'label'     => __( 'Font Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'alpha'     => true,
 			'default'   => '',
@@ -675,12 +675,12 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 	protected function add_form_style_controls() {
 		$this->start_controls_section( 'section_form_style', [
-			'label' => __( 'Form', 'the7mk2' ),
+			'label' => esc_html__( 'Form', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
 		$this->add_control( 'column_gap', [
-			'label'     => __( 'Columns Gap', 'the7mk2' ),
+			'label'     => esc_html__( 'Columns Gap', 'the7mk2' ),
 			'type'      => Controls_Manager::SLIDER,
 			'default'   => [
 				'size' => 20,
@@ -698,7 +698,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'row_gap', [
-			'label'     => __( 'Rows Gap', 'the7mk2' ),
+			'label'     => esc_html__( 'Rows Gap', 'the7mk2' ),
 			'type'      => Controls_Manager::SLIDER,
 			'default'   => [
 				'size' => 20,
@@ -716,7 +716,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'heading_label', [
-			'label'     => __( 'Labels & Content', 'the7mk2' ),
+			'label'     => esc_html__( 'Labels & Content', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		] );
@@ -729,7 +729,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'label_color', [
-			'label'     => __( 'Text Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				$selector => 'color: {{VALUE}};',
@@ -737,7 +737,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'mark_required_color', [
-			'label'     => __( 'Asterisk  Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Asterisk  Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -749,7 +749,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'label_spacing', [
-			'label'     => __( 'Label Bottom Spacing', 'the7mk2' ),
+			'label'     => esc_html__( 'Label Bottom Spacing', 'the7mk2' ),
 			'type'      => Controls_Manager::SLIDER,
 			'default'   => [
 				'size' => 5,
@@ -773,7 +773,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 	protected function add_field_style_controls() {
 		$this->start_controls_section( 'section_field_style', [
-			'label' => __( 'Field', 'the7mk2' ),
+			'label' => esc_html__( 'Field', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
@@ -785,7 +785,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'field_text_color', [
-			'label'     => __( 'Text Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				$selector => 'color: {{VALUE}};',
@@ -795,7 +795,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		$selector = '{{WRAPPER}} p[class*="comment-form-"] input, {{WRAPPER}} p[class*="comment-form-"] textarea';
 
 		$this->add_control( 'field_background_color', [
-			'label'     => __( 'Background Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				$selector => 'background-color: {{VALUE}};',
@@ -804,7 +804,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'field_border_color', [
-			'label'     => __( 'Border Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				$selector => 'border-color: {{VALUE}};',
@@ -813,7 +813,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'field_border_width', [
-			'label'      => __( 'Border Width', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px' ],
 			'selectors'  => [
@@ -822,7 +822,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'field_border_radius', [
-			'label'      => __( 'Border Radius', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', '%' ],
 			'selectors'  => [
@@ -835,7 +835,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 	protected function add_buttons_style_controls() {
 		$this->start_controls_section( 'section_button_style', [
-			'label' => __( 'Button', 'the7mk2' ),
+			'label' => esc_html__( 'Button', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
@@ -856,12 +856,12 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		$this->start_controls_tabs( 'tabs_button_style' );
 
 		$this->start_controls_tab( 'tab_button_normal', [
-			'label' => __( 'Normal', 'the7mk2' ),
+			'label' => esc_html__( 'Normal', 'the7mk2' ),
 		] );
 
 
 		$this->add_control( 'button_background_color', [
-			'label' => __( 'Background Color', 'the7mk2' ),
+			'label' => esc_html__( 'Background Color', 'the7mk2' ),
 			'type'  => Controls_Manager::COLOR,
 
 			'selectors' => [
@@ -871,17 +871,17 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'button_text_color', [
-			'label'     => __( 'Text Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .e-form__buttons__wrapper__button-next' => 'color: {{VALUE}};',
 				'{{WRAPPER}} .elementor-button[type="submit"]'       => 'color: {{VALUE}};',
-				'{{WRAPPER}} .elementor-button[type="submit"] svg *' => 'fill: {{VALUE}};',
+				'{{WRAPPER}} .elementor-button[type="submit"] svg *' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 
 		$this->add_control( 'button_border_color', [
-			'label'     => __( 'Border Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -896,12 +896,12 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		$this->end_controls_tab();
 
 		$this->start_controls_tab( 'tab_button_hover', [
-			'label' => __( 'Hover', 'the7mk2' ),
+			'label' => esc_html__( 'Hover', 'the7mk2' ),
 		] );
 
 
 		$this->add_control( 'button_background_hover_color', [
-			'label'     => __( 'Background Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -911,17 +911,17 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'button_hover_color', [
-			'label'     => __( 'Text Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .e-form__buttons__wrapper__button-next:hover' => 'color: {{VALUE}};',
 				'{{WRAPPER}} .elementor-button[type="submit"]:hover'       => 'color: {{VALUE}};',
-				'{{WRAPPER}} .elementor-button[type="submit"]:hover svg *' => 'fill: {{VALUE}};',
+				'{{WRAPPER}} .elementor-button[type="submit"]:hover svg *' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 
 		$this->add_control( 'button_hover_border_color', [
-			'label'     => __( 'Border Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -938,7 +938,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->add_control( 'button_border_radius', [
-			'label'      => __( 'Border Radius', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', '%' ],
 			'selectors'  => [
@@ -948,7 +948,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'button_text_padding', [
-			'label'      => __( 'Text Padding', 'the7mk2' ),
+			'label'      => esc_html__( 'Text Padding', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', 'em', '%' ],
 			'selectors'  => [
@@ -961,11 +961,11 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 	protected function add_comments_style_controls() {
 		$this->start_controls_section( 'section_comments_style', [
-			'label' => __( 'Comment Content', 'the7mk2' ),
+			'label' => esc_html__( 'Comment Content', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 		$this->add_control( 'heading_comment_title', [
-			'label' => __( 'Title', 'the7mk2' ),
+			'label' => esc_html__( 'Title', 'the7mk2' ),
 			'type'  => Controls_Manager::HEADING,
 		] );
 
@@ -976,7 +976,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			'selector' => $selector,
 		] );
 		$this->add_control( 'comments_title_color', [
-			'label'     => __( 'Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -984,7 +984,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_control( 'heading_comment_date', [
-			'label'     => __( 'Date', 'the7mk2' ),
+			'label'     => esc_html__( 'Date', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		] );
@@ -995,7 +995,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			'selector' => $selector,
 		] );
 		$this->add_control( 'comments_date_color', [
-			'label'     => __( 'Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -1003,7 +1003,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_basic_responsive_control( 'comments_date_spacing', [
-			'label'      => __( 'Date Spacing Above', 'the7mk2' ),
+			'label'      => esc_html__( 'Date Spacing Above', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1023,7 +1023,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_control( 'heading_comment_text', [
-			'label'     => __( 'Text', 'the7mk2' ),
+			'label'     => esc_html__( 'Text', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		] );
@@ -1035,7 +1035,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			'selector' => $selector,
 		] );
 		$this->add_control( 'comments_text_color', [
-			'label'     => __( 'Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -1043,7 +1043,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_basic_responsive_control( 'comments_text_spacing', [
-			'label'      => __( 'Text Spacing Above', 'the7mk2' ),
+			'label'      => esc_html__( 'Text Spacing Above', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px' ],
 			'range'      => [
@@ -1064,11 +1064,11 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section( 'section_comments_box', [
-			'label' => __( 'Comment Box', 'the7mk2' ),
+			'label' => esc_html__( 'Comment Box', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 		$this->add_control( 'comments_box_background_color', [
-			'label' => __( 'Background Color', 'the7mk2' ),
+			'label' => esc_html__( 'Background Color', 'the7mk2' ),
 			'type'  => Controls_Manager::COLOR,
 
 			'selectors' => [
@@ -1085,7 +1085,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'comments_box_border_color', [
-			'label'     => __( 'Border Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -1097,7 +1097,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_basic_responsive_control( 'comments_box_text_padding', [
-			'label'      => __( 'Padding', 'the7mk2' ),
+			'label'      => esc_html__( 'Padding', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', 'em', '%' ],
 			'default'    => [
@@ -1109,7 +1109,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_control( 'comments_box_bottom_margin', [
-			'label'      => __( 'Distance Between Comments', 'the7mk2' ),
+			'label'      => esc_html__( 'Distance Between Comments', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1130,21 +1130,21 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 		$this->end_controls_section();
 		$this->start_controls_section( 'section_user_box', [
-			'label' => __( "Comment User's Avatar", 'the7mk2' ),
+			'label' => esc_html__( "Comment User's Avatar", 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 		$this->add_control( 'show_avatar', [
-			'label'        => __( 'Avatar', 'the7mk2' ),
+			'label'        => esc_html__( 'Avatar', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_on'     => __( 'Show', 'the7mk2' ),
-			'label_off'    => __( 'Hide', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+			'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 			'default'      => 'y',
 			'return_value' => 'y',
 			'prefix_class' => 'show-avatar-',
 		] );
 
 		$this->add_basic_responsive_control( 'comments_avatar_size', [
-			'label'      => __( 'Size', 'the7mk2' ),
+			'label'      => esc_html__( 'Size', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1168,7 +1168,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'comments_avatar_disabled', [
-			'label'        => __( 'disabled', 'the7mk2' ),
+			'label'        => esc_html__( 'disabled', 'the7mk2' ),
 			'type'         => Controls_Manager::HIDDEN,
 			'selectors'    => [
 				'{{WRAPPER}} #reviews ol.commentlist .comment_container' => 'grid-template-columns: 0 100%; grid-column-gap: 0;',
@@ -1182,7 +1182,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'comments_avatar_border_radius', [
-			'label'      => __( 'Border Radius', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', '%' ],
 					'selectors'  => [
@@ -1195,7 +1195,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 
 		$this->add_basic_responsive_control( 'avatar_spacing', [
-			'label'     => __( 'Avatar Side Spacing', 'the7mk2' ),
+			'label'     => esc_html__( 'Avatar Side Spacing', 'the7mk2' ),
 			'type'      => Controls_Manager::SLIDER,
 			'range'     => [
 				'px' => [
@@ -1218,12 +1218,12 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 
 	protected function add_rating_style_controls() {
 		$this->start_controls_section( 'section_stars_style', [
-			'label' => __( 'Rating', 'the7mk2' ),
+			'label' => esc_html__( 'Rating', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
 		$this->add_control( 'empty_stars_color', [
-			'label'     => __( 'Empty Star Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Empty Star Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -1231,7 +1231,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 			],
 		] );
 		$this->add_control( 'stars_color', [
-			'label'     => __( 'Filled Star Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Filled Star Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'default'   => '',
 			'selectors' => [
@@ -1240,13 +1240,13 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'rating_form_heading', [
-			'label'     => __( 'Stars In Form', 'the7mk2' ),
+			'label'     => esc_html__( 'Stars In Form', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		] );
 
 		$this->add_basic_responsive_control( 'rating_form_size', [
-			'label'      => __( 'Size', 'the7mk2' ),
+			'label'      => esc_html__( 'Size', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1266,7 +1266,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'rating_form_gap', [
-			'label'      => __( 'Distance', 'the7mk2' ),
+			'label'      => esc_html__( 'Distance', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1286,13 +1286,13 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'rating_comment_heading', [
-			'label'     => __( 'Stars In Comments', 'the7mk2' ),
+			'label'     => esc_html__( 'Stars In Comments', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
 			'separator' => 'before',
 		] );
 
 		$this->add_basic_responsive_control( 'rating_comment_size', [
-			'label'      => __( 'Size', 'the7mk2' ),
+			'label'      => esc_html__( 'Size', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1312,7 +1312,7 @@ class Product_Reviews extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'rating_comment_gap', [
-			'label'      => __( 'Distance', 'the7mk2' ),
+			'label'      => esc_html__( 'Distance', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',

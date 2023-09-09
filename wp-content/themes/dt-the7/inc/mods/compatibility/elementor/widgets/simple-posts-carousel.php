@@ -14,6 +14,8 @@ use The7\Mods\Compatibility\Elementor\The7_Elementor_Less_Vars_Decorator_Interfa
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Arrows;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Bullets;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Button;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 use The7_Categorization_Request;
 use The7_Query_Builder;
 use The7_Related_Query_Builder;
@@ -23,9 +25,7 @@ defined( 'ABSPATH' ) || exit;
 /**
  *  Simple_Posts_Carousel class.
  */
-class Simple_Posts_Carousel extends Simple_Widget_Base {
-
-	use Posts_Masonry_Style;
+class Simple_Posts_Carousel extends Simple_Posts {
 
 	/**
 	 * Get element name.
@@ -41,7 +41,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 	 * @return string
 	 */
 	protected function the7_title() {
-		return __( 'Simple Posts Carousel', 'the7mk2' );
+		return esc_html__( 'Simple Posts Carousel', 'the7mk2' );
 	}
 
 	/**
@@ -75,19 +75,13 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 			PRESSCORE_THEME_URI . '/js/compatibility/elementor/the7-simple-posts-carousel.js',
 			[ 'dt-main' ]
 		);
-
-		the7_register_script_in_footer(
-			$this->get_name() . '-preview',
-			PRESSCORE_ADMIN_URI . '/assets/js/elementor/the7-simple-posts-carousel-preview.js',
-			[ 'the7-elementor-editor-common', 'the7-elements-carousel-widget-preview' ]
-		);
 	}
 
 	/**
 	 * @return string[]
 	 */
 	public function get_style_depends() {
-		return [ $this->get_name() ];
+		return [ $this->get_name(), 'the7-carousel-navigation' ];
 	}
 
 	/**
@@ -174,7 +168,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'query_section',
 			[
-				'label' => __( 'Query', 'the7mk2' ),
+				'label' => esc_html__( 'Query', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -182,10 +176,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_type',
 			[
-				'label'   => __( 'Source', 'the7mk2' ),
+				'label'   => esc_html__( 'Source', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT2,
 				'default' => 'post',
-				'options' => the7_elementor_elements_widget_post_types() + [ 'related' => __( 'Related', 'the7mk2' ) ],
+				'options' => the7_elementor_elements_widget_post_types() + [ 'related' => esc_html__( 'Related', 'the7mk2' ) ],
 				'classes' => 'select2-medium-width',
 			]
 		);
@@ -193,7 +187,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'taxonomy',
 			[
-				'label'     => __( 'Select Taxonomy', 'the7mk2' ),
+				'label'     => esc_html__( 'Select Taxonomy', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'category',
 				'options'   => [],
@@ -207,7 +201,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'terms',
 			[
-				'label'     => __( 'Select Terms', 'the7mk2' ),
+				'label'     => esc_html__( 'Select Terms', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT2,
 				'default'   => '',
 				'multiple'  => true,
@@ -223,12 +217,12 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'order',
 			[
-				'label'     => __( 'Order', 'the7mk2' ),
+				'label'     => esc_html__( 'Order', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'desc',
 				'options'   => [
-					'asc'  => __( 'Ascending', 'the7mk2' ),
-					'desc' => __( 'Descending', 'the7mk2' ),
+					'asc'  => esc_html__( 'Ascending', 'the7mk2' ),
+					'desc' => esc_html__( 'Descending', 'the7mk2' ),
 				],
 				'condition' => [
 					'post_type!' => 'current_query',
@@ -239,17 +233,17 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'orderby',
 			[
-				'label'     => __( 'Order By', 'the7mk2' ),
+				'label'     => esc_html__( 'Order By', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'date',
 				'options'   => [
-					'date'          => __( 'Date', 'the7mk2' ),
-					'title'         => __( 'Name', 'the7mk2' ),
-					'ID'            => __( 'ID', 'the7mk2' ),
-					'modified'      => __( 'Modified', 'the7mk2' ),
-					'comment_count' => __( 'Comment count', 'the7mk2' ),
-					'menu_order'    => __( 'Menu order', 'the7mk2' ),
-					'rand'          => __( 'Rand', 'the7mk2' ),
+					'date'          => esc_html__( 'Date', 'the7mk2' ),
+					'title'         => esc_html__( 'Name', 'the7mk2' ),
+					'ID'            => esc_html__( 'ID', 'the7mk2' ),
+					'modified'      => esc_html__( 'Modified', 'the7mk2' ),
+					'comment_count' => esc_html__( 'Comment count', 'the7mk2' ),
+					'menu_order'    => esc_html__( 'Menu order', 'the7mk2' ),
+					'rand'          => esc_html__( 'Rand', 'the7mk2' ),
 				],
 				'condition' => [
 					'post_type!' => 'current_query',
@@ -260,8 +254,8 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'dis_posts_total',
 			[
-				'label'       => __( 'Total Number Of Posts', 'the7mk2' ),
-				'description' => __( 'Leave empty to display all posts.', 'the7mk2' ),
+				'label'       => esc_html__( 'Total Number Of Posts', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to display all posts.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '12',
 				'condition'   => [
@@ -273,8 +267,8 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'posts_offset',
 			[
-				'label'       => __( 'Posts Offset', 'the7mk2' ),
-				'description' => __(
+				'label'       => esc_html__( 'Posts Offset', 'the7mk2' ),
+				'description' => esc_html__(
 					'Offset for posts query (i.e. 2 means, posts will be displayed starting from the third post).',
 					'the7mk2'
 				),
@@ -298,7 +292,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'layout_content_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -306,10 +300,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'show_widget_title',
 			[
-				'label'        => __( 'Widget Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Widget Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 			]
@@ -318,7 +312,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'widget_title_text',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => 'Widget title',
 				'condition' => [
@@ -330,7 +324,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -374,7 +368,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 1,
 				'tablet_default' => 1,
@@ -384,10 +378,12 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 			]
 		);
 
+		$this->template( Image_Size::class )->add_style_controls();
+
 		$this->add_basic_responsive_control(
 			'gap_between_posts',
 			[
-				'label'      => __( 'Columns Gap (px)', 'the7mk2' ),
+				'label'      => esc_html__( 'Columns Gap (px)', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -405,7 +401,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'carousel_margin',
 			[
-				'label'       => __( 'outer gaps', 'the7mk2' ),
+				'label'       => esc_html__( 'outer gaps', 'the7mk2' ),
 				'type'        => Controls_Manager::DIMENSIONS,
 				'size_units'  => [ 'px' ],
 				'range'       => [
@@ -433,7 +429,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'post_content_section',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -441,10 +437,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'article_links',
 			[
-				'label'        => __( 'Links To A Single Post', 'the7mk2' ),
+				'label'        => esc_html__( 'Links To A Single Post', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 			]
@@ -453,13 +449,13 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'article_links_goes_to',
 			[
-				'label'     => __( 'Links Lead To', 'the7mk2' ),
+				'label'     => esc_html__( 'Links Lead To', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'posts',
 				'options'   => [
-					'posts'                => __( 'Posts', 'the7mk2' ),
-					'external_or_posts'    => __( 'External links or posts', 'the7mk2' ),
-					'external_or_disabled' => __( 'External links or disabled', 'the7mk2' ),
+					'posts'                => esc_html__( 'Posts', 'the7mk2' ),
+					'external_or_posts'    => esc_html__( 'External links or posts', 'the7mk2' ),
+					'external_or_disabled' => esc_html__( 'External links or disabled', 'the7mk2' ),
 				],
 				'condition' => [
 					'article_links' => 'y',
@@ -471,10 +467,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 			'article_link_meta_field',
 			[
 				'label'       => esc_html__( 'Link Meta Field', 'the7mk2' ),
-				'description' => esc_html__( 'Post meta field with external link.', 'the7mk2' ),
+				'description' => esc_html__( 'Post meta field name, f.e. site_link, with url.', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
-				'placeholder' => esc_html__( 'Meta Field Key', 'the7mk2' ),
+				'placeholder' => 'meta_field_name',
 				'condition'   => [
 					'post_type!'             => 'dt_portfolio',
 					'article_links_goes_to!' => 'posts',
@@ -486,12 +482,12 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'link_click',
 			[
-				'label'   => __( 'Apply Link & Hover', 'the7mk2' ),
+				'label'   => esc_html__( 'Apply Link & Hover', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'button',
 				'options' => [
-					'box'    => __( 'Whole box', 'the7mk2' ),
-					'button' => __( "Separate element's", 'the7mk2' ),
+					'box'    => esc_html__( 'Whole box', 'the7mk2' ),
+					'button' => esc_html__( "Separate element's", 'the7mk2' ),
 				],
 			]
 		);
@@ -499,10 +495,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'show_post_image',
 			[
-				'label'        => __( 'Image', 'the7mk2' ),
+				'label'        => esc_html__( 'Image', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'separator'    => 'before',
 				'default'      => 'y',
@@ -512,10 +508,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'show_post_title',
 			[
-				'label'        => __( 'Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -525,7 +521,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -545,11 +541,11 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'title_width',
 			[
-				'label'     => __( 'Title Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Title Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'normal'      => __( 'Normal', 'the7mk2' ),
-					'crp-to-line' => __( 'Crop to one line', 'the7mk2' ),
+					'normal'      => esc_html__( 'Normal', 'the7mk2' ),
+					'crp-to-line' => esc_html__( 'Crop to one line', 'the7mk2' ),
 				],
 				'default'   => 'normal',
 				'condition' => [
@@ -561,8 +557,8 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'title_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire title.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire title.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'min'         => 1,
@@ -577,10 +573,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_content',
 			[
-				'label'        => __( 'Excerpt', 'the7mk2' ),
+				'label'        => esc_html__( 'Excerpt', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'show_excerpt',
 				'default'      => 'show_excerpt',
 				'separator'    => 'before',
@@ -590,11 +586,11 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'description_width',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'normal'      => __( 'Normal', 'the7mk2' ),
-					'crp-to-line' => __( 'Crop to one line', 'the7mk2' ),
+					'normal'      => esc_html__( 'Normal', 'the7mk2' ),
+					'crp-to-line' => esc_html__( 'Crop to one line', 'the7mk2' ),
 				],
 				'default'   => 'normal',
 				'condition' => [
@@ -606,8 +602,8 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'excerpt_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire excerpt.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire excerpt.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -620,10 +616,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_terms',
 			[
-				'label'        => __( 'Category', 'the7mk2' ),
+				'label'        => esc_html__( 'Category', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -633,10 +629,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_terms_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -649,10 +645,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_author',
 			[
-				'label'        => __( 'Author', 'the7mk2' ),
+				'label'        => esc_html__( 'Author', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -662,10 +658,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_author_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -678,10 +674,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_date',
 			[
-				'label'        => __( 'Date', 'the7mk2' ),
+				'label'        => esc_html__( 'Date', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -691,10 +687,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_date_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -708,10 +704,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_comments',
 			[
-				'label'        => __( 'Comments Count', 'the7mk2' ),
+				'label'        => esc_html__( 'Comments Count', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -721,10 +717,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_comments_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -737,10 +733,10 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'show_read_more_button',
 			[
-				'label'        => __( 'Button', 'the7mk2' ),
+				'label'        => esc_html__( 'Button', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -753,9 +749,9 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'read_more_button_text',
 			[
-				'label'     => __( 'Button Text', 'the7mk2' ),
+				'label'     => esc_html__( 'Button Text', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
-				'default'   => __( 'Read more', 'the7mk2' ),
+				'default'   => esc_html__( 'Read more', 'the7mk2' ),
 				'condition' => [
 					'show_read_more_button' => 'y',
 					'article_links'         => 'y',
@@ -774,7 +770,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'scrolling_section',
 			[
-				'label' => __( 'Scrolling', 'the7mk2' ),
+				'label' => esc_html__( 'Scrolling', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -782,7 +778,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'slide_to_scroll',
 			[
-				'label'   => __( 'Scroll Mode', 'the7mk2' ),
+				'label'   => esc_html__( 'Scroll Mode', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'single',
 				'options' => [
@@ -795,7 +791,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'speed',
 			[
-				'label'   => __( 'Transition Speed (ms)', 'the7mk2' ),
+				'label'   => esc_html__( 'Transition Speed (ms)', 'the7mk2' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => '600',
 			]
@@ -804,7 +800,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'autoplay',
 			[
-				'label'        => __( 'Autoplay Slides', 'the7mk2' ),
+				'label'        => esc_html__( 'Autoplay Slides', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -814,7 +810,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'autoplay_speed',
 			[
-				'label'     => __( 'Autoplay Speed (ms)', 'the7mk2' ),
+				'label'     => esc_html__( 'Autoplay Speed (ms)', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 6000,
 				'min'       => 100,
@@ -836,7 +832,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'widget_style_section',
 			[
-				'label'     => __( 'Widget Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_widget_title' => 'y',
@@ -847,19 +843,19 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_title_align',
 			[
-				'label'     => __( 'Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -880,7 +876,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'widget_title_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -893,7 +889,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_title_bottom_margin',
 			[
-				'label'      => __( 'Spacing Below Title', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing Below Title', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -924,7 +920,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'content_area_style',
 			[
-				'label' => __( 'Content Area', 'the7mk2' ),
+				'label' => esc_html__( 'Content Area', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -932,20 +928,20 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'content_alignment',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'label_block'          => false,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -965,7 +961,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'content_area_padding',
 			[
-				'label'      => __( 'Content Area Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Content Area Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -995,7 +991,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'title_style',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_post_title' => 'y',
@@ -1016,14 +1012,14 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_title_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'text_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post-title' => 'color: {{VALUE}};',
@@ -1036,14 +1032,14 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_title_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post-title:hover' => 'color: {{VALUE}};',
@@ -1066,7 +1062,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'post_meta_style_section',
 			[
-				'label'      => __( 'Meta Information', 'the7mk2' ),
+				'label'      => esc_html__( 'Meta Information', 'the7mk2' ),
 				'tab'        => Controls_Manager::TAB_STYLE,
 				'conditions' => [
 					'relation' => 'or',
@@ -1099,7 +1095,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_control(
 			'post_meta_separator',
 			[
-				'label'       => __( 'Separator Between', 'the7mk2' ),
+				'label'       => esc_html__( 'Separator Between', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '•',
 				'placeholder' => '',
@@ -1113,7 +1109,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'post_meta',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'fields_options' => [
 					'font_family' => [
 						'default' => '',
@@ -1143,14 +1139,14 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_post_meta_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'tab_post_meta_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1166,14 +1162,14 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_post_meta_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'field_post_meta_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1191,7 +1187,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'post_meta_bottom_margin',
 			[
-				'label'      => __( 'Meta Spacing Above', 'the7mk2' ),
+				'label'      => esc_html__( 'Meta Spacing Above', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1217,7 +1213,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'short_description',
 			[
-				'label'     => __( 'Excerpt', 'the7mk2' ),
+				'label'     => esc_html__( 'Excerpt', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'post_content' => 'show_excerpt',
@@ -1238,14 +1234,14 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_desc_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'short_desc_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1260,14 +1256,14 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_desc_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'short_desc_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1285,7 +1281,7 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'gap_above_description',
 			[
-				'label'      => __( 'Excerpt Spacing Above', 'the7mk2' ),
+				'label'      => esc_html__( 'Excerpt Spacing Above', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1321,15 +1317,12 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 			'data-v-tablet-columns-num' => $settings['widget_columns_tablet'],
 			'data-phone-columns-num'    => $settings['widget_columns_mobile'],
 			'data-auto-height'          => $settings['adaptive_height'] ? 'true' : 'false',
-			'data-col-gap'              => $settings['gap_between_posts']['size'],
-			'data-col-gap-tablet'       => $settings['gap_between_posts_tablet']['size'],
-			'data-col-gap-mobile'       => $settings['gap_between_posts_mobile']['size'],
+			'data-col-gap'              => $settings['gap_between_posts']['size'] ?? null,
+			'data-col-gap-tablet'       => $settings['gap_between_posts_tablet']['size'] ?? null,
+			'data-col-gap-mobile'       => $settings['gap_between_posts_mobile']['size'] ?? null,
 			'data-speed'                => $settings['speed'],
 			'data-autoplay'             => $settings['autoplay'] ? 'true' : 'false',
 			'data-autoplay_speed'       => $settings['autoplay_speed'],
-			'data-bullet'               => $settings['show_bullets'],
-			'data-bullet_tablet'        => $settings['show_bullets_tablet'],
-			'data-bullet_mobile'        => $settings['show_bullets_mobile'],
 		];
 
 		$this->add_render_attribute( $element, $data_atts );
@@ -1507,50 +1500,6 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 	 *
 	 * @return string
 	 */
-	protected function get_post_image( $settings ) {
-
-		$link_attridutes = $this->get_link_attributes( $settings );
-		$post_media      = '';
-
-		$link_class = [ 'post-thumbnail-rollover', 'img-ratio-wrapper' ];
-		if ( ! $link_attridutes['href'] ) {
-			$link_class[] = 'not-clickable-item';
-		}
-		$icons_html = $this->get_hover_icons_html_template( $settings );
-
-		$link_wrapper = '<a %HREF% %CLASS% %CUSTOM%><img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% />' . $icons_html . '</a>';
-
-		$thumb_args = [
-			'img_id'       => get_post_thumbnail_id(),
-			'class'        => implode( ' ', $link_class ),
-			'img_class'    => 'preload-me',
-			'lazy_loading' => false,
-			'custom'       => the7_get_html_attributes_string(
-				[
-					'aria-label' => __( 'Post image', 'the7mk2' ),
-					'target'     => $link_attridutes['target'],
-				]
-			),
-			'wrap'         => $link_wrapper,
-			'echo'         => false,
-		];
-
-		if ( $settings['link_click'] === 'box' || ! $link_attridutes['href'] ) {
-			$thumb_args['wrap'] = '<div %CLASS% %CUSTOM%><img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% />' . $icons_html . '</div>';
-		} else {
-			$thumb_args['href'] = $link_attridutes['href'];
-		}
-
-		$post_media = dt_get_thumb_img( $thumb_args );
-
-		return $post_media;
-	}
-
-	/**
-	 * @param array $settings Settings array.
-	 *
-	 * @return string
-	 */
 	protected function get_hover_icons_html_template( $settings ) {
 		$a_atts = [
 			'class' => 'the7-hover-icon',
@@ -1664,18 +1613,6 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 
 		$settings = $this->get_settings_for_display();
 
-		$class[] = the7_array_match(
-			$settings['bullets_style'],
-			[
-				'scale-up'         => 'bullets-scale-up',
-				'stroke'           => 'bullets-stroke',
-				'fill-in'          => 'bullets-fill-in',
-				'small-dot-stroke' => 'bullets-small-dot-stroke',
-				'ubax'             => 'bullets-ubax',
-				'etefu'            => 'bullets-etefu',
-			]
-		);
-
 		if ( $settings['title_width'] === 'crp-to-line' ) {
 			$class[] = 'title-to-line';
 		}
@@ -1704,14 +1641,5 @@ class Simple_Posts_Carousel extends Simple_Widget_Base {
 			$this->get_unique_class() . '.the7-elementor-widget',
 			'~"%s"'
 		);
-
-		$this->template( Arrows::class )->add_less_vars( $less_vars );
-
-		$less_vars->add_rgba_color( 'bullet-color', $settings['bullet_color'] );
-		$less_vars->add_rgba_color( 'bullet-color-hover', $settings['bullet_color_hover'] );
-		$less_vars->add_keyword( 'bullets-v-position', $settings['bullets_v_position'] );
-		$less_vars->add_keyword( 'bullets-h-position', $settings['bullets_h_position'] );
-		$less_vars->add_pixel_number( 'bullet-v-position', $settings['bullets_v_offset'] );
-		$less_vars->add_pixel_number( 'bullet-h-position', $settings['bullets_h_offset'] );
 	}
 }

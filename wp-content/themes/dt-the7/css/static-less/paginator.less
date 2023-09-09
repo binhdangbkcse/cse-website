@@ -70,6 +70,7 @@
 /*Load more button*/
 .paginator.paginator-more-button {
 	text-align: center;
+	overflow: hidden;
 	.lazy-loading-mode & {
 		opacity: 0;
 	}
@@ -111,10 +112,14 @@
 					height: 12px;
 				    content: "";
 				    margin-right: 5px;
-				    -webkit-mask: url(../images/the7-check-circle-fill.svg) no-repeat right center;
-					  mask-image: url(../images/the7-check-circle-fill.svg) no-repeat right center;
-					  -webkit-mask-size: 12px;
-					  mask-size: 12px;
+				    -webkit-mask: url(../images/the7-check-circle-fill.svg);
+					mask-image: url(../images/the7-check-circle-fill.svg);
+					-webkit-mask-size: 12px;
+					mask-size: 12px;
+					-webkit-mask-repeat: no-repeat;
+			  		mask-repeat: no-repeat;
+			  		-webkit-mask-position: right center;
+			  		mask-position: right center;
 					 .the7-elementor-widget & {
 					 	display: none;
 					 }

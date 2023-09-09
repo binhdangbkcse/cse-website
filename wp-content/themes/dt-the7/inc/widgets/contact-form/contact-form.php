@@ -147,7 +147,7 @@ class Presscore_Inc_Widgets_ContactForm extends WP_Widget {
 		}
 
 		if ( $text ) {
-			echo '<div class="widget-info">' . apply_filters( 'get_the_excerpt', $text ) . '</div>';
+			echo '<div class="widget-info">' . $text . '</div>';
 		}
 
 		if ( $fields_not_empty ) {

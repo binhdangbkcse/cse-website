@@ -20,6 +20,8 @@ use The7\Mods\Compatibility\Elementor\Shortcode_Adapters\Query_Adapters\Products
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Less_Vars_Decorator_Interface;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\General;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Pagination;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Woocommerce\Add_To_Cart_Button;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Woocommerce\Price;
@@ -54,7 +56,14 @@ class Products extends The7_Elementor_Widget_Base {
 	 * @return string
 	 */
 	protected function the7_title() {
-		return __( 'Products', 'the7mk2' );
+		return esc_html__( 'Products', 'the7mk2' );
+	}
+
+	/**
+	 * @return string[]
+	 */
+	protected function the7_keywords() {
+		return [ 'woocommerce', 'products', 'shop', 'store' ];
 	}
 
 	/**
@@ -82,7 +91,7 @@ class Products extends The7_Elementor_Widget_Base {
 	 */
 	protected function register_assets() {
 		the7_register_style(
-			$this->get_name(),
+			'the7-wc-products',
 			THE7_ELEMENTOR_CSS_URI . '/the7-wc-products-widget.css',
 			[ 'the7-filter-decorations-base' ]
 		);
@@ -101,7 +110,7 @@ class Products extends The7_Elementor_Widget_Base {
 	 * @return array Element styles dependencies.
 	 */
 	public function get_style_depends() {
-		return [ $this->get_name() ];
+		return [ 'the7-wc-products' ];
 	}
 
 	/**
@@ -262,7 +271,6 @@ class Products extends The7_Elementor_Widget_Base {
 			[
 				'below_image'    => 'cart-btn-below-img',
 				'on_image'       => 'cart-btn-on-img',
-				'on_image_hover' => 'cart-btn-on-hover',
 			]
 		);
 
@@ -347,7 +355,7 @@ class Products extends The7_Elementor_Widget_Base {
 			$class[] = 'iso-item';
 		}
 
-		if ( $this->show_product_variations( $product ) ) {
+		if ( $this->is_show_product_variations( $product ) ) {
 			$class[] = 'show-variations-y';
 		}
 
@@ -372,26 +380,27 @@ class Products extends The7_Elementor_Widget_Base {
 
 		$this->template( Sale_Flash::class )->render_sale_flash();
 
-		$class = [ 'alignnone', 'img-wrap', 'img-ratio-wrapper' ];
-
-		if ( presscore_lazy_loading_enabled() ) {
-			$class[] = 'layzr-bg';
-		}
+		$img_wrapper_class = implode( ' ', array_filter( [
+			'alignnone',
+			'img-wrap',
+			$this->template( Image_Size::class )->get_wrapper_class(),
+			$this->template( Image_Aspect_Ratio::class )->get_wrapper_class(),
+		] ) );
 
 		echo '<div class="img-border">';
-		echo '<a href="' . esc_url( get_permalink() ) . '" class="' . esc_attr( implode( ' ', $class ) ) . '">';
-
-		// Add the7 lazy loading.
-		add_filter( 'wp_get_attachment_image_attributes', [ $this, 'apply_image_lazy_loading_filter' ], 99, 3 );
+		echo '<a href="' . esc_url( get_permalink() ) . '" class="' . esc_attr( $img_wrapper_class ) . '">';
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		woocommerce_template_loop_product_thumbnail();
-		if ( $settings['image_hover_style'] === 'hover_image' ) {
-			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			echo the7_wc_get_the_first_product_gallery_image_html( $product );
-		}
+		echo $this->template( Image_Size::class )->apply_filters(
+			function ( $size ) use ( $product, $settings ) {
+				$result = woocommerce_get_product_thumbnail( $size );
+				if ( $settings['image_hover_style'] === 'hover_image' ) {
+					$result .= the7_wc_get_the_first_product_gallery_image_html( $product, $size );
+				}
 
-		remove_filter( 'wp_get_attachment_image_attributes', [ $this, 'apply_image_lazy_loading_filter' ], 99 );
+				return $result;
+			}
+		);
 
 		echo '</a>';
 		echo '</div>';
@@ -400,7 +409,7 @@ class Products extends The7_Elementor_Widget_Base {
 			$this->render_product_variations( $product );
 		}
 
-		if ( ! empty( $settings['show_add_to_cart'] ) && $settings['button_position'] !== 'below_image' ) {
+		if ( $this->is_show_add_to_cart() && $settings['button_position'] !== 'below_image' ) {
 			$this->render_add_to_cart_button( $product );
 		}
 
@@ -412,107 +421,88 @@ class Products extends The7_Elementor_Widget_Base {
 	}
 
 	/**
-	 * @param string[]     $attr       Array of attribute values for the image markup, keyed by attribute name.
-	 *                                 See wp_get_attachment_image().
-	 * @param WP_Post      $attachment Image attachment post.
-	 * @param string|int[] $size       Requested image size. Can be any registered image size name, or
-	 *                                 an array of width and height values in pixels (in that order).
-	 *
-	 * @return string[]
-	 */
-	public function apply_image_lazy_loading_filter( $attr, $attachment, $size ) {
-		$image = wp_get_attachment_image_src( $attachment->ID, $size, false );
-
-		if ( isset( $image[1], $image[2] ) ) {
-			$_width = $image[1];
-			$_height = $image[2];
-			$lazy_loading_src = "data:image/svg+xml,%3Csvg%20xmlns%3D&#39;http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg&#39;%20viewBox%3D&#39;0%200%20{$_width}%20{$_height}&#39;%2F%3E";
-
-			$attr['class'] .= ' preload-me';
-			$attr['data-src'] = $attr['src'];
-			$attr['src'] = $lazy_loading_src;
-			$attr['data-srcset'] = $attr['srcset'];
-			unset( $attr['loading'], $attr['srcset'] );
-		}
-
-		return $attr;
-	}
-
-	/**
 	 * @param WC_Product $product Product.
 	 */
 	public function render_product_variations( $product ) {
-		$settings = $this->get_settings_for_display();
-		if ( $this->show_product_variations( $product ) ) {
-			$product_attributes = $product->get_attributes();
+		if ( ! $this->is_show_product_variations( $product ) ) {
+			return;
+		}
 
+		$product_attributes = $product->get_attributes();
+
+		/**
+		 * @var WC_Product_Variation[] $available_variations
+		 */
+		$available_variations     = $product->get_available_variations( 'objects' );
+		$variations_per_attribute = [];
+		foreach ( $available_variations as $variation ) {
+			$variation_attributes = $variation->get_variation_attributes( false );
+			foreach ( $variation_attributes as $attribute_slug => $variation_slug ) {
+				$variations_per_attribute[ $attribute_slug ][ $variation_slug ] = $variation;
+			}
+		}
+		$wrap_class = '';
+		if ( $this->is_show_add_to_cart() && $this->is_wc_ajax_add_to_cart_enabled() ) {
+			$wrap_class = 'ajax-variation-enabled';
+		}
+		echo '<div class="products-variations-wrap ' . $wrap_class . ' ">';
+		foreach ( $product_attributes as $attribute_slug => $attribute ) {
 			/**
-			 * @var WC_Product_Variation[] $available_variations
+			 * @var WC_Product_Attribute $attribute
 			 */
-			$available_variations     = $product->get_available_variations( 'objects' );
-			$variations_per_attribute = [];
-			foreach ( $available_variations as $variation ) {
-				$variation_attributes = $variation->get_variation_attributes( false );
-				foreach ( $variation_attributes as $attribute_slug => $variation_slug ) {
-					$variations_per_attribute[ $attribute_slug ][ $variation_slug ] = $variation;
-				}
-			}
-			$wrap_class = '';
-			if ( $settings['show_add_to_cart'] === 'y' && get_option( 'woocommerce_enable_ajax_add_to_cart' ) === 'yes' ) {
-				$wrap_class = 'ajax-variation-enabled';
-			}
-			echo '<div class="products-variations-wrap ' . $wrap_class . ' ">';
-			foreach ( $product_attributes as $attribute_slug => $attribute ) {
-				/**
-				 * @var WC_Product_Attribute $attribute
-				 */
 
-				if ( ! isset( $variations_per_attribute[ $attribute_slug ] ) ) {
+			if ( ! isset( $variations_per_attribute[ $attribute_slug ] ) ) {
+				continue;
+			}
+
+			$attribute_taxonomy = $attribute->get_taxonomy_object();
+			if ( $attribute_taxonomy ) {
+				// Get terms if this is a taxonomy - ordered. We need the names too.
+				$terms = wc_get_product_terms(
+					$product->get_id(),
+					$attribute_slug,
+					[
+						'fields' => 'all',
+						'slug'   => $variations_per_attribute[ $attribute_slug ] ? array_keys( $variations_per_attribute[ $attribute_slug ] ) : '',
+					]
+				);
+
+				if ( ! $terms ) {
 					continue;
 				}
 
-				$attribute_taxonomy = $attribute->get_taxonomy_object();
-				if ( $attribute_taxonomy ) {
-					// Get terms if this is a taxonomy - ordered. We need the names too.
-					$terms = wc_get_product_terms( $product->get_id(), $attribute_slug, [ 'fields' => 'all' ] );
-
-					if ( ! $terms ) {
-						continue;
-					}
-
-					$attribute_label = $attribute_taxonomy->attribute_label;
-				} else {
-					$options = $attribute->get_options();
-					$terms   = [];
-					foreach ( $options as $option ) {
-						$term       = new stdClass();
-						$term->name = ucfirst( $option );
-						$term->slug = $option;
-						$terms[]    = $term;
-					}
-
-					$attribute_label = $attribute->get_name();
+				$attribute_label = $attribute_taxonomy->attribute_label;
+			} else {
+				$options = $attribute->get_options();
+				$terms   = [];
+				foreach ( $options as $option ) {
+					$term       = new stdClass();
+					$term->name = ucfirst( $option );
+					$term->slug = $option;
+					$terms[]    = $term;
 				}
 
-				$prefixed_attribute_slug = 'attribute_' . $attribute_slug;
-
-				echo '<div class="product-variation-row">';
-				echo '<span>' . esc_html( $attribute_label ) . '</span>';
-				echo '<ul class="products-variations" data-atr="' . esc_attr( $prefixed_attribute_slug ) . '">';
-
-				foreach ( $terms as $term ) {
-					$name                = $term->name;
-					$attribute_plus_name = $prefixed_attribute_slug . '_' . $term->slug;
-					$href                = add_query_arg( [ $prefixed_attribute_slug => $term->slug ], $product->get_permalink() );
-					echo '<li><a href="' . esc_url( $href ) . '" data-id="' . esc_attr( $term->slug ) . '" class="' . esc_attr( $attribute_plus_name ) . '">' . esc_html( $name ) . '</a></li>';
-				}
-
-				echo '</ul>';
-				echo '</div>';
+				$attribute_label = $attribute->get_name();
 			}
 
+			$prefixed_attribute_slug = 'attribute_' . $attribute_slug;
+
+			echo '<div class="product-variation-row">';
+			echo '<span>' . esc_html( $attribute_label ) . '</span>';
+			echo '<ul class="products-variations" data-atr="' . esc_attr( $prefixed_attribute_slug ) . '">';
+
+			foreach ( $terms as $term ) {
+				$name                = $term->name;
+				$attribute_plus_name = $prefixed_attribute_slug . '_' . $term->slug;
+				$href                = add_query_arg( [ $prefixed_attribute_slug => $term->slug ], $product->get_permalink() );
+				echo '<li><a href="' . esc_url( $href ) . '" data-id="' . esc_attr( $term->slug ) . '" class="' . esc_attr( $attribute_plus_name ) . '">' . esc_html( $name ) . '</a></li>';
+			}
+
+			echo '</ul>';
 			echo '</div>';
 		}
+
+		echo '</div>';
 	}
 
 	/**
@@ -609,16 +599,15 @@ class Products extends The7_Elementor_Widget_Base {
 		// Cleanup button render attributes.
 		$this->remove_render_attribute( 'box-button' );
 
-		if ( $this->show_product_variations( $product ) ) {
+		if ( $this->is_show_product_variations( $product ) ) {
 			// Add ajax handler if it is enabled.
-			if ( get_option( 'woocommerce_enable_ajax_add_to_cart' ) === 'yes' ) {
+			if ( $this->is_wc_ajax_add_to_cart_enabled() ) {
 				$this->add_render_attribute(
 					'box-button',
 					[
 						'class' => 'ajax_add_to_cart variation-btn-disabled',
 					]
 				);
-
 			}
 			$button_text = esc_html__( 'Add to cart', 'the7mk2' );
 		} else {
@@ -662,7 +651,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$button_icon = $this->get_product_add_to_cart_icon_html( $product, 'popup-icon' );
 		$button_text = '';
 		if ( $settings['layout'] === 'icon_with_text' ) {
-			if ( $this->show_product_variations( $product ) ) {
+			if ( $this->is_show_product_variations( $product ) ) {
 				// Add ajax handler if it is enabled.
 
 				$button_text = esc_html__( 'Add to cart', 'the7mk2' );
@@ -674,7 +663,7 @@ class Products extends The7_Elementor_Widget_Base {
 				$button_text
 			);
 		}
-		if ( get_option( 'woocommerce_enable_ajax_add_to_cart' ) === 'yes' && $this->show_product_variations( $product ) ) {
+		if ( $this->is_wc_ajax_add_to_cart_enabled() && $this->is_show_product_variations( $product ) ) {
 			$this->add_render_attribute(
 				'button',
 				[
@@ -694,7 +683,7 @@ class Products extends The7_Elementor_Widget_Base {
 	 * @return array|null
 	 */
 	protected function get_product_add_to_cart_icon_html( $product, $class ) {
-		if ( in_array( $product->get_type(), [ 'variable', 'grouped' ], true ) && ! $this->get_settings_for_display( 'show_variations' ) ) {
+		if ( in_array( $product->get_type(), [ 'variable', 'grouped' ], true ) && ! $this->is_show_variations() ) {
 			$icon_setting = $this->get_add_to_cart_icon_setting( 'options_icon' );
 		} else {
 			$icon_setting = $this->get_add_to_cart_icon_setting();
@@ -767,8 +756,29 @@ class Products extends The7_Elementor_Widget_Base {
 	 *
 	 * @return bool
 	 */
-	protected function show_product_variations( WC_Product $product ) {
-		return $product->get_type() === 'variable' && $this->get_settings_for_display( 'show_variations' );
+	protected function is_show_product_variations( WC_Product $product ) {
+		return $product->get_type() === 'variable' && $this->is_show_variations();
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function is_show_variations() {
+		return ( $this->get_settings_for_display( 'show_variations' ) === 'y' || $this->get_settings_for_display( 'show_variations_tablet' ) === 'y' || $this->get_settings_for_display( 'show_variations_mobile' ) === 'y' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function is_show_add_to_cart() {
+		return ( $this->get_settings_for_display( 'show_add_to_cart' ) === 'y' || $this->get_settings_for_display( 'show_add_to_cart_tablet' ) === 'y' || $this->get_settings_for_display( 'show_add_to_cart_mobile' ) === 'y' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function is_wc_ajax_add_to_cart_enabled() {
+		return get_option( 'woocommerce_enable_ajax_add_to_cart' ) === 'yes';
 	}
 
 	/**
@@ -778,10 +788,11 @@ class Products extends The7_Elementor_Widget_Base {
 	 * @return void
 	 */
 	protected function maybe_add_product_variations_data_to_element( WC_Product $product, $element ) {
-		// Cleanup attribute definition.
+		// DO NOT FORGET TO CLEANUP ATTRIBUTES!
 		$this->remove_render_attribute( $element, 'data-product_variations' );
+		$this->remove_render_attribute( $element, 'data-default_attributes' );
 
-		if ( $this->show_product_variations( $product ) ) {
+		if ( $this->is_show_product_variations( $product ) ) {
 			$available_variations = $product->get_available_variations();
 			$available_variations = array_map(
 				function ( $variation ) {
@@ -799,7 +810,15 @@ class Products extends The7_Elementor_Widget_Base {
 			);
 
 			$this->add_render_attribute( $element, 'data-product_variations', wp_json_encode( $available_variations ), true );
-			$this->add_render_attribute( $element, 'data-post-id', $product->get_id(), true );
+
+			$default_attributes = $product->get_default_attributes();
+			if ( $default_attributes ) {
+				$prefixed_default_attributes = [];
+				foreach ( $default_attributes as $attr => $val ) {
+					$prefixed_default_attributes[ 'attribute_' . $attr ] = $val;
+				}
+				$this->add_render_attribute( $element, 'data-default_attributes', wp_json_encode( $prefixed_default_attributes ), true );
+			}
 		}
 	}
 
@@ -885,7 +904,7 @@ class Products extends The7_Elementor_Widget_Base {
 						$this->render_short_description( $product );
 					}
 
-					if ( ! empty( $settings['show_add_to_cart'] ) && $settings['button_position'] === 'below_image' ) {
+					if ( $this->is_show_add_to_cart() && $settings['button_position'] === 'below_image' ) {
 						$this->render_add_to_cart_button( $product );
 					}
 
@@ -939,8 +958,8 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'archive_posts_per_page',
 			[
-				'label'       => __( 'Number Of Products On One Page', 'the7mk2' ),
-				'description' => __( 'Leave empty to display default archive products amount.', 'the7mk2' ),
+				'label'       => esc_html__( 'Number Of Products On One Page', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to display default archive products amount.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -973,7 +992,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'widget_style_section',
 			[
-				'label'     => __( 'Widget Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_widget_title' => 'y',
@@ -984,19 +1003,19 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_title_align',
 			[
-				'label'     => __( 'Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -1017,7 +1036,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'widget_title_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1030,7 +1049,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'widget_title_bottom_margin',
 			[
-				'label'      => __( 'Spacing Below Title', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing Below Title', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1060,7 +1079,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'layout_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -1068,10 +1087,10 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_widget_title',
 			[
-				'label'        => __( 'Widget Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Widget Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 			]
@@ -1080,7 +1099,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'widget_title_text',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => 'Widget title',
 				'condition' => [
@@ -1092,7 +1111,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -1112,7 +1131,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'mode',
 			[
-				'label'     => __( 'Mode', 'the7mk2' ),
+				'label'     => esc_html__( 'Mode', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'grid',
 				'options'   => [
@@ -1126,7 +1145,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'responsiveness',
 			[
-				'label'     => __( 'Responsiveness mode', 'the7mk2' ),
+				'label'     => esc_html__( 'Responsiveness mode', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'browser_width_based',
 				'options'   => [
@@ -1173,7 +1192,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 3,
 				'tablet_default' => 2,
@@ -1189,10 +1208,12 @@ class Products extends The7_Elementor_Widget_Base {
 			]
 		);
 
+		$this->template( Image_Size::class )->add_style_controls();
+
 		$this->add_control(
 			'pwb_column_min_width',
 			[
-				'label'       => __( 'Column minimum width', 'the7mk2' ),
+				'label'       => esc_html__( 'Column minimum width', 'the7mk2' ),
 				'type'        => Controls_Manager::SLIDER,
 				'default'     => [
 					'unit' => 'px',
@@ -1219,7 +1240,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'pwb_columns',
 			[
-				'label'     => __( 'Desired columns number', 'the7mk2' ),
+				'label'     => esc_html__( 'Desired columns number', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 3,
 				'min'       => 1,
@@ -1234,8 +1255,8 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'gap_between_posts_adapter',
 			[
-				'label'       => __( 'Gap between columns', 'the7mk2' ),
-				'description' => __( 'Please note that this setting affects post paddings. So, for example: a value 10px will give you 20px gaps between posts)', 'the7mk2' ),
+				'label'       => esc_html__( 'Gap between columns', 'the7mk2' ),
+				'description' => esc_html__( 'Please note that this setting affects post paddings. So, for example: a value 10px will give you 20px gaps between posts', 'the7mk2' ),
 				'type'        => Controls_Manager::SLIDER,
 				'default'     => [
 					'unit' => 'px',
@@ -1259,7 +1280,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'columns_gap',
 			[
-				'label'      => __( 'Columns Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Columns Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1283,7 +1304,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'rows_gap',
 			[
-				'label'      => __( 'Rows Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1313,7 +1334,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'content_section',
 			[
-				'label' => __( 'Product Content', 'the7mk2' ),
+				'label' => esc_html__( 'Product Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -1321,10 +1342,10 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_product_title',
 			[
-				'label'        => __( 'Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 			]
@@ -1333,7 +1354,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'product_title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -1353,11 +1374,11 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'product_title_width',
 			[
-				'label'       => __( 'Title Width', 'the7mk2' ),
+				'label'       => esc_html__( 'Title Width', 'the7mk2' ),
 				'type'        => Controls_Manager::SELECT,
 				'options'     => [
-					'normal'      => __( 'Normal', 'the7mk2' ),
-					'crp-to-line' => __( 'Crop to one line', 'the7mk2' ),
+					'normal'      => esc_html__( 'Normal', 'the7mk2' ),
+					'crp-to-line' => esc_html__( 'Crop to one line', 'the7mk2' ),
 				],
 				'default'     => 'normal',
 				'condition'   => [
@@ -1370,8 +1391,8 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'product_title_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire title.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire title.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'min'         => 1,
@@ -1388,10 +1409,10 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_rating',
 			[
-				'label'        => __( 'Rating', 'the7mk2' ),
+				'label'        => esc_html__( 'Rating', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1401,10 +1422,10 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_short_description',
 			[
-				'label'        => __( 'Short Description', 'the7mk2' ),
+				'label'        => esc_html__( 'Short Description', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1414,11 +1435,11 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'description_width',
 			[
-				'label'       => __( 'Width', 'the7mk2' ),
+				'label'       => esc_html__( 'Width', 'the7mk2' ),
 				'type'        => Controls_Manager::SELECT,
 				'options'     => [
-					'normal'      => __( 'Normal', 'the7mk2' ),
-					'crp-to-line' => __( 'Crop to one line', 'the7mk2' ),
+					'normal'      => esc_html__( 'Normal', 'the7mk2' ),
+					'crp-to-line' => esc_html__( 'Crop to one line', 'the7mk2' ),
 				],
 				'default'     => 'normal',
 				'condition'   => [
@@ -1431,8 +1452,8 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'description_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire title.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire title.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'min'         => 1,
@@ -1456,85 +1477,236 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'variations_section',
 			[
-				'label' => __( 'Variations & Add to cart', 'the7mk2' ),
+				'label' => esc_html__( 'Variations & Add to cart', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
-			]
-		);
-		$this->add_control(
-			'variations_heading',
-			[
-				'label' => __( 'Variations', 'the7mk2' ),
-				'type'  => Controls_Manager::HEADING,
 			]
 		);
 
 		$this->add_control(
+			'variations_heading',
+			[
+				'label' => esc_html__( 'Variations', 'the7mk2' ),
+				'type'  => Controls_Manager::HEADING,
+			]
+		);
+
+		$variations_show_options = [
+			'y' => esc_html__( 'Show', 'the7mk2' ),
+			'n' => esc_html__( 'Hide', 'the7mk2' ),
+		];
+		$device_variations_show_options = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $variations_show_options;
+
+		$this->add_basic_responsive_control(
 			'show_variations',
 			[
-				'label'        => __( 'Variations', 'the7mk2' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
-				'return_value' => 'y',
-				'default'      => '',
+				'label'        => esc_html__( 'Visibility', 'the7mk2' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'n',
+				'options'      => $variations_show_options,
+				'device_args'  => [
+					'tablet' => [
+						'options' => $device_variations_show_options,
+					],
+					'mobile' => [
+						'options' => $device_variations_show_options,
+					],
+				],
+				'selectors_dictionary' => [
+					'y' => 'flex',
+					'n' => 'none',
+				],
+				'selectors'            => [
+					'{{WRAPPER}} .products-variations-wrap' => 'display:{{VALUE}};',
+				],
+				'render_type'  => 'template',
+				'frontend_available' => true,
+				'prefix_class' => 'variations-visible%s-',
 			]
 		);
 
 		$this->add_control(
 			'variations_position',
 			[
-				'label'        => __( 'Position', 'the7mk2' ),
+				'label'        => esc_html__( 'Position', 'the7mk2' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'below_content',
 				'options'      => [
 					'on_image'       => 'On image',
-					'on_image_hover' => 'On image (box hover)',
 					'below_image'    => 'Before content',
 					'below_content'  => 'After content',
 				],
 				'render_type'  => 'template',
 				'prefix_class' => 'variations-position-',
-				'condition'    => [
-					'show_variations' => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'name'  => 'show_variations',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_variations_tablet',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_variations_mobile',
+							'value' => 'y',
+						],
+					],
+				],
+			]
+		);
+
+		$variations_visibility_options        = [
+			'always'   => esc_html__( 'Always', 'the7mk2' ),
+			'on-hover' => esc_html__( 'On image (box hover)', 'the7mk2' ),
+		];
+		$device_variations_visibility_options = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $variations_visibility_options;
+
+		$this->add_basic_responsive_control(
+			'show_variations_on_hover',
+			[
+				'label'        => esc_html__( 'Display', 'the7mk2' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'always',
+				'options'      => $variations_visibility_options,
+				'device_args'  => [
+					'tablet' => [
+						'options' => $device_variations_visibility_options,
+					],
+					'mobile' => [
+						'options' => $device_variations_visibility_options,
+					],
+				],
+				'selectors'            => [
+					'{{WRAPPER}}' => '{{VALUE}}',
+				],
+				'selectors_dictionary' => [
+					'always' => '--variations-opacity:1;',
+					'on-hover'  => '--variations-opacity:0;',
 				],
 				'frontend_available' => true,
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'variations_position',
+									'operator' => '==',
+									'value'    => 'on_image',
+								],
+								[
+									'name'     => 'show_variations',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'variations_position',
+									'operator' => '==',
+									'value'    => 'on_image',
+								],
+								[
+									'name'     => 'show_variations_tablet',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'variations_position',
+									'operator' => '==',
+									'value'    => 'on_image',
+								],
+								[
+									'name'     => 'show_variations_mobile',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
 		$this->add_control(
 			'skins_heading',
 			[
-				'label'     => __( 'Add to cart', 'the7mk2' ),
+				'label'     => esc_html__( 'Add to cart', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
 		);
 
-		$this->add_control(
+		$add_to_cart_show_options        = [
+			'y'   => esc_html__( 'Show', 'the7mk2' ),
+			'n' => esc_html__( 'Hide', 'the7mk2' ),
+		];
+		$device_add_to_cart_show_options = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $add_to_cart_show_options;
+
+		$this->add_basic_responsive_control(
 			'show_add_to_cart',
 			[
-				'label'        => __( 'Add to cart', 'the7mk2' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
-				'return_value' => 'y',
+				'label'        => esc_html__( 'Visibility', 'the7mk2' ),
+				'type'         => Controls_Manager::SELECT,
 				'default'      => 'y',
+				'options'      => $add_to_cart_show_options,
+				'device_args'  => [
+					'tablet' => [
+						'options' => $device_add_to_cart_show_options,
+					],
+					'mobile' => [
+						'options' => $device_add_to_cart_show_options,
+					],
+				],
+				'selectors_dictionary' => [
+					'y'  => 'flex',
+					'n' => 'none',
+				],
+				'selectors'            => [
+					'{{WRAPPER}} .woo-list-buttons' => 'display:{{VALUE}};',
+				],
+				'frontend_available' => true,
 			]
 		);
 
 		$this->add_control(
 			'layout',
 			[
-				'label'        => __( 'Style', 'the7mk2' ),
+				'label'        => esc_html__( 'Style', 'the7mk2' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'content_below_img',
 				'options'      => [
-					'content_below_img' => __( 'Button', 'the7mk2' ),
-					'btn_on_img'        => __( 'Icon', 'the7mk2' ),
-					'icon_with_text'    => __( 'Icon + Text on hover', 'the7mk2' ),
+					'content_below_img' => esc_html__( 'Button', 'the7mk2' ),
+					'btn_on_img'        => esc_html__( 'Icon', 'the7mk2' ),
+					'icon_with_text'    => esc_html__( 'Icon + Text on hover', 'the7mk2' ),
 				],
-				'condition'    => [
-					'show_add_to_cart' => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'name'  => 'show_add_to_cart',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_tablet',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_mobile',
+							'value' => 'y',
+						],
+					],
 				],
 				'render_type'  => 'template',
 				'prefix_class' => 'layout-',
@@ -1544,31 +1716,140 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'button_position',
 			[
-				'label'        => __( 'Position', 'the7mk2' ),
+				'label'        => esc_html__( 'Position', 'the7mk2' ),
 				'type'         => Controls_Manager::SELECT,
 				'default'      => 'below_image',
 				'options'      => [
 					'on_image'       => 'On image',
-					'on_image_hover' => 'On image (box hover)',
 					'below_image'    => 'After content',
 				],
 				'render_type'  => 'template',
 				'prefix_class' => 'btn-position-',
-				'condition'    => [
-					'show_add_to_cart' => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'name'  => 'show_add_to_cart',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_tablet',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_mobile',
+							'value' => 'y',
+						],
+					],
+				],
+			]
+		);
+
+		$btn_visibility_options        = [
+			'always'   => esc_html__( 'Always', 'the7mk2' ),
+			'on-hover' => esc_html__( 'On image (box hover)', 'the7mk2' ),
+		];
+		$device_btn_visibility_options = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $btn_visibility_options;
+
+		$this->add_basic_responsive_control(
+			'show_btn_on_hover',
+			[
+				'label'        => esc_html__( 'Display', 'the7mk2' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'always',
+				'options'      => $btn_visibility_options,
+				'device_args'  => [
+					'tablet' => [
+						'options' => $device_btn_visibility_options,
+					],
+					'mobile' => [
+						'options' => $device_btn_visibility_options,
+					],
+				],
+				'prefix_class' => 'show-btn%s-',
+				'selectors'            => [
+					'{{WRAPPER}}' => '{{VALUE}}',
+				],
+				'selectors_dictionary' => [
+					'always' => '--btn-opacity:1;',
+					'on-hover'  => '--btn-opacity:0;',
 				],
 				'frontend_available' => true,
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'button_position',
+									'operator' => '==',
+									'value'    => 'on_image',
+								],
+								[
+									'name'     => 'show_add_to_cart',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'button_position',
+									'operator' => '==',
+									'value'    => 'on_image',
+								],
+								[
+									'name'     => 'show_add_to_cart_tablet',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'button_position',
+									'operator' => '==',
+									'value'    => 'on_image',
+								],
+								[
+									'name'     => 'show_add_to_cart_mobile',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+							],
+						],
+					],
+				],
 			]
 		);
 
 		$this->add_control(
 			'icons_heading',
 			[
-				'label'     => __( 'Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
-				'condition' => [
-					'show_add_to_cart' => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'name'  => 'show_add_to_cart',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_tablet',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_mobile',
+							'value' => 'y',
+						],
+					],
 				],
 			]
 		);
@@ -1576,7 +1857,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'add_to_cart_icon',
 			[
-				'label'       => __( '"Add To Cart" Icon', 'the7mk2' ),
+				'label'       => esc_html__( '"Add To Cart" Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-shopping-cart',
@@ -1584,8 +1865,22 @@ class Products extends The7_Elementor_Widget_Base {
 				],
 				'skin'        => 'inline',
 				'label_block' => false,
-				'condition'   => [
-					'show_add_to_cart' => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'name'  => 'show_add_to_cart',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_tablet',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_add_to_cart_mobile',
+							'value' => 'y',
+						],
+					],
 				],
 			]
 		);
@@ -1593,43 +1888,73 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'options_icon',
 			[
-				'label'       => __( '"Options" Icon', 'the7mk2' ),
+				'label'       => esc_html__( '"Options" Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'description' => esc_html__( 'If none is selected, inherits from “Add To Cart” icon', 'the7mk2' ),
 				'default'     => [
 					'value'   => '',
 					'library' => '',
 				],
-				'condition'   => [
-					'show_variations!' => 'y',
-					'show_add_to_cart' => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'show_add_to_cart',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+								[
+									'name'     => 'show_variations',
+									'operator' => '!==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'show_add_to_cart_tablet',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+								[
+									'name'     => 'show_variations_tablet',
+									'operator' => '!==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'show_add_to_cart_mobile',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+								[
+									'name'     => 'show_variations_mobile',
+									'operator' => '!==',
+									'value'    => 'y',
+								],
+							],
+						],
+					],
 				],
 				'skin'        => 'inline',
 				'label_block' => false,
 			]
 		);
 
-		$this->add_control(
-			'show_added_to_cart',
-			[
-				'label'        => __( '"Added to cart" state', 'the7mk2' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
-				'return_value' => 'y',
-				'default'      => 'y',
-				'condition'    => [
-					'show_variations!' => 'y',
-					'show_add_to_cart' => 'y',
-				],
-				'prefix_class' => 'added-to-cart-',
-			]
-		);
 
 		$this->add_control(
 			'added_to_cart_icon',
 			[
-				'label'       => __( '"Added To Cart" Icon', 'the7mk2' ),
+				'label'       => esc_html__( '"Added To Cart" Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'description' => esc_html__( 'If none is selected, inherits from “Add To Cart” icon', 'the7mk2' ),
 				'default'     => [
@@ -1638,10 +1963,55 @@ class Products extends The7_Elementor_Widget_Base {
 				],
 				'skin'        => 'inline',
 				'label_block' => false,
-				'condition'   => [
-					'show_variations!'   => 'y',
-					'show_added_to_cart' => 'y',
-					'show_add_to_cart'   => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'show_add_to_cart',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+								[
+									'name'     => 'show_variations',
+									'operator' => '!==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'show_add_to_cart',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+								[
+									'name'     => 'show_variations_tablet',
+									'operator' => '!==',
+									'value'    => 'y',
+								],
+							],
+						],
+						[
+							'relation' => 'and',
+							'terms'    => [
+								[
+									'name'     => 'show_add_to_cart',
+									'operator' => '==',
+									'value'    => 'y',
+								],
+								[
+									'name'     => 'show_variations_mobile',
+									'operator' => '!==',
+									'value'    => 'y',
+								],
+							],
+						],
+					],
 				],
 			]
 		);
@@ -1656,7 +2026,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'content_style_section',
 			[
-				'label' => __( 'Content Area', 'the7mk2' ),
+				'label' => esc_html__( 'Content Area', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -1664,21 +2034,21 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'post_content_alignment',
 			[
-				'label'     => __( 'Text Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'toggle'    => false,
 				'default'   => 'left',
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -1691,7 +2061,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'post_content_padding',
 			[
-				'label'      => __( 'Content Area Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Content Area Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -1718,50 +2088,17 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_design_image',
 			[
-				'label' => __( 'Image', 'the7mk2' ),
+				'label' => esc_html__( 'Image', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
-		$this->add_control(
-			'item_preserve_ratio',
-			[
-				'label'        => __( 'Preserve Image Proportions', 'the7mk2' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'default'      => 'y',
-				'return_value' => 'y',
-				'prefix_class' => 'preserve-img-ratio-',
-			]
-		);
-
-		$this->add_basic_responsive_control(
-			'item_ratio',
-			[
-				'label'     => __( 'Image Ratio', 'the7mk2' ),
-				'type'      => Controls_Manager::SLIDER,
-				'default'   => [
-					'size' => 0.66,
-				],
-				'range'     => [
-					'px' => [
-						'min'  => 0.1,
-						'max'  => 2,
-						'step' => 0.01,
-					],
-				],
-				'condition' => [
-					'item_preserve_ratio!' => 'y',
-				],
-				'selectors' => [
-					'{{WRAPPER}}:not(.preserve-img-ratio-y) .img-ratio-wrapper' => 'padding-bottom:  calc( {{SIZE}} * 100% )',
-				],
-			]
-		);
+		$this->template( Image_Aspect_Ratio::class )->add_style_controls();
 
 		$this->add_control(
 			'img_border',
 			[
-				'label'      => __( 'Border', 'the7mk2' ),
+				'label'      => esc_html__( 'Border', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'selectors'  => [
@@ -1773,7 +2110,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'img_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -1785,14 +2122,14 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_hover_style',
 			[
-				'label'   => __( 'Hover Style', 'the7mk2' ),
+				'label'   => esc_html__( 'Hover Style', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'hover_image',
 				'options' => [
-					''            => __( 'No Hover', 'the7mk2' ),
-					'quick_scale' => __( 'Quick scale', 'the7mk2' ),
-					'slow_scale'  => __( 'Slow scale', 'the7mk2' ),
-					'hover_image' => __( 'Hover Image', 'the7mk2' ),
+					''            => esc_html__( 'No Hover', 'the7mk2' ),
+					'quick_scale' => esc_html__( 'Quick scale', 'the7mk2' ),
+					'slow_scale'  => esc_html__( 'Slow scale', 'the7mk2' ),
+					'hover_image' => esc_html__( 'Hover Image', 'the7mk2' ),
 				],
 			]
 		);
@@ -1800,12 +2137,12 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_hover_trigger',
 			[
-				'label'     => __( 'Enable Hover', 'the7mk2' ),
+				'label'     => esc_html__( 'Enable Hover', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'image',
 				'options'   => [
-					'image' => __( 'On image hover', 'the7mk2' ),
-					'box'   => __( 'On box hover', 'the7mk2' ),
+					'image' => esc_html__( 'On image hover', 'the7mk2' ),
+					'box'   => esc_html__( 'On box hover', 'the7mk2' ),
 				],
 				'condition' => [
 					'image_hover_style!' => '',
@@ -1818,7 +2155,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
@@ -1830,7 +2167,7 @@ class Products extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label' => __( 'Background Overlay', 'the7mk2' ),
+						'label' => esc_html__( 'Background Overlay', 'the7mk2' ),
 					],
 				],
 				'selector'       => '{{WRAPPER}} .img-wrap:before, {{WRAPPER}} .img-wrap:after { transition: none; } {{WRAPPER}} .img-wrap:before, {{WRAPPER}} .img-wrap:after',
@@ -1840,7 +2177,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_border_color',
 			[
-				'label'     => __( 'Border', 'the7mk2' ),
+				'label'     => esc_html__( 'Border', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1869,7 +2206,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_opacity',
 			[
-				'label'      => __( 'Opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Opacity', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -1890,7 +2227,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 		$this->add_group_control(
@@ -1911,7 +2248,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_hover_border_color',
 			[
-				'label'     => __( 'Border', 'the7mk2' ),
+				'label'     => esc_html__( 'Border', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1940,7 +2277,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_hover_opacity',
 			[
-				'label'      => __( 'Opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Opacity', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -1970,7 +2307,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'post_title_style_section',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_product_title' => 'y',
@@ -1982,7 +2319,7 @@ class Products extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'post_title',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'selector'       => '{{WRAPPER}} .product-title',
 				'fields_options' => [
 					'font_family' => [
@@ -2012,14 +2349,14 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_title_normal_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'custom_title_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2035,14 +2372,14 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_title_hover_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'post_title_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2059,7 +2396,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_title_bottom_margin',
 			[
-				'label'      => __( 'Spacing Above Title', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing Above Title', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -2117,7 +2454,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_color',
 			[
-				'label'     => __( 'Text  Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text  Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2130,7 +2467,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -2149,7 +2486,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => $item_count_border_color_selectors,
 			]
@@ -2165,10 +2502,24 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'show_variations_style',
 			[
-				'label'     => __( 'Variations', 'the7mk2' ),
+				'label'     => esc_html__( 'Variations', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
-				'condition' => [
-					'show_variations' => 'y',
+				'conditions' => [
+					'relation' => 'or',
+					'terms'    => [
+						[
+							'name'  => 'show_variations',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_variations_tablet',
+							'value' => 'y',
+						],
+						[
+							'name'  => 'show_variations_mobile',
+							'value' => 'y',
+						],
+					],
 				],
 			]
 		);
@@ -2176,19 +2527,19 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'variations_align',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -2201,16 +2552,13 @@ class Products extends The7_Elementor_Widget_Base {
 				'selectors'            => [
 					'{{WRAPPER}}' => '{{VALUE}}',
 				],
-				'condition'            => [
-					'show_variations' => 'y',
-				],
 			]
 		);
 
 		$this->add_basic_responsive_control(
 			'variations_row_space',
 			[
-				'label'     => __( 'Attributes gap', 'the7mk2' ),
+				'label'     => esc_html__( 'Attributes gap', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -2224,16 +2572,13 @@ class Products extends The7_Elementor_Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}}  .products-variations-wrap' => 'grid-row-gap: {{SIZE}}{{UNIT}};',
 				],
-				'condition' => [
-					'show_variations' => 'y',
-				],
 			]
 		);
 
 		$this->add_basic_responsive_control(
 			'variations_column_space',
 			[
-				'label'     => __( 'Values gap', 'the7mk2' ),
+				'label'     => esc_html__( 'Values gap', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -2246,9 +2591,6 @@ class Products extends The7_Elementor_Widget_Base {
 				],
 				'default'   => [
 					'size' => 10,
-				],
-				'condition' => [
-					'show_variations' => 'y',
 				],
 			]
 		);
@@ -2332,7 +2674,7 @@ class Products extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label'     => __( 'Background', 'the7mk2' ),
+						'label'     => esc_html__( 'Background', 'the7mk2' ),
 						'selectors' => [
 							'{{SELECTOR}}' => 'content: ""',
 						],
@@ -2345,7 +2687,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variations_border_color',
 			[
-				'label'     => __( 'Box Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Box Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .products-variations-wrap' => 'border-color: {{VALUE}}',
@@ -2360,7 +2702,7 @@ class Products extends The7_Elementor_Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'variations_shadow',
-				'label'    => __( 'Box Shadow', 'the7mk2' ),
+				'label'    => esc_html__( 'Box Shadow', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .products-variations-wrap',
 			]
 		);
@@ -2377,17 +2719,14 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variations_label',
 			[
-				'label'        => __( 'Label', 'the7mk2' ),
+				'label'        => esc_html__( 'Label', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'selectors'    => [
 					'{{WRAPPER}} .product-variation-row > span' => 'display: flex;',
-				],
-				'condition'    => [
-					'show_variations' => 'y',
 				],
 			]
 		);
@@ -2395,17 +2734,17 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variations_label_position',
 			[
-				'label'                => __( 'Label Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Label Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'toggle'               => false,
 				'default'              => 'left',
 				'options'              => [
 					'left' => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'top'  => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 				],
@@ -2433,10 +2772,9 @@ class Products extends The7_Elementor_Widget_Base {
 				'selectors'            => [
 					'{{WRAPPER}}' => '{{VALUE}}',
 				],
-				'condition'            => [
-					'show_variations'  => 'y',
+				'condition' => [
 					'variations_label' => 'y',
-				],
+				]
 			]
 		);
 
@@ -2445,17 +2783,23 @@ class Products extends The7_Elementor_Widget_Base {
 			[
 				'name'     => 'variations_label_typography',
 				'selector' => ' {{WRAPPER}} .product-variation-row > span',
+				'condition' => [
+					'variations_label' => 'y',
+				]
 			]
 		);
 
 		$this->add_control(
 			'variations_label_bg_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .product-variation-row > span' => 'color: {{VALUE}};',
 				],
+				'condition' => [
+					'variations_label' => 'y',
+				]
 			]
 		);
 
@@ -2478,6 +2822,9 @@ class Products extends The7_Elementor_Widget_Base {
 				'selectors'  => [
 					'{{WRAPPER}} .product-variation-row > span' => 'min-width: {{SIZE}}{{UNIT}};',
 				],
+				'condition' => [
+					'variations_label' => 'y',
+				]
 			]
 		);
 
@@ -2498,6 +2845,9 @@ class Products extends The7_Elementor_Widget_Base {
 				'selectors'  => [
 					'{{WRAPPER}}' => '--label-margin-top: {{TOP}}{{UNIT}}; --label-margin-right: {{RIGHT}}{{UNIT}}; --label-margin-bottom: {{BOTTOM}}{{UNIT}}; --label-margin-left: {{LEFT}}{{UNIT}};',
 				],
+				'condition' => [
+					'variations_label' => 'y',
+				]
 			]
 		);
 
@@ -2521,7 +2871,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'variation_width',
 			[
-				'label'      => __( 'Min Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -2543,7 +2893,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'variation_height',
 			[
-				'label'      => __( 'Min Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -2616,33 +2966,11 @@ class Products extends The7_Elementor_Widget_Base {
 		);
 
 		$this->start_controls_tabs( 'tabs_variations_style' );
-		$this->add_variations_tab_controls( 'normal_', __( 'Normal', 'the7mk2' ) );
-		$this->add_variations_tab_controls( 'hover_', __( 'Hover', 'the7mk2' ) );
-		$this->add_variations_tab_controls( 'active_', __( 'Selected', 'the7mk2' ) );
-		$this->add_variations_tab_controls( 'of_stock_', __( 'Out', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'normal_', esc_html__( 'Normal', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'hover_', esc_html__( 'Hover', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'active_', esc_html__( 'Selected', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'of_stock_', esc_html__( 'Out', 'the7mk2' ) );
 		$this->end_controls_tabs();
-
-		$this->add_control(
-			'gap_above_variations',
-			[
-				'label'      => __( 'Spacing Above Rating', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => 0,
-						'max'  => 100,
-						'step' => 1,
-					],
-				],
-				'selectors'  => [
-					'{{WRAPPER}} .products-variations' => 'margin-top: {{SIZE}}{{UNIT}};',
-				],
-				'condition'  => [
-					'variations_position' => 'below_content',
-				],
-			]
-		);
 
 		$this->end_controls_section();
 	}
@@ -2654,7 +2982,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'show_rating_style',
 			[
-				'label'     => __( 'Rating', 'the7mk2' ),
+				'label'     => esc_html__( 'Rating', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_rating' => 'y',
@@ -2665,7 +2993,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'stars_size',
 			[
-				'label'     => __( 'Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Size', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -2686,7 +3014,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'empty_star_color',
 			[
-				'label'     => __( 'Empty Star Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Empty Star Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2699,7 +3027,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'full_star_color',
 			[
-				'label'     => __( 'Filled Star Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Filled Star Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2712,7 +3040,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'gap_above_rating',
 			[
-				'label'      => __( 'Spacing Above Rating', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing Above Rating', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -2738,7 +3066,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'short_description_style_section',
 			[
-				'label'     => __( 'Short Description', 'the7mk2' ),
+				'label'     => esc_html__( 'Short Description', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_short_description' => 'y',
@@ -2750,7 +3078,7 @@ class Products extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'short_description_typography',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'fields_options' => [
 					'font_family' => [
 						'default' => '',
@@ -2778,7 +3106,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'short_description_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2791,7 +3119,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'short_description_bottom_margin',
 			[
-				'label'      => __( 'Spacing Above Description', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing Above Description', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -2932,11 +3260,11 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'add_to_cart_align',
 			[
-				'label'                => __( 'Horizontal Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'    => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'center'  => [
@@ -2944,7 +3272,7 @@ class Products extends The7_Elementor_Widget_Base {
 						'icon'  => 'eicon-h-align-center',
 					],
 					'right'   => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 					'justify' => [
@@ -3027,13 +3355,13 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'product_icon_h_position',
 			[
-				'label'                => __( 'Horizontal Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'toggle'               => false,
 				'default'              => 'right',
 				'options'              => [
 					'left'    => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'center'  => [
@@ -3041,7 +3369,7 @@ class Products extends The7_Elementor_Widget_Base {
 						'icon'  => 'eicon-h-align-center',
 					],
 					'right'   => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 					'justify' => [
@@ -3136,21 +3464,21 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'product_icon_v_position',
 			[
-				'label'                => __( 'Vertical Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Vertical Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'toggle'               => false,
 				'default'              => 'bottom',
 				'options'              => [
 					'top'    => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-bottom',
 					],
 				],
@@ -3190,7 +3518,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'add_to_cart_margin',
 			[
-				'label'      => __( 'Margins', 'the7mk2' ),
+				'label'      => esc_html__( 'Margins', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'selectors'  => [
@@ -3219,10 +3547,10 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'hide_icon',
 			[
-				'label'        => __( 'Icon', 'the7mk2' ),
+				'label'        => esc_html__( 'Icon', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -3245,7 +3573,7 @@ class Products extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_on_image_text_background_color',
 			[
-				'label'     => __( 'Text Background', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Background', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .woo-list-buttons .woo-popup-button { background-color: transparent;} {{WRAPPER}} .woo-list-buttons .woo-popup-button.elementor-button:hover' => 'background: {{VALUE}};',
@@ -3256,10 +3584,10 @@ class Products extends The7_Elementor_Widget_Base {
 			]
 		);
 
-		$this->add_control(
+		$this->add_basic_responsive_control(
 			'icon_on_image_text_padding',
 			[
-				'label'              => __( 'Padding', 'the7mk2' ),
+				'label'              => esc_html__( 'Padding', 'the7mk2' ),
 				'type'               => Controls_Manager::DIMENSIONS,
 				'size_units'         => [ 'px' ],
 				'allowed_dimensions' => 'horizontal',

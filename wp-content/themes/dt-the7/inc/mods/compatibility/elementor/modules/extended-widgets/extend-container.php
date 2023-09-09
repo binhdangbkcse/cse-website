@@ -29,7 +29,7 @@ class Extend_Container {
 	public function update_controls( $widget, $section_id, $args ) {
 		$widgets = [
 			'container' => [
-				'section_name' => [ 'section_layout' ],
+				'section_name' => [ 'section_layout_container' ],
 			],
 		];
 
@@ -42,20 +42,40 @@ class Extend_Container {
 			return;
 		}
 
+		$widget->update_control(
+			'content_width',
+			[
+				'options' => [
+					'boxed' => esc_html__( 'Boxed', 'the7mk2' ),
+					'full' => esc_html__( 'Full Width', 'the7mk2' ),
+					'fit' => esc_html__( 'Fit Content', 'the7mk2' ),
+				],
+			]
+		);
+
+		$widget->update_responsive_control(
+			'width',
+			[
+				'description' => __( 'Select  <i class="eicon-edit"></i>  and enter "fit-content" to make container width fit its content', 'the7mk2' ),
+			]
+		);
+
 		$widget->start_injection( [
-			'of' => 'position_description',
+			'of' => 'content_width',
 			'at' => 'after',
 		] );
 
-
-		$widget->add_responsive_control( 'the7_size_fit_content', [
-			'label'        => __( 'Fit Content', 'the7mk2' ),
-			'type'         => Controls_Manager::SWITCHER,
-			'separator'    => 'before',
+		$widget->add_control( 'the7_width_fit', [
+			'label'        => esc_html__( 'Fit Content', 'the7mk2' ),
+			'type'         => Controls_Manager::HIDDEN,
 			'selectors' => [
-				'{{WRAPPER}}.e-container' => 'flex-basis: fit-content;',
+				'{{WRAPPER}}' => '--width: fit-content;',
 			],
-			'classes' => 'the7-control',
+			'condition' => [
+				'content_width' => 'fit',
+			],
+			'default'      => 'y',
+			'return_value' => 'y',
 		] );
 
 		$widget->end_injection();

@@ -83,53 +83,70 @@ if ( ! class_exists( 'Presscore_Modules_Custom_Fonts', false ) ) {
 		 * Allow to use custom icons in VC shortcodes.
 		 */
 		public static function add_the7_icons_fields_in_vc_ui() {
-			$shortcodes_to_modify = array(
-				'vc_icon'    => array(
+			$shortcodes_to_modify = [
+				'vc_icon'        => [
 					'type'  => 'type',
 					'icons' => 'icon_the7',
-				),
-				'vc_btn'     => array(
+				],
+				'vc_btn'         => [
 					'type'  => 'i_type',
 					'icons' => 'i_icon_the7',
-				),
-				'vc_message' => array(
+				],
+				'vc_tta_section' => [
+					'type'  => 'i_type',
+					'icons' => 'i_icon_the7',
+				],
+				'vc_pricing_table' => [
+					'type'              => 'btn_i_type',
+					'icons'             => 'btn_i_icon_the7',
+					'additional_params' => [
+						'integrated_shortcode'       => 'vc_btn',
+						'integrated_shortcode_field' => 'btn_',
+						'group'                      => 'Button',
+					],
+				],
+				'vc_message'     => [
 					'type'  => 'icon_type',
 					'icons' => 'icon_the7',
-				),
-			);
+				],
+			];
 
 			foreach ( $shortcodes_to_modify as $tag => $params ) {
-				self::add_the7_icons_to_vc_shortcode( $tag, $params['type'], $params['icons'] );
+				self::add_the7_icons_to_vc_shortcode( $tag, $params );
 			}
 		}
 
 		/**
 		 * Add the7 icons type and selector in VC shortcode interface.
 		 *
-		 * @param string $tag         Shortcode tag.
-		 * @param string $type_param  Icons type param name.
-		 * @param string $icons_param Icons selector param name. Usually it's icon_the7 or i_icon_the7.
+		 * @param  string  $tag  Shortcode tag.
+		 * @param  array  $params  Icons type and selector.
 		 */
-		protected static function add_the7_icons_to_vc_shortcode( $tag, $type_param = 'type', $icons_param = 'icon_the7' ) {
-			$the7_icons_title = array( __( 'The7 Icons', 'the7mk2' ) => 'the7' );
-			$the7_icons_param = array(
-				array(
-					'type'        => 'iconpicker',
-					'heading'     => __( 'Icon', 'the7mk2' ),
-					'param_name'  => $icons_param,
-					'value'       => 'vc-oi vc-oi-dial',
-					'settings'    => array(
-						'emptyIcon'    => false,
-						'type'         => 'the7_icons',
-						'iconsPerPage' => 4000,
-					),
-					'dependency'  => array(
-						'element' => $type_param,
-						'value'   => 'the7',
-					),
-					'description' => __( 'Select icon from library.', 'the7mk2' ),
+		protected static function add_the7_icons_to_vc_shortcode( $tag, $params ) {
+			$type_param = isset( $params['type'] ) ? $params['type'] : 'type';
+			$icons_param = isset( $params['icons'] ) ? $params['icons'] : 'icon_the7';
+			$the7_icons_title = [ esc_html__( 'The7 Icons', 'the7mk2' ) => 'the7' ];
+			$the7_icons_param = [
+				array_merge(
+					[
+						'type'        => 'iconpicker',
+						'heading'     => esc_html__( 'Icon', 'the7mk2' ),
+						'param_name'  => $icons_param,
+						'value'       => 'vc-oi vc-oi-dial',
+						'settings'    => [
+							'emptyIcon'    => false,
+							'type'         => 'the7_icons',
+							'iconsPerPage' => 4000,
+						],
+						'dependency'  => [
+							'element' => $type_param,
+							'value'   => 'the7',
+						],
+						'description' => esc_html__( 'Select icon from library.', 'the7mk2' ),
+					],
+					isset( $params['additional_params'] ) ? $params['additional_params'] : []
 				),
-			);
+			];
 
 			$settings = WPBMap::getShortCode( $tag );
 
@@ -144,10 +161,10 @@ if ( ! class_exists( 'Presscore_Modules_Custom_Fonts', false ) ) {
 					continue;
 				}
 
-				$settings                      = wp_parse_args( $settings, array(
-					'admin_enqueue_css' => array(),
-					'front_enqueue_css' => array(),
-				) );
+				$settings                      = wp_parse_args( $settings, [
+					'admin_enqueue_css' => [],
+					'front_enqueue_css' => [],
+				] );
 				$settings['admin_enqueue_css'] = the7_get_custom_icons_stylesheets( $settings['admin_enqueue_css'] );
 				$settings['front_enqueue_css'] = the7_get_custom_icons_stylesheets( $settings['front_enqueue_css'] );
 

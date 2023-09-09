@@ -1,14 +1,11 @@
-.the7-simple-widget-products-carousel .the7-product-thumb {
-  width: 100%;
+.the7-simple-widget-products-carousel .the7-simple-post-thumb > a {
+  position: relative;
+  display: block;
 }
 .the7-simple-widget-products-carousel .post-entry-content {
   display: flex;
   flex-flow: column wrap;
   max-width: 100%;
-}
-.img-align-right .post-entry-content,
-.img-align-left .post-entry-content {
-  width: calc(100% - var(--image-size) - var(--image-spacing));
 }
 .img-align-top .post-entry-content {
   width: 100%;
@@ -88,16 +85,8 @@
   margin-left: 0;
   margin-right: 0;
 }
-.elementor-widget.preserve-img-ratio-y .the7-simple-widget-products-carousel .img-ratio-wrapper.compat-object-fit {
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.elementor-widget .the7-simple-widget-products-carousel .img-ratio-wrapper.compat-object-fit img {
-  display: none;
-}
-.elementor-widget .the7-simple-widget-products-carousel .img-ratio-wrapper.compat-object-fit {
-  background-size: cover;
-  background-position: center center;
+.the7-simple-widget-products-carousel .the7-simple-post-thumb > a:not(.post-thumbnail-rollover) img {
+  width: 100%;
 }
 .icon-box-vertical-align-center .post-entry-content {
   justify-content: center;

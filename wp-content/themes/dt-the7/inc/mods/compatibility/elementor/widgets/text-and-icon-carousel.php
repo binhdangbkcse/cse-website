@@ -18,6 +18,8 @@ use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Arrows;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Bullets;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Button;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -48,7 +50,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 	 * @return string|void
 	 */
 	protected function the7_title() {
-		return __( 'Multipurpose Carousel', 'the7mk2' );
+		return esc_html__( 'Multipurpose Carousel', 'the7mk2' );
 	}
 
 	/**
@@ -73,7 +75,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 	 * @return string[]
 	 */
 	public function get_style_depends() {
-		return [ 'the7-carousel-text-and-icon-widget' ];
+		return [ 'the7-carousel-text-and-icon-widget', 'the7-carousel-navigation' ];
 	}
 
 	/**
@@ -83,7 +85,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'content_section',
 			[
-				'label' => __( 'Slides', 'the7mk2' ),
+				'label' => esc_html__( 'Slides', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -93,16 +95,16 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$repeater->add_control(
 			'list_title',
 			[
-				'label'   => __( 'Title', 'the7mk2' ),
+				'label'   => esc_html__( 'Title', 'the7mk2' ),
 				'type'    => Controls_Manager::TEXT,
-				'default' => __( 'Title', 'the7mk2' ),
+				'default' => esc_html__( 'Title', 'the7mk2' ),
 			]
 		);
 
 		$repeater->add_control(
 			'list_content',
 			[
-				'label' => __( 'Subtitle', 'the7mk2' ),
+				'label' => esc_html__( 'Subtitle', 'the7mk2' ),
 				'type'  => Controls_Manager::TEXTAREA,
 			]
 		);
@@ -110,20 +112,20 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$repeater->add_control(
 			'graphic_type',
 			[
-				'label'       => __( 'Graphic Element', 'the7mk2' ),
+				'label'       => esc_html__( 'Graphic Element', 'the7mk2' ),
 				'type'        => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options'     => [
 					'icon'  => [
-						'title' => __( 'Icon', 'the7mk2' ),
+						'title' => esc_html__( 'Icon', 'the7mk2' ),
 						'icon'  => 'eicon-favorite',
 					],
 					'image' => [
-						'title' => __( 'Image', 'the7mk2' ),
+						'title' => esc_html__( 'Image', 'the7mk2' ),
 						'icon'  => 'eicon-image',
 					],
 					'none'  => [
-						'title' => __( 'None', 'the7mk2' ),
+						'title' => esc_html__( 'None', 'the7mk2' ),
 						'icon'  => 'eicon-ban',
 					],
 				],
@@ -136,7 +138,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$repeater->add_control(
 			'list_icon',
 			[
-				'label'     => __( 'Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::ICONS,
 				'default'   => [
 					'value'   => 'fas fa-check',
@@ -152,7 +154,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 			'list_image',
 			[
 				'name'        => 'image',
-				'label'       => __( 'Choose Image', 'the7mk2' ),
+				'label'       => esc_html__( 'Choose Image', 'the7mk2' ),
 				'type'        => Controls_Manager::MEDIA,
 				'default'     => [
 					'url' => Utils::get_placeholder_image_src(),
@@ -167,16 +169,16 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$repeater->add_control(
 			'button',
 			[
-				'label'   => __( 'Button text', 'the7mk2' ),
+				'label'   => esc_html__( 'Button text', 'the7mk2' ),
 				'type'    => Controls_Manager::TEXT,
-				'default' => __( 'Button text', 'the7mk2' ),
+				'default' => esc_html__( 'Button text', 'the7mk2' ),
 			]
 		);
 
 		$repeater->add_control(
 			'link',
 			[
-				'label'       => __( 'Link', 'the7mk2' ),
+				'label'       => esc_html__( 'Link', 'the7mk2' ),
 				'type'        => Controls_Manager::URL,
 				'dynamic'     => [
 					'active' => true,
@@ -192,18 +194,18 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 				'fields'      => $repeater->get_controls(),
 				'default'     => [
 					[
-						'list_title'   => __( 'Item #1', 'the7mk2' ),
-						'list_content' => __( 'Item content. Click the edit button to change this text.', 'the7mk2' ),
+						'list_title'   => esc_html__( 'Item #1', 'the7mk2' ),
+						'list_content' => esc_html__( 'Item content. Click the edit button to change this text.', 'the7mk2' ),
 						'list_icon'    => 'fas fa-check',
-						'button'       => __( 'Click Here', 'the7mk2' ),
-						'link'         => __( 'https://your-link.com', 'the7mk2' ),
+						'button'       => esc_html__( 'Click Here', 'the7mk2' ),
+						'link'         => esc_html__( 'https://your-link.com', 'the7mk2' ),
 					],
 					[
-						'list_title'   => __( 'Item #2', 'the7mk2' ),
-						'list_content' => __( 'Item content. Click the edit button to change this text.', 'the7mk2' ),
+						'list_title'   => esc_html__( 'Item #2', 'the7mk2' ),
+						'list_content' => esc_html__( 'Item content. Click the edit button to change this text.', 'the7mk2' ),
 						'list_icon'    => 'fas fa-check',
-						'button'       => __( 'Click Here', 'the7mk2' ),
-						'link'         => __( 'https://your-link.com', 'the7mk2' ),
+						'button'       => esc_html__( 'Click Here', 'the7mk2' ),
+						'link'         => esc_html__( 'https://your-link.com', 'the7mk2' ),
 					],
 				],
 				'title_field' => '{{{ list_title }}}',
@@ -215,7 +217,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'layout_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -246,7 +248,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 3,
 				'tablet_default' => 2,
@@ -254,10 +256,12 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 			]
 		);
 
+		$this->template( Image_Size::class )->add_style_controls();
+
 		$this->add_basic_responsive_control(
 			'gap_between_posts',
 			[
-				'label'      => __( 'Gap Between Columns (px)', 'the7mk2' ),
+				'label'      => esc_html__( 'Gap Between Columns (px)', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -277,7 +281,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'carousel_margin',
 			[
-				'label'       => __( 'outer gaps', 'the7mk2' ),
+				'label'       => esc_html__( 'outer gaps', 'the7mk2' ),
 				'type'        => Controls_Manager::DIMENSIONS,
 				'size_units'  => [ 'px' ],
 				'range'       => [
@@ -296,7 +300,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'adaptive_height',
 			[
-				'label'        => __( 'Adaptive Height', 'the7mk2' ),
+				'label'        => esc_html__( 'Adaptive Height', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -309,7 +313,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'scrolling_section',
 			[
-				'label' => __( 'Scrolling', 'the7mk2' ),
+				'label' => esc_html__( 'Scrolling', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -317,7 +321,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'slide_to_scroll',
 			[
-				'label'   => __( 'Scroll Mode', 'the7mk2' ),
+				'label'   => esc_html__( 'Scroll Mode', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'single',
 				'options' => [
@@ -330,7 +334,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'speed',
 			[
-				'label'   => __( 'Transition Speed (ms)', 'the7mk2' ),
+				'label'   => esc_html__( 'Transition Speed (ms)', 'the7mk2' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => '600',
 			]
@@ -339,7 +343,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'autoplay',
 			[
-				'label'        => __( 'Autoplay Slides', 'the7mk2' ),
+				'label'        => esc_html__( 'Autoplay Slides', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -349,7 +353,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'autoplay_speed',
 			[
-				'label'     => __( 'Autoplay Speed (ms)', 'the7mk2' ),
+				'label'     => esc_html__( 'Autoplay Speed (ms)', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 6000,
 				'min'       => 100,
@@ -369,23 +373,23 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'skin_section',
 			[
-				'label' => __( 'Skin', 'the7mk2' ),
+				'label' => esc_html__( 'Skin', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
 		$layouts            = [
-			'layout_1' => __( 'Above content', 'the7mk2' ),
-			'layout_2' => __( 'Aligned with title', 'the7mk2' ),
-			'layout_3' => __( 'Left aligned with content', 'the7mk2' ),
-			'layout_4' => __( 'Right aligned with content', 'the7mk2' ),
+			'layout_1' => esc_html__( 'Above content', 'the7mk2' ),
+			'layout_2' => esc_html__( 'Aligned with title', 'the7mk2' ),
+			'layout_3' => esc_html__( 'Left aligned with content', 'the7mk2' ),
+			'layout_4' => esc_html__( 'Right aligned with content', 'the7mk2' ),
 		];
-		$layouts_on_devices = [ 'default' => __( 'No change', 'the7mk2' ) ] + $layouts;
+		$layouts_on_devices = [ 'default' => esc_html__( 'No change', 'the7mk2' ) ] + $layouts;
 
 		$this->add_basic_responsive_control(
 			'layout',
 			[
-				'label'        => __( 'Choose Skin', 'the7mk2' ),
+				'label'        => esc_html__( 'Choose Skin', 'the7mk2' ),
 				'type'         => Controls_Manager::SELECT,
 				'options'              => $layouts,
 				'device_args'          => [
@@ -463,20 +467,20 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'content_alignment',
 			[
-				'label'        => __( 'Alignment', 'the7mk2' ),
+				'label'        => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'         => Controls_Manager::CHOOSE,
 				'label_block'  => false,
 				'options'      => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -517,7 +521,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_below_gap',
 			[
-				'label'      => __( 'Graphic Element Margin', 'the7mk2' ),
+				'label'      => esc_html__( 'Graphic Element Margin', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -535,7 +539,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_bg_size',
 			[
-				'label'      => __( 'Graphic Element Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Graphic Element Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -561,19 +565,19 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'link_click',
 			[
-				'label'   => __( 'Apply Link & Hover On', 'the7mk2' ),
+				'label'   => esc_html__( 'Apply Link & Hover On', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'button',
 				'options' => [
-					'slide'  => __( 'Whole box', 'the7mk2' ),
-					'button' => __( "Separate slide's elements", 'the7mk2' ),
+					'slide'  => esc_html__( 'Whole box', 'the7mk2' ),
+					'button' => esc_html__( "Separate slide's elements", 'the7mk2' ),
 				],
 			]
 		);
 		$this->add_control(
 			'link_hover',
 			[
-				'label'        => __( 'Apply Hover To Slides With No Links', 'the7mk2' ),
+				'label'        => esc_html__( 'Apply Hover To Slides With No Links', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -585,7 +589,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'box_section',
 			[
-				'label' => __( 'Box', 'the7mk2' ),
+				'label' => esc_html__( 'Box', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -593,7 +597,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -611,7 +615,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -629,7 +633,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -654,7 +658,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'classic_style_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
@@ -676,7 +680,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .dt-owl-item-wrap' => 'background-color: {{VALUE}}',
@@ -687,7 +691,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .dt-owl-item-wrap' => 'border-color: {{VALUE}}',
@@ -700,7 +704,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'classic_style_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
@@ -708,7 +712,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'           => 'box_shadow_hover',
-				'selector'       => '{{WRAPPER}} .dt-owl-item-wrap { transition: all 0.3s ease; } {{WRAPPER}} .dt-owl-item-wrap.box-hover:hover, {{WRAPPER}} .dt-owl-item-wrap.elements-hover:hover',
+				'selector'       => '{{WRAPPER}} .dt-owl-item-wrap.box-hover:hover, {{WRAPPER}} .dt-owl-item-wrap.elements-hover:hover',
 				'fields_options' => [
 					'box_shadow' => [
 						'selectors' => [
@@ -724,12 +728,10 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_background_color_hover',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'
-					{{WRAPPER}} .dt-owl-item-wrap { transition: all 0.3s ease; }
-					{{WRAPPER}} .dt-owl-item-wrap.box-hover:hover, {{WRAPPER}} .dt-owl-item-wrap.elements-hover:hover' => 'background-color: {{VALUE}};',
+					'{{WRAPPER}} .dt-owl-item-wrap.box-hover:hover, {{WRAPPER}} .dt-owl-item-wrap.elements-hover:hover' => 'background-color: {{VALUE}};',
 				],
 			]
 		);
@@ -737,12 +739,10 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_color_hover',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'
-					{{WRAPPER}} .dt-owl-item-wrap { transition: all 0.3s ease; }
-					{{WRAPPER}} .dt-owl-item-wrap.box-hover:hover, {{WRAPPER}} .dt-owl-item-wrap.elements-hover:hover' => 'border-color: {{VALUE}}',
+					'{{WRAPPER}} .dt-owl-item-wrap.box-hover:hover, {{WRAPPER}} .dt-owl-item-wrap.elements-hover:hover' => 'border-color: {{VALUE}}',
 				],
 			]
 		);
@@ -756,7 +756,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_style_main-menu',
 			[
-				'label' => __( 'Title', 'the7mk2' ),
+				'label' => esc_html__( 'Title', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 
 			]
@@ -765,7 +765,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_tag',
 			[
-				'label'   => __( 'HTML Tag', 'the7mk2' ),
+				'label'   => esc_html__( 'HTML Tag', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => [
 					'h1'   => 'H1',
@@ -786,7 +786,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'post_title',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'selector'       => '{{WRAPPER}} .dt-owl-item-heading',
 				'fields_options' => [
 					'font_family' => [
@@ -816,14 +816,14 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_title_normal_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'custom_title_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -838,21 +838,19 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_title_hover_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'post_title_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'
-					{{WRAPPER}} .dt-owl-item-heading { transition: color 0.3s ease; }
-					{{WRAPPER}} .box-hover:hover .dt-owl-item-heading, {{WRAPPER}} .elements-hover .dt-owl-item-heading:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .box-hover:hover .dt-owl-item-heading, {{WRAPPER}} .elements-hover .dt-owl-item-heading:hover' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -864,7 +862,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_title_bottom_margin',
 			[
-				'label'      => __( 'Gap Below Title', 'the7mk2' ),
+				'label'      => esc_html__( 'Gap Below Title', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -892,7 +890,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'text_section',
 			[
-				'label' => __( 'Text', 'the7mk2' ),
+				'label' => esc_html__( 'Text', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -901,7 +899,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'post_content',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'fields_options' => [
 					'font_family' => [
 						'default' => '',
@@ -931,14 +929,14 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_content_normal_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'post_content_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -953,20 +951,19 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_content_hover_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'post_content_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .dt-owl-item-description { transition: color 0.3s ease; }
-					{{WRAPPER}} .box-hover:hover .dt-owl-item-description,
+					'{{WRAPPER}} .box-hover:hover .dt-owl-item-description,
 					{{WRAPPER}} .elements-hover .dt-owl-item-description:hover' => 'color: {{VALUE}};',
 				],
 			]
@@ -979,7 +976,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_content_bottom_margin',
 			[
-				'label'      => __( 'Gap Below Text', 'the7mk2' ),
+				'label'      => esc_html__( 'Gap Below Text', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1007,7 +1004,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'icon_section',
 			[
-				'label' => __( 'Icon', 'the7mk2' ),
+				'label' => esc_html__( 'Icon', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -1015,7 +1012,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_size',
 			[
-				'label'      => __( 'Icon Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Icon Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1038,7 +1035,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'default'    => [
 					'unit' => 'px',
@@ -1061,7 +1058,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'default'    => [
 					'unit' => 'px',
@@ -1085,20 +1082,20 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_menu_item_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'icon_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .dt-owl-item-icon i'   => 'color: {{VALUE}}',
-					'{{WRAPPER}} .dt-owl-item-icon svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .dt-owl-item-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -1106,7 +1103,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1120,7 +1117,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_bg_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1135,20 +1132,20 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_icon_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'icon_color_hover',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .dt-owl-item-icon i { transition: color 0.3s ease; } {{WRAPPER}} .box-hover:hover .dt-owl-item-icon > i,  {{WRAPPER}} .elements-hover .dt-owl-item-icon:hover > i' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .dt-owl-item-icon svg { transition: fill 0.3s ease; } {{WRAPPER}} .box-hover:hover .dt-owl-item-icon > svg,  {{WRAPPER}} .elements-hover .dt-owl-item-icon:hover > svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .box-hover:hover .dt-owl-item-icon > i,  {{WRAPPER}} .elements-hover .dt-owl-item-icon:hover > i' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .box-hover:hover .dt-owl-item-icon > svg,  {{WRAPPER}} .elements-hover .dt-owl-item-icon:hover > svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -1156,7 +1153,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_border_color_hover',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1172,7 +1169,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_bg_color_hover',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1193,34 +1190,17 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_design_image',
 			[
-				'label' => __( 'Image', 'the7mk2' ),
+				'label' => esc_html__( 'Image', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 
-		$this->add_control(
-			'image_ratio',
-			[
-				'label'       => __( 'Image Ratio', 'the7mk2' ),
-				'description' => __( 'Lieve empty to use original proportions', 'the7mk2' ),
-				'type'        => Controls_Manager::SLIDER,
-				'default'     => [
-					'size' => '',
-				],
-				'range'       => [
-					'px' => [
-						'min'  => 0.1,
-						'max'  => 2,
-						'step' => 0.01,
-					],
-				],
-			]
-		);
+		$this->template( Image_Aspect_Ratio::class )->add_style_controls();
 
 		$this->add_control(
 			'img_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -1234,13 +1214,13 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_scale_animation_on_hover',
 			[
-				'label'   => __( 'Scale Animation On Hover', 'the7mk2' ),
+				'label'   => esc_html__( 'Scale Animation On Hover', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'quick_scale',
 				'options' => [
-					'disabled'    => __( 'Disabled', 'the7mk2' ),
-					'quick_scale' => __( 'Quick scale', 'the7mk2' ),
-					'slow_scale'  => __( 'Slow scale', 'the7mk2' ),
+					'disabled'    => esc_html__( 'Disabled', 'the7mk2' ),
+					'quick_scale' => esc_html__( 'Quick scale', 'the7mk2' ),
+					'slow_scale'  => esc_html__( 'Slow scale', 'the7mk2' ),
 				],
 			]
 		);
@@ -1250,7 +1230,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
@@ -1262,7 +1242,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label' => __( 'Overlay', 'the7mk2' ),
+						'label' => esc_html__( 'Overlay', 'the7mk2' ),
 					],
 				],
 				'selector'       => '
@@ -1295,7 +1275,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_opacity',
 			[
-				'label'      => __( 'Opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Opacity', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -1316,7 +1296,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
@@ -1328,7 +1308,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label' => __( 'Overlay', 'the7mk2' ),
+						'label' => esc_html__( 'Overlay', 'the7mk2' ),
 					],
 					'color'      => [
 						'selectors' => [
@@ -1369,7 +1349,7 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_hover_opacity',
 			[
-				'label'      => __( 'Opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Opacity', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -1417,7 +1397,6 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 		}
 
 		$this->remove_image_hooks();
-		$this->print_inline_css();
 
 		$this->template( Arrows::class )->add_container_render_attributes( 'wrapper' );
 		$this->add_container_class_render_attribute( 'wrapper' );
@@ -1425,27 +1404,13 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 
 		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '<div ' . $this->get_render_attribute_string( 'wrapper' ) . '>';
-
-		$image_proportion     = ( empty( $settings['image_ratio']['size'] ) ? null : $settings['image_ratio']['size'] );
-		$image_resize_options = [];
-		if ( in_array( 'image', array_column( $settings['list'], 'graphic_type' ), true ) ) {
-			$image_resize_options = the7_calculate_bwb_image_resize_options(
-				[
-					'desktop'  => $settings['widget_columns'],
-					'v_tablet' => $settings['widget_columns_tablet'],
-					'h_tablet' => $settings['widget_columns_tablet'],
-					'phone'    => $settings['widget_columns_mobile'],
-				],
-				0,
-				false
-			);
-		}
-		$title_element = Utils::validate_html_tag( $settings['title_tag'] );
-		$slide_count   = 0;
-		$layzr_bg = '';
-		if ( presscore_lazy_loading_enabled() ) {
-			$layzr_bg = 'layzr-bg';
-		}
+		$title_element     = Utils::validate_html_tag( $settings['title_tag'] );
+		$slide_count       = 0;
+		$img_wrapper_class = implode( ' ', array_filter( [
+			'dt-owl-item-image',
+			$this->template( Image_Size::class )->get_wrapper_class(),
+			$this->template( Image_Aspect_Ratio::class )->get_wrapper_class(),
+		] ) );
 
 		foreach ( $settings['list'] as $slide ) {
 			$btn_attributes_list = [];
@@ -1501,21 +1466,9 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 					'i'
 				);
 				echo '</' . $icon_element . '>';
-			}
-
-			if ( 'image' === $slide['graphic_type'] && ! empty( $slide['list_image']['id'] ) ) {
-				echo '<' . $icon_element . ' ' . $btn_attributes . ' class="dt-owl-item-image ' . $layzr_bg . '"> ';
-
-				dt_get_thumb_img(
-					[
-						'img_id'  => $slide['list_image']['id'],
-						'wrap'    => '<img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% />',
-						'options' => $image_resize_options,
-						'prop'    => $image_proportion,
-						'echo'    => true,
-					]
-				);
-
+			} elseif ( 'image' === $slide['graphic_type'] && ! empty( $slide['list_image']['id'] ) ) {
+				echo '<' . $icon_element . ' ' . $btn_attributes . ' class="' . $img_wrapper_class . '"> ';
+				echo $this->template( Image_Size::class )->get_image( $slide['list_image']['id'] );
 				echo '</' . $icon_element . '>';
 			}
 
@@ -1568,18 +1521,6 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 
 		$settings = $this->get_settings_for_display();
 
-		$class[] = the7_array_match(
-			$settings['bullets_style'],
-			[
-				'scale-up'         => 'bullets-scale-up',
-				'stroke'           => 'bullets-stroke',
-				'fill-in'          => 'bullets-fill-in',
-				'small-dot-stroke' => 'bullets-small-dot-stroke',
-				'ubax'             => 'bullets-ubax',
-				'etefu'            => 'bullets-etefu',
-			]
-		);
-
 		if ( $settings['image_scale_animation_on_hover'] === 'quick_scale' ) {
 			$class[] = 'quick-scale-img';
 		} elseif ( $settings['image_scale_animation_on_hover'] === 'slow_scale' ) {
@@ -1606,128 +1547,14 @@ class Text_And_Icon_Carousel extends The7_Elementor_Widget_Base {
 			'data-v-tablet-columns-num' => $settings['widget_columns_tablet'],
 			'data-phone-columns-num'    => $settings['widget_columns_mobile'],
 			'data-auto-height'          => $settings['adaptive_height'] ? 'true' : 'false',
-			'data-col-gap'              => $settings['gap_between_posts']['size'],
-			'data-col-gap-tablet'       => $settings['gap_between_posts_tablet']['size'],
-			'data-col-gap-mobile'       => $settings['gap_between_posts_mobile']['size'],
+			'data-col-gap'              => $settings['gap_between_posts']['size'] ?? null,
+			'data-col-gap-tablet'       => $settings['gap_between_posts_tablet']['size'] ?? null,
+			'data-col-gap-mobile'       => $settings['gap_between_posts_mobile']['size'] ?? null,
 			'data-speed'                => $settings['speed'],
 			'data-autoplay'             => $settings['autoplay'] ? 'true' : 'false',
 			'data-autoplay_speed'       => $settings['autoplay_speed'],
-			'data-bullet'               => $settings['show_bullets'],
-			'data-bullet_tablet'        => $settings['show_bullets_tablet'],
-			'data-bullet_mobile'        => $settings['show_bullets_mobile'],
 		];
 
 		$this->add_render_attribute( $element, $data_atts );
-	}
-
-	/**
-	 * Return shortcode less file absolute path to output inline.
-	 *
-	 * @return string
-	 */
-	protected function get_less_file_name() {
-		return PRESSCORE_THEME_DIR . '/css/dynamic-less/elementor/the7-carousel-text-and-icon-widget.less';
-	}
-
-	/**
-	 * @param  The7_Elementor_Less_Vars_Decorator_Interface $less_vars Less vars manager object.
-	 *
-	 * @return void
-	 */
-	protected function less_vars( The7_Elementor_Less_Vars_Decorator_Interface $less_vars ) {
-		// For project icon style, see `selectors` in settings declaration.
-
-		$settings = $this->get_settings_for_display();
-
-		$less_vars->add_keyword(
-			'unique-shortcode-class-name',
-			$this->get_unique_class() . '.text-and-icon-carousel',
-			'~"%s"'
-		);
-
-		$less_vars->add_pixel_number( 'icon-size', $settings['arrow_icon_size'] );
-
-		$this->template( Arrows::class )->add_less_vars( $less_vars );
-
-		$less_vars->add_keyword( 'bullets-v-position', $settings['bullets_v_position'] );
-		$less_vars->add_keyword( 'bullets-h-position', $settings['bullets_h_position'] );
-		$less_vars->add_pixel_number( 'bullet-v-position', $settings['bullets_v_offset'] );
-		$less_vars->add_pixel_number( 'bullet-h-position', $settings['bullets_h_offset'] );
-
-		$icon_bg_size       = array_merge( [ 'size' => 0 ], array_filter( $settings['icon_bg_size'] ) );
-		$iconbg_size_tablet = array_merge(
-			$icon_bg_size,
-			$this->unset_empty_value( $settings['icon_bg_size_tablet'] )
-		);
-		$iconbg_size_mobile = array_merge(
-			$iconbg_size_tablet,
-			$this->unset_empty_value( $settings['icon_bg_size_mobile'] )
-		);
-		$less_vars->add_pixel_or_percent_number( 'icon-bg-size', $icon_bg_size );
-		$less_vars->add_pixel_or_percent_number( 'icon-bg-size-tablet', $iconbg_size_tablet );
-		$less_vars->add_pixel_or_percent_number( 'icon-bg-size-mobile', $iconbg_size_mobile );
-
-		$less_vars->add_pixel_number(
-			'icon-font-size',
-			$this->get_settings_for_display( 'icon_size' )
-		);
-		$less_vars->add_pixel_number(
-			'icon-font-size-tablet',
-			$this->get_responsive_setting( 'icon_size', 'tablet' )
-		);
-		$less_vars->add_pixel_number(
-			'icon-font-size-mobile',
-			$this->get_responsive_setting( 'icon_size', 'mobile' )
-		);
-
-		$defaults              = [
-			'top'    => 0,
-			'right'  => 0,
-			'bottom' => 0,
-			'left'   => 0,
-		];
-		$icon_below_gap        = array_merge(
-			$defaults,
-			the7_array_filter_non_empty_string( $settings['icon_below_gap'] )
-		);
-		$icon_below_gap_tablet = array_merge(
-			$icon_below_gap,
-			$this->unset_empty_value( $settings['icon_below_gap_tablet'] )
-		);
-		$icon_below_gap_mobile = array_merge(
-			$icon_below_gap_tablet,
-			$this->unset_empty_value( $settings['icon_below_gap_mobile'] )
-		);
-
-		$less_vars->add_paddings(
-			[
-				'icon-padding-top',
-				'icon-padding-right',
-				'icon-padding-bottom',
-				'icon-padding-left',
-			],
-			$icon_below_gap,
-			'px|%'
-		);
-		$less_vars->add_paddings(
-			[
-				'icon-padding-top-tablet',
-				'icon-padding-right-tablet',
-				'icon-padding-bottom-tablet',
-				'icon-padding-left-tablet',
-			],
-			$icon_below_gap_tablet,
-			'px|%'
-		);
-		$less_vars->add_paddings(
-			[
-				'icon-padding-top-mobile',
-				'icon-padding-right-mobile',
-				'icon-padding-bottom-mobile',
-				'icon-padding-left-mobile',
-			],
-			$icon_below_gap_mobile,
-			'px|%'
-		);
 	}
 }

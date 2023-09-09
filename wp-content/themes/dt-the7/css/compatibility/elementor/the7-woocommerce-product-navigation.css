@@ -120,6 +120,7 @@
   font: var(--the7-woo-title-font);
   text-transform: var(--the7-woo-title-text-transform);
   float: none;
+  transition: color 0.3s ease;
 }
 .the7-product-navigation .the7-nav-product:hover .widget-product-info .product-title {
   color: var(--the7-title-color);
@@ -136,15 +137,18 @@
 .the7-product-navigation.post-nav .post-navigation__arrow-wrapper svg {
   width: 16px;
   height: 16px;
+  transition: all 0.3s ease;
 }
 .post-nav .post-navigation__arrow-wrapper i,
 .post-nav .post-navigation__arrow-wrapper svg {
   -webkit-transform: translateY(-5%);
   -ms-transform: translateY(-5%);
   transform: translateY(-5%);
+  transition: color 0.3s ease;
 }
 .the7-product-navigation.post-nav .post-navigation__arrow-wrapper svg path {
   fill: var(--the7-title-color);
+  color: var(--the7-title-color);
 }
 .the7-product-navigation.post-nav .post-navigation__arrow-wrapper.nav-arrow-prev {
   padding-right: 0;
@@ -213,13 +217,18 @@
 .the7-product-navigation .post-nav__back-wrapper:hover a {
   color: var(--the7-title-color);
 }
+.the7-product-navigation .post-nav__back-wrapper a {
+  transition: color 0.3s ease;
+}
 .post-nav__back-wrapper svg {
   width: 16px;
   height: 16px;
+  transition: all 0.3s ease;
 }
 .post-nav__back-wrapper svg path,
 .post-nav__back-wrapper:hover svg path {
   fill: var(--the7-title-color);
+  color: var(--the7-title-color);
 }
 .the7-navigation--skin-outer .post-nav__next,
 .the7-product-navigation.content--align-sides .post-nav__next a.product-title {

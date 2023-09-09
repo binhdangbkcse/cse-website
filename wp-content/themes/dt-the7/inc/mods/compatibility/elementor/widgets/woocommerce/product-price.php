@@ -26,7 +26,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Product Price', 'the7mk2' );
+		return esc_html__( 'Product Price', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -51,7 +51,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'price_style',
 			[
-				'label' => __( 'Price', 'the7mk2' ),
+				'label' => esc_html__( 'Price', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -59,19 +59,19 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'text_align',
 			[
-				'label'     => __( 'Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -85,7 +85,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 			'normal_price_heading',
 			[
 				'type'  => \Elementor\Controls_Manager::HEADING,
-				'label' => __( 'Normal price', 'the7mk2' ),
+				'label' => esc_html__( 'Normal price', 'the7mk2' ),
 			]
 		);
 
@@ -93,7 +93,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'price_typography',
-				'label'    => __( 'Normal Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Normal Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price, {{WRAPPER}} .price > span.woocommerce-Price-amount.amount, {{WRAPPER}} .price > span.woocommerce-Price-amount span',
 			]
 		);
@@ -101,7 +101,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'normal_price_text_color',
 			[
-				'label'     => __( 'Normal Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Normal Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price, {{WRAPPER}} .price > span.woocommerce-Price-amount.amount, {{WRAPPER}} .price > span.woocommerce-Price-amount span' => 'color: {{VALUE}};',
@@ -113,7 +113,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 			'sale_price_heading',
 			[
 				'type'      => \Elementor\Controls_Manager::HEADING,
-				'label'     => __( 'Sale Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Sale Price', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -122,7 +122,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_price_typography',
-				'label'    => __( 'Old Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Old Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price del, {{WRAPPER}} .price del span',
 			]
 		);
@@ -130,7 +130,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sale_price_text_color',
 			[
-				'label'     => __( 'Old Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price del span' => 'color: {{VALUE}};',
@@ -141,7 +141,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'old_price_line_color',
 			[
-				'label'     => __( 'Old Price Line Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Line Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price del' => 'color: {{VALUE}};',
@@ -153,7 +153,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_new_price_typography',
-				'label'    => __( 'New Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'New Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price ins span',
 			]
 		);
@@ -161,7 +161,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sale_new_price_text_color',
 			[
-				'label'     => __( 'New Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'New Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price ins span' => 'color: {{VALUE}};',
@@ -172,7 +172,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'price_block',
 			[
-				'label'        => __( 'Stacked', 'the7mk2' ),
+				'label'        => esc_html__( 'Stacked', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'yes',
 				'prefix_class' => 'elementor-product-price-block-',
@@ -182,7 +182,7 @@ class Product_Price extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sale_price_spacing',
 			[
-				'label'      => __( 'Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em' ],
 				'range'      => [

@@ -5,10 +5,6 @@
         elementorFrontend.hooks.addAction("frontend/element_ready/the7-elements-simple-posts.default", function($scope, $) {
             // Most of the methods here are defined after the document is ready.
             $(function() {
-                if (!$scope.hasClass("preserve-img-ratio-y")) {
-                    window.the7ApplyWidgetImageRatio($scope);
-                }
-
                 // Actually show cells with the fade effect.
                 window.the7ProcessEffects($scope.find(".wf-cell:not(.shown)"));
 

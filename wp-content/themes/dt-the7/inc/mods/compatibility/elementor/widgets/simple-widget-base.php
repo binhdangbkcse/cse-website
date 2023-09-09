@@ -12,6 +12,8 @@ use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Css_Filter;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -31,7 +33,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'fetatured_image_style',
 			[
-				'label'     => __( 'Featured Image', 'the7mk2' ),
+				'label'     => esc_html__( 'Featured Image', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => $condition,
 			]
@@ -40,7 +42,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'position_title',
 			[
-				'label' => __( 'Position', 'the7mk2' ),
+				'label' => esc_html__( 'Position', 'the7mk2' ),
 				'type'  => \Elementor\Controls_Manager::HEADING,
 			]
 		);
@@ -48,19 +50,19 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'align_image',
 			[
-				'label'                => __( 'Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'  => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'top'   => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -75,30 +77,60 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 					],
 				],
 				'prefix_class'         => 'img-align%s-',
+				// 'selectors_dictionary' => [
+				// 	'top'   => 'flex-flow: column wrap;',
+				// 	'left'  => 'flex-flow: row nowrap;',
+				// 	'right' => 'flex-flow: row nowrap;',
+				// ],
+				// 'selectors'            => [
+				// 	'{{WRAPPER}} .post-content-wrapper' => '{{VALUE}}',
+				// ],
+
 				'selectors_dictionary' => [
-					'top'   => 'flex-flow: column wrap;',
-					'left'  => 'flex-flow: row nowrap;',
-					'right' => 'flex-flow: row nowrap;',
+					'top'   => $this->combine_to_css_vars_definition_string(
+						[
+							'content-wrapper-flex-flow' => 'column wrap',
+							'thumb-margin' => '0 0 var(--image-spacing) 0',
+							'thumb-order' =>  '0',
+							'content-width' =>  '100%',
+						]
+					),
+					'left' => $this->combine_to_css_vars_definition_string(
+						[
+							'content-wrapper-flex-flow' => 'row nowrap',
+							'thumb-margin' => '0 var(--image-spacing) 0 0',
+							'thumb-order' =>  '0',
+							'content-width' =>  ' calc(100% - var(--image-size) - var(--image-spacing))',
+						]
+					),
+					'right'  => $this->combine_to_css_vars_definition_string(
+						[
+							'content-wrapper-flex-flow' => 'row nowrap',
+							'thumb-margin' => '0 0 0 var(--image-spacing)',
+							'thumb-order' =>  '2',
+							'content-width' =>  ' calc(100% - var(--image-size) - var(--image-spacing))',
+						]
+					),
 				],
 				'selectors'            => [
-					'{{WRAPPER}} .post-content-wrapper' => '{{VALUE}}',
+					'{{WRAPPER}} [class*="the7-simple-widget-"]' => '{{VALUE}}',
 				],
 			]
 		);
 
 		$img_position_options            = [
-			'start'  => __( 'Start', 'the7mk2' ),
-			'center' => __( 'Center', 'the7mk2' ),
-			'end'    => __( 'End', 'the7mk2' ),
+			'start'  => esc_html__( 'Start', 'the7mk2' ),
+			'center' => esc_html__( 'Center', 'the7mk2' ),
+			'end'    => esc_html__( 'End', 'the7mk2' ),
 		];
 		$img_position_options_on_devices = [
-			'' => __( 'Default', 'the7mk2' ),
+			'' => esc_html__( 'Default', 'the7mk2' ),
 		] + $img_position_options;
 
 		$this->add_basic_responsive_control(
 			'image_position',
 			[
-				'label'                => __( 'Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'default'              => 'start',
 				'options'              => $img_position_options,
@@ -127,7 +159,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'image_space',
 			[
-				'label'     => __( 'Image Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Image Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
 					'size' => '',
@@ -140,16 +172,6 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 				],
 				'selectors' => [
 					'{{WRAPPER}} [class*="the7-simple-widget-"]'                                                                             => '--image-spacing: {{SIZE}}{{UNIT}}',
-					'(tablet) {{WRAPPER}}.img-align-tablet-left .the7-simple-post-thumb' => 'margin: 0 var(--image-spacing) 0 0; order: 0;',
-					'(tablet) {{WRAPPER}}.img-align-tablet-right .the7-simple-post-thumb' => 'margin: 0 0 0 var(--image-spacing); order: 2;',
-					'(tablet) {{WRAPPER}}.img-align-tablet-left .post-entry-content, {{WRAPPER}}.img-align-tablet-right .post-entry-content' => 'width: calc(100% - var(--image-size) - var(--image-spacing))',
-					'(tablet) {{WRAPPER}}.img-align-tablet-top .post-entry-content' => 'width: 100%',
-					'(mobile) {{WRAPPER}}.img-align-mobile-left .the7-simple-post-thumb' => 'margin: 0 var(--image-spacing) 0 0; order: 0;',
-					'(mobile) {{WRAPPER}}.img-align-mobile-right .the7-simple-post-thumb' => 'margin: 0 0 0 var(--image-spacing); order: 2;',
-					'(tablet) {{WRAPPER}}.img-align-tablet-top .the7-simple-post-thumb' => 'margin: 0 0 var(--image-spacing) 0; order: 0;',
-					'(mobile) {{WRAPPER}}.img-align-mobile-left .post-entry-content, {{WRAPPER}}.img-align-mobile-right .post-entry-content' => 'width: calc(100% - var(--image-size) - var(--image-spacing))',
-					'(mobile) {{WRAPPER}}.img-align-mobile-top .the7-simple-post-thumb' => 'margin: 0 0 var(--image-spacing) 0; order: 0;',
-					'(mobile) {{WRAPPER}}.img-align-mobile-top .post-entry-content'                                                          => 'width: 100%',
 				],
 			]
 		);
@@ -157,7 +179,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'size_title',
 			[
-				'label'     => __( 'Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Size', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -166,7 +188,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'image_size',
 			[
-				'label'      => __( 'Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Max Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -186,51 +208,12 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'item_preserve_ratio',
-			[
-				'label'        => __( 'Preserve Image Proportions', 'the7mk2' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'default'      => '',
-				'return_value' => 'y',
-				'prefix_class' => 'preserve-img-ratio-',
-			]
-		);
-
-		$this->add_basic_responsive_control(
-			'item_ratio',
-			[
-				'label'      => __( 'Image Ratio', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'size' => 1,
-				],
-				'range'      => [
-					'px' => [
-						'min'  => 0.1,
-						'max'  => 2,
-						'step' => 0.01,
-					],
-				],
-				'conditions' => [
-					'terms' => [
-						[
-							'name'     => 'item_preserve_ratio',
-							'operator' => '!=',
-							'value'    => 'y',
-						],
-					],
-				],
-				'selectors'  => [
-					'{{WRAPPER}}:not(.preserve-img-ratio-y) .img-ratio-wrapper' => 'padding-bottom:  calc( {{SIZE}} * 100% )',
-				],
-			]
-		);
+		$this->template( Image_Aspect_Ratio::class )->add_style_controls();
 
 		$this->add_control(
 			'icon_title',
 			[
-				'label'     => __( 'Hover icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Hover icon', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -239,7 +222,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'hover_icon',
 			[
-				'label' => __( 'Icon', 'the7mk2' ),
+				'label' => esc_html__( 'Icon', 'the7mk2' ),
 				'type'  => Controls_Manager::ICONS,
 				'skin'  => 'inline',
 			]
@@ -248,7 +231,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'hover_icon_size',
 			[
-				'label'      => __( 'Icon Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Icon Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -275,13 +258,13 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'hover_icon_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '#FFFFFF',
 				'selectors' => [
 					'{{WRAPPER}} .the7-hover-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .the7-hover-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .the7-hover-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'hover_icon[value]!' => '',
@@ -292,7 +275,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'style_title',
 			[
-				'label'     => __( 'Style', 'the7mk2' ),
+				'label'     => esc_html__( 'Style', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -302,7 +285,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Border::get_type(),
 			[
 				'name'     => 'image_border',
-				'label'    => __( 'Border', 'the7mk2' ),
+				'label'    => esc_html__( 'Border', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .the7-simple-post-thumb',
 				'exclude'  => [
 					'color',
@@ -313,7 +296,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'image_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -328,7 +311,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
@@ -340,7 +323,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label' => __( 'Overlay', 'the7mk2' ),
+						'label' => esc_html__( 'Overlay', 'the7mk2' ),
 					],
 				],
 				'selector'       => '{{WRAPPER}} .post-thumbnail-rollover:before, {{WRAPPER}} .post-thumbnail-rollover:after { transition: none; }
@@ -353,7 +336,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-simple-post-thumb' => 'border-color: {{VALUE}}',
@@ -384,7 +367,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_opacity',
 			[
-				'label'      => __( 'Image opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Image opacity (%)', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -405,7 +388,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
@@ -417,7 +400,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label' => __( 'Overlay', 'the7mk2' ),
+						'label' => esc_html__( 'Overlay', 'the7mk2' ),
 					],
 					'color'      => [
 						'selectors' => [
@@ -435,7 +418,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_hover_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} a.post:hover .the7-simple-post-thumb,
@@ -467,7 +450,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_hover_opacity',
 			[
-				'label'      => __( 'Image opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Image opacity (%)', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -500,7 +483,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_design_box',
 			[
-				'label' => __( 'Box', 'the7mk2' ),
+				'label' => esc_html__( 'Box', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -508,7 +491,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'adaptive_height',
 			[
-				'label'        => __( 'Adaptive Height', 'the7mk2' ),
+				'label'        => esc_html__( 'Adaptive Height', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -519,7 +502,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_height',
 			[
-				'label'      => __( 'Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -548,19 +531,19 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'content_position',
 			[
-				'label'                => __( 'Content Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Content Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'top'    => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-bottom',
 					],
 				],
@@ -584,7 +567,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Border::get_type(),
 			[
 				'name'     => 'box_border',
-				'label'    => __( 'Border', 'the7mk2' ),
+				'label'    => esc_html__( 'Border', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .post.wrapper',
 				'exclude'  => [
 					'color',
@@ -595,7 +578,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -607,7 +590,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -632,14 +615,14 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'box_bg_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post.wrapper' => 'background: {{VALUE}};',
@@ -650,7 +633,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post.wrapper' => 'border-color: {{VALUE}}',
@@ -662,7 +645,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'box_shadow',
-				'label'    => __( 'Box Shadow', 'the7mk2' ),
+				'label'    => esc_html__( 'Box Shadow', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .post.wrapper',
 			]
 		);
@@ -672,14 +655,14 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'bg_hover_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post.wrapper:hover' => 'background: {{VALUE}};',
@@ -690,7 +673,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_hover_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post.wrapper:hover' => 'border-color: {{VALUE}}',
@@ -702,7 +685,7 @@ abstract class Simple_Widget_Base extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'box_hover_shadow',
-				'label'    => __( 'Box Shadow', 'the7mk2' ),
+				'label'    => esc_html__( 'Box Shadow', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .post.wrapper:hover',
 			]
 		);

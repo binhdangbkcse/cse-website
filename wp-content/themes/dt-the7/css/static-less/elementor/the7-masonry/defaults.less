@@ -12,10 +12,6 @@
 @read-more-icon-spacing: 5px;
 
 .bottom-overlap-layout-list article:not(.no-img) {
-  .project-links-container {
-    height: calc(100% - @content-box-overlap);
-  }
-
   .post-entry-content {
     margin-top: -1*@content-box-overlap;
   }
@@ -59,45 +55,27 @@
   }
 }
 
-.project-links-container a {
+.the7-hover-icon {
   width: @hover-icon-bg-size;
   height: @hover-icon-bg-size;
   line-height: @hover-icon-bg-size;
   margin: @hover-icon-margin;
   box-sizing: border-box;
-
-    border-width: @hover-icon-border-width;
-    border-color: var(--the7-accent-color);
-    background-color: var(--the7-accent-color);
-    box-shadow: none;
-    &:before,
-    &:after {
-      display: none;
-    }
-
-  & > span {
-    color: @hover-icon-color;
-  }
+  border-width: @hover-icon-border-width;
+  border-color: var(--the7-accent-color);
+  background-color: var(--the7-accent-color);
+  box-shadow: none;
+  font-size: @hover-icon-size;
+  color: @hover-icon-color;
   &:hover > svg,
   & > svg {
     fill: @hover-icon-color;
-  }
-
-  > span {
-    font-size: @hover-icon-size;
     color: @hover-icon-color;
-
-    &:before {
-      line-height: @hover-icon-bg-size;
-    }
   }
   & > svg {
     width: @hover-icon-size;
     height: auto;
   }
-}
-.portfolio-shortcode .project-links-container a:not(:hover) span {
-    color: @hover-icon-color;
 }
 .post-details {
   i:first-child {

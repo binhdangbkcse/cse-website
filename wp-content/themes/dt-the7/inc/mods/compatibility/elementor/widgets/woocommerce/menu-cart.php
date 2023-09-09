@@ -47,6 +47,13 @@ class Menu_Cart extends The7_Elementor_Widget_Base {
 	/**
 	 * @return string[]
 	 */
+	protected function the7_keywords() {
+		return [ 'woocommerce', 'cart', 'menu', 'shop' ];
+	}
+
+	/**
+	 * @return string[]
+	 */
 	public function the7_categories() {
 		return [ 'theme-elements', 'woocommerce-elements' ];
 	}
@@ -305,7 +312,7 @@ class Menu_Cart extends The7_Elementor_Widget_Base {
 					$selectors,
 					[
 						''     => 'color: {{VALUE}}',
-						' svg' => 'fill: {{VALUE}}',
+						' svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 			]
@@ -484,17 +491,17 @@ class Menu_Cart extends The7_Elementor_Widget_Base {
 			$this->add_control(
 				'popup_id',
 				[
-					'label'       => __( 'Popup', 'the7mk2' ),
+					'label'       => esc_html__( 'Popup', 'the7mk2' ),
 					'type'        => Controls_Manager::SELECT2,
 					'options'     => $this->get_popups_list(),
-					'description' => __( 'Will open the selected popup by action specified below', 'the7mk2' ),
+					'description' => esc_html__( 'Will open the selected popup by action specified below', 'the7mk2' ),
 				]
 			);
 
 			$this->add_control(
 				'popup_action_adding_product',
 				[
-					'label'              => __( 'Open cart after adding product', 'the7mk2' ),
+					'label'              => esc_html__( 'Open cart after adding product', 'the7mk2' ),
 					'type'               => Controls_Manager::SWITCHER,
 					'render_type'        => 'none',
 					'frontend_available' => true,
@@ -1266,7 +1273,7 @@ class Menu_Cart extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-icon svg' => 'fill: {{VALUE}};  color: {{VALUE}};',
 				],
 			]
 		);
@@ -1303,7 +1310,7 @@ class Menu_Cart extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}}:not(.dt-empty-cart) .dt-menu-cart__toggle .elementor-icon'     => 'color: {{VALUE}};',
-					'{{WRAPPER}}:not(.dt-empty-cart) .dt-menu-cart__toggle .elementor-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}}:not(.dt-empty-cart) .dt-menu-cart__toggle .elementor-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -1339,7 +1346,7 @@ class Menu_Cart extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .dt-menu-cart__toggle:hover .dt-button-icon .elementor-icon' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .dt-menu-cart__toggle:hover .elementor-icon svg'             => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .dt-menu-cart__toggle:hover .elementor-icon svg'             => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);

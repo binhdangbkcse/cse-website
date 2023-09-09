@@ -156,7 +156,6 @@ class The7_Icon_Manager {
 	 * Display icons manager page.
 	 */
 	public static function icon_manager_dashboard() {
-		self::maybe_delete_all_fonts();
 		?>
 			<div id="the7-dashboard" class="wrap">
 				<h1>
@@ -740,32 +739,6 @@ class The7_Icon_Manager {
 		}
 
 		return true;
-	}
-
-	/**
-	 * @return void
-	 */
-	protected static function maybe_delete_all_fonts() {
-		global $wp_filesystem, $plugin_page;
-
-		if ( ! isset( $_GET['delete-the7-fonts'] ) ) {
-			return;
-		}
-
-		if ( ! current_user_can( apply_filters( 'the7_file_upload_capability', 'switch_themes' ) ) ) {
-			wp_die( __( "Using this feature is reserved for Super Admins. You unfortunately don't have the necessary permissions.", 'the7mk2' ) );
-		}
-
-		try {
-			self::load_wp_filesystem();
-		} catch ( Exception $e ) {
-			wp_die( $e->getMessage() );
-		}
-
-		$wp_filesystem->rmdir( self::get_font_dir(), true );
-		delete_option( 'smile_fonts' );
-		wp_redirect( admin_url( "admin.php?page={$plugin_page}" ) );
-		exit;
 	}
 
 	/**

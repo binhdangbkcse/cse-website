@@ -44,7 +44,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Active Filter', 'the7mk2' );
+		return esc_html__( 'Active Filter', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -64,15 +64,15 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_title_styles();
 		$this->add_box_attributes_styles();
 		$this->add_filter_indicator_styles();
-		$this->add_box_styles( 'active', __( 'Active Attributes Box', 'the7mk2' ) );
-		$this->add_box_styles( 'clear_all', __( 'Clear All Box', 'the7mk2' ) );
+		$this->add_box_styles( 'active', esc_html__( 'Active Attributes Box', 'the7mk2' ) );
+		$this->add_box_styles( 'clear_all', esc_html__( 'Clear All Box', 'the7mk2' ) );
 	}
 
 	protected function add_title_area_content_controls() {
 		$this->start_controls_section(
 			'title_area_section',
 			[
-				'label' => __( 'Title Area', 'the7mk2' ),
+				'label' => esc_html__( 'Title Area', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -80,10 +80,10 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title',
 			[
-				'label'        => __( 'Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'On', 'the7mk2' ),
-				'label_off'    => __( 'Off', 'the7mk2' ),
+				'label_on'     => esc_html__( 'On', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Off', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'separator'    => 'before',
@@ -93,9 +93,9 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_text',
 			[
-				'label'     => __( 'Widget Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Title', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
-				'default'   => __( 'Active filters', 'the7mk2' ),
+				'default'   => esc_html__( 'Active filters', 'the7mk2' ),
 				'condition' => [
 					'title!' => '',
 				],
@@ -105,10 +105,10 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle',
 			[
-				'label'        => __( 'Widget Toggle', 'the7mk2' ),
+				'label'        => esc_html__( 'Widget Toggle', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'On', 'the7mk2' ),
-				'label_off'    => __( 'Off', 'the7mk2' ),
+				'label_on'     => esc_html__( 'On', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Off', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'separator'    => 'before',
@@ -121,10 +121,10 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle_closed_by_default',
 			[
-				'label'        => __( 'Closed By Default', 'the7mk2' ),
+				'label'        => esc_html__( 'Closed By Default', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'closed',
 				'default'      => '',
 				'condition'    => [
@@ -137,7 +137,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle_icon',
 			[
-				'label'            => __( 'Icon', 'the7mk2' ),
+				'label'            => esc_html__( 'Icon', 'the7mk2' ),
 				'type'             => Controls_Manager::ICONS,
 				'fa4compatibility' => 'icon',
 				'default'          => [
@@ -168,7 +168,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle_active_icon',
 			[
-				'label'            => __( 'Active Icon', 'the7mk2' ),
+				'label'            => esc_html__( 'Active Icon', 'the7mk2' ),
 				'type'             => Controls_Manager::ICONS,
 				'fa4compatibility' => 'icon_active',
 				'default'          => [
@@ -204,7 +204,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'content_section',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -213,17 +213,17 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 			'indicators_heading',
 			[
 				'type'  => Controls_Manager::HEADING,
-				'label' => __( 'Indicators', 'the7mk2' ),
+				'label' => esc_html__( 'Indicators', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'active_filter_indicator',
 			[
-				'label'        => __( 'Active Attributes Indicator', 'the7mk2' ),
+				'label'        => esc_html__( 'Active Attributes Indicator', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			]
@@ -232,10 +232,10 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'clear_all_filter_indicator',
 			[
-				'label'        => __( '"Clear All" indicator', 'the7mk2' ),
+				'label'        => esc_html__( '"Clear All" indicator', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'condition'    => [
@@ -247,11 +247,11 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'layout',
 			[
-				'label'                => __( 'Layout', 'the7mk2' ),
+				'label'                => esc_html__( 'Layout', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'options'              => [
-					'grid'   => __( 'Grid', 'the7mk2' ),
-					'inline' => __( 'Inline', 'the7mk2' ),
+					'grid'   => esc_html__( 'Grid', 'the7mk2' ),
+					'inline' => esc_html__( 'Inline', 'the7mk2' ),
 				],
 				'separator'            => 'before',
 				'default'              => 'grid',
@@ -269,20 +269,20 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'inline_alignment',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'label_block'          => false,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -304,7 +304,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'grid_columns',
 			[
-				'label'          => __( 'Number Of Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Number Of Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 1,
 				'mobile_default' => 1,
@@ -322,7 +322,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'box_margin',
 			[
-				'label'      => __( 'Margins', 'the7mk2' ),
+				'label'      => esc_html__( 'Margins', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -355,7 +355,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'box_row_space',
 			[
-				'label'     => __( 'Row Gap', 'the7mk2' ),
+				'label'     => esc_html__( 'Row Gap', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -378,7 +378,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'box_column_space',
 			[
-				'label'     => __( 'Column Gap', 'the7mk2' ),
+				'label'     => esc_html__( 'Column Gap', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -402,7 +402,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 			'clear_all_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'Clear All', 'the7mk2' ),
+				'label'     => esc_html__( 'Clear All', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -410,10 +410,10 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'clear_all',
 			[
-				'label'        => __( 'Clear All', 'the7mk2' ),
+				'label'        => esc_html__( 'Clear All', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 			]
@@ -422,9 +422,9 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'clear_all_text',
 			[
-				'label'     => __( 'Button Name', 'the7mk2' ),
+				'label'     => esc_html__( 'Button Name', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
-				'default'   => __( 'Clear all', 'the7mk2' ),
+				'default'   => esc_html__( 'Clear all', 'the7mk2' ),
 				'condition' => [
 					'clear_all' => 'yes',
 				],
@@ -434,12 +434,12 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'clear_all_position',
 			[
-				'label'     => __( 'Position', 'the7mk2' ),
+				'label'     => esc_html__( 'Position', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'after',
 				'options'   => [
-					'before' => __( 'Before', 'the7mk2' ),
-					'after'  => __( 'After', 'the7mk2' ),
+					'before' => esc_html__( 'Before', 'the7mk2' ),
+					'after'  => esc_html__( 'After', 'the7mk2' ),
 				],
 				'condition' => [
 					'clear_all' => 'yes',
@@ -454,7 +454,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'title_section',
 			[
-				'label'     => __( 'Widget Title Area', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Title Area', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'title!' => '',
@@ -476,7 +476,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'title_arrow_size',
 			[
-				'label'     => __( 'Toggle Icon Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Toggle Icon Size', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -559,14 +559,14 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'normal_title_arrow_style',
 			[
-				'label' => __( 'Closed', 'the7mk2' ),
+				'label' => esc_html__( 'Closed', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'title_color',
 			[
-				'label'     => __( 'Title Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Title Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -579,11 +579,11 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_arrow_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-closed i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-closed svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-closed svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'toggle!'             => '',
@@ -603,7 +603,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -618,14 +618,14 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'hover_title_arrow_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'hover_title_color',
 			[
-				'label'     => __( 'Title Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Title Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -638,11 +638,11 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'hover_title_arrow_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .filter-header:hover .filter-toggle-icon .elementor-icon i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .filter-header:hover .filter-toggle-icon .elementor-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .filter-header:hover .filter-toggle-icon .elementor-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'toggle!'             => '',
@@ -662,7 +662,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'hover_title_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -677,14 +677,14 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'active_title_arrow_style',
 			[
-				'label' => __( 'Open', 'the7mk2' ),
+				'label' => esc_html__( 'Open', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'active_title_color',
 			[
-				'label'     => __( 'Title Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Title Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -697,11 +697,11 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'active_title_arrow_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-active i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-active svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-active svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'toggle!'             => '',
@@ -721,7 +721,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'active_title_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -743,7 +743,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'container_section',
 			[
-				'label'     => __( 'Widget Content Area', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Content Area', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -834,7 +834,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'filter_indicator_section',
 			[
-				'label'      => __( 'Filter Indicator', 'the7mk2' ),
+				'label'      => esc_html__( 'Filter Indicator', 'the7mk2' ),
 				'tab'        => Controls_Manager::TAB_STYLE,
 				'conditions' => [
 					'relation' => 'or',
@@ -857,15 +857,15 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_indicator_align',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'  => [
-						'title' => __( 'Start', 'the7mk2' ),
+						'title' => esc_html__( 'Start', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'right' => [
-						'title' => __( 'End', 'the7mk2' ),
+						'title' => esc_html__( 'End', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -885,7 +885,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'filter_indicator_icon_size',
 			[
-				'label'     => __( 'Icon Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Size', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -903,7 +903,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_indicator_padding',
 			[
-				'label'      => __( 'Icon Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Icon Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -921,7 +921,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_indicator_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -939,7 +939,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_indicator_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -957,7 +957,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'filter_indicator_space',
 			[
-				'label'     => __( 'Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -976,7 +976,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 			'active_indicator_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'Active Attributes Indicator', 'the7mk2' ),
+				'label'     => esc_html__( 'Active Attributes Indicator', 'the7mk2' ),
 				'separator' => 'before',
 				'condition' => [
 					'active_filter_indicator' => 'yes',
@@ -990,7 +990,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 			'clear_all_indicator_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'Clear All', 'the7mk2' ),
+				'label'     => esc_html__( 'Clear All', 'the7mk2' ),
 				'separator' => 'before',
 				'condition' => [
 					'clear_all_filter_indicator' => 'yes',
@@ -1023,7 +1023,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			$prefix . '_filter_indicator_tab',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
@@ -1037,7 +1037,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 			$prefix . '_filter_indicator_icon',
 			array_merge(
 				[
-					'label'       => __( 'Icon', 'the7mk2' ),
+					'label'       => esc_html__( 'Icon', 'the7mk2' ),
 					'type'        => Controls_Manager::ICONS,
 					'label_block' => false,
 					'skin'        => 'inline',
@@ -1049,11 +1049,11 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix . '_filter_indicator_icon_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector . ' .elementor-icon'     => 'color: {{VALUE}};',
-					$selector . ' .elementor-icon svg' => 'fill: {{VALUE}};',
+					$selector . ' .elementor-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -1061,7 +1061,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix . '_filter_indicator_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -1072,7 +1072,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix . '_filter_indicator_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'border-color: {{VALUE}};',
@@ -1085,7 +1085,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			$prefix . '_filter_indicator_hover_tab',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
@@ -1093,7 +1093,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 			$prefix . '_filter_indicator_hover_icon',
 			array_merge(
 				[
-					'label'       => __( 'Icon', 'the7mk2' ),
+					'label'       => esc_html__( 'Icon', 'the7mk2' ),
 					'type'        => Controls_Manager::ICONS,
 					'label_block' => false,
 					'skin'        => 'inline',
@@ -1106,13 +1106,13 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix . '_filter_indicator_hover_icon_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector . ' .elementor-icon.indicator-hover' => 'color: {{VALUE}};',
-					$selector . ' .elementor-icon.indicator-hover svg' => 'fill: {{VALUE}};',
+					$selector . ' .elementor-icon.indicator-hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 					$hov_selector . ' .elementor-icon'     => 'color: {{VALUE}};',
-					$hov_selector . ' .elementor-icon svg' => 'fill: {{VALUE}};',
+					$hov_selector . ' .elementor-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -1122,7 +1122,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix . '_filter_indicator_hover_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -1133,7 +1133,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix . '_filter_indicator_hover_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'border-color: {{VALUE}};',
@@ -1171,14 +1171,14 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		);
 
 		$this->start_controls_tabs( $prefix . '_box_tabs_style' );
-		$this->add_box_tab_controls( $prefix, 'normal', __( 'Normal', 'the7mk2' ) );
-		$this->add_box_tab_controls( $prefix, 'hover', __( 'Hover', 'the7mk2' ) );
+		$this->add_box_tab_controls( $prefix, 'normal', esc_html__( 'Normal', 'the7mk2' ) );
+		$this->add_box_tab_controls( $prefix, 'hover', esc_html__( 'Hover', 'the7mk2' ) );
 		$this->end_controls_tabs();
 
 		$this->add_control(
 			$prefix . '_box_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1199,7 +1199,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix . '_box_border _radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1217,7 +1217,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			$prefix . '_box_padding',
 			[
-				'label'      => __( 'Paddings', 'the7mk2' ),
+				'label'      => esc_html__( 'Paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -1266,7 +1266,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$full_prefix . 'box_text_color',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector . ' .name' => 'color: {{VALUE}};',
@@ -1277,7 +1277,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$full_prefix . 'box_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -1288,7 +1288,7 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$full_prefix . 'box_border_color',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'border-color: {{VALUE}};',
@@ -1463,14 +1463,14 @@ class Filter_Active extends The7_Elementor_Widget_Base {
 			if ( $min_price ) {
 				$link                    = remove_query_arg( 'min_price', $base_link );
 				$remove_all_filters_link = remove_query_arg( 'min_price', $remove_all_filters_link );
-				$this->display_term_html( $link, [ 'active' ], sprintf( __( 'Min %s', 'the7mk2' ), wc_price( $min_price ) ), $settings, 'active' );
+				$this->display_term_html( $link, [ 'active' ], sprintf( esc_html__( 'Min %s', 'the7mk2' ), wc_price( $min_price ) ), $settings, 'active' );
 				$items++;
 			}
 
 			if ( $max_price ) {
 				$link                    = remove_query_arg( 'max_price', $base_link );
 				$remove_all_filters_link = remove_query_arg( 'max_price', $remove_all_filters_link );
-				$this->display_term_html( $link, [ 'active' ], sprintf( __( 'Max %s', 'the7mk2' ), wc_price( $max_price ) ), $settings, 'active' );
+				$this->display_term_html( $link, [ 'active' ], sprintf( esc_html__( 'Max %s', 'the7mk2' ), wc_price( $max_price ) ), $settings, 'active' );
 				$items++;
 			}
 

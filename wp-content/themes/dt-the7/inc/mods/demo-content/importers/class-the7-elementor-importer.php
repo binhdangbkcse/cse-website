@@ -205,14 +205,54 @@ class The7_Elementor_Importer {
 
 		$ids = $wpdb->get_col( "SELECT post_id FROM {$wpdb->postmeta} WHERE meta_key='_elementor_data'" );
 
-		foreach ( $ids as $post_id ) {
-			$elementor_data = json_decode( get_post_meta( $post_id, '_elementor_data', true ), true );
+		// Modify only processed posts meta.
+		$ids = array_intersect( $ids, array_values( $this->importer->processed_posts ) );
 
-			if ( ! $elementor_data ) {
+		foreach ( $ids as $post_id ) {
+			$post_meta = get_post_meta( $post_id, '_elementor_data', true );
+			if ( ! $post_meta || ! is_string( $post_meta ) ) {
+				continue;
+			}
+
+			$elementor_data = json_decode( $post_meta, true );
+
+			if ( ! $elementor_data || ! is_array( $elementor_data ) ) {
 				continue;
 			}
 
 			static::apply_elementor_data_patch( $elementor_data, [ $this, 'fix_the7_widgets_terms' ] );
+
+			// Single page import. Set menu id in widgets to the first available menu. Applies only to header and footer templates.
+			if ( $this->importer->get_processed_filtered_post() && in_array( get_post_meta( $post_id, '_elementor_template_type', true ), [ 'header', 'footer' ], true ) ) {
+				$local_menu_slug = '';
+				$locations       = get_nav_menu_locations();
+				if ( empty( $locations['primary'] ) ) {
+					$menus = wp_get_nav_menus();
+					if ( isset( $menus[0] ) ) {
+						$local_menu_slug = $menus[0]->slug;
+					}
+				} else {
+					$menu            = wp_get_nav_menu_object( $locations['primary'] );
+					$local_menu_slug = $menu->slug;
+				}
+
+				static::apply_elementor_data_patch(
+					$elementor_data,
+					function ( $widget ) use ( $local_menu_slug ) {
+						$menu_widgets = [ 'the7_horizontal-menu', 'the7_nav-menu' ];
+						// Return early if not menu widget.
+						if ( ! isset( $widget['widgetType'], $widget['settings'] ) || ! in_array( $widget['widgetType'], $menu_widgets, true ) ) {
+							return $widget;
+						}
+
+						// Update widget menu setting.
+						$widget['settings']['menu'] = $local_menu_slug;
+
+						return $widget;
+					}
+				);
+			}
+
 			update_post_meta( $post_id, '_elementor_data', wp_slash( wp_json_encode( $elementor_data ) ) );
 		}
 	}
@@ -482,5 +522,4 @@ class The7_Elementor_Importer {
 
 		return $value;
 	}
-
 }

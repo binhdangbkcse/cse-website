@@ -120,7 +120,7 @@ function the7_elementor_get_content_width_string() {
  */
 function the7_elementor_get_wide_columns_control_description() {
 	// translators: %s: elementor content width.
-	$description = esc_html__( 'Lieve empty to use %s (value of "Content Width" from Elementor setting).', 'the7mk2' );
+	$description = esc_html__( 'Leave empty to use %s (value of "Content Width" from Elementor setting).', 'the7mk2' );
 
 	return sprintf( $description, the7_elementor_get_content_width_string() );
 }

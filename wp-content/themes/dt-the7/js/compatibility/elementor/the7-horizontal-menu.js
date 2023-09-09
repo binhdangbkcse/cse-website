@@ -296,7 +296,7 @@
                 $el.data(visibilityTimeout, timeoutID);
             },
             bindEvents: function () {
-                elementorFrontend.elements.$window.on('resize', methods.handleResize);
+                elementorFrontend.elements.$window.on('the7-resize-width', methods.handleResize);
                 // Close dropdown menu upon scrolling to the element.
                 elementorFrontend.elements.$window.on("the7.anchorScrolling", methods.closeDropdownMenu);
                 // Close dropdown menu on any popup close.
@@ -308,7 +308,7 @@
                 $('body').on("click", methods.onClickCb);
             },
             unBindEvents: function () {
-                elementorFrontend.elements.$window.off('resize', methods.handleResize);
+                elementorFrontend.elements.$window.off('the7-resize-width', methods.handleResize);
                 elementorFrontend.elements.$window.off("the7.anchorScrolling", methods.closeDropdownMenu);
                 elementorFrontend.elements.$document.off('elementor/popup/hide', methods.closeDropdownMenu);
                 $menuToggle.off("click", methods.handleToggleButton);

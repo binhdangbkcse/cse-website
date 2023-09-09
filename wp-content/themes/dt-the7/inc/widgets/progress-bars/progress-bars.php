@@ -15,14 +15,14 @@ add_action( 'widgets_init', array( 'Presscore_Inc_Widgets_ProgressBars', 'pressc
 class Presscore_Inc_Widgets_ProgressBars extends WP_Widget {
 
 	/* Widget defaults */
-	public static $widget_defaults = array( 
+	public static $widget_defaults = array(
 		'title'     => '',
 		'text'		=> '',
 		'fields'    => array(),
 	);
 
 	/* Widget setup  */
-	function __construct() { 
+	function __construct() {
 		/* Widget settings. */
 		$widget_ops = array( 'description' => _x( 'Progress bars', 'widget', 'the7mk2' ) );
 
@@ -61,7 +61,7 @@ class Presscore_Inc_Widgets_ProgressBars extends WP_Widget {
 
 		// content
 		if ( $text ) {
-			echo '<div class="widget-info">' . apply_filters('get_the_excerpt', $text) . '</div>';
+			echo '<div class="widget-info">' . $text . '</div>';
 		}
 
 		// fields
@@ -107,7 +107,7 @@ class Presscore_Inc_Widgets_ProgressBars extends WP_Widget {
 	/* Update the widget settings  */
 	function update( $new_instance, $old_instance ) {
 		$instance = $old_instance;
-		
+
 		$instance['title'] = strip_tags($new_instance['title']);
 		$instance['text'] = $new_instance['text'];
 
@@ -132,7 +132,7 @@ class Presscore_Inc_Widgets_ProgressBars extends WP_Widget {
 			<label for="<?php echo $this->get_field_id( 'title' ); ?>"><?php _ex('Title:', 'widget',  'the7mk2'); ?></label>
 			<input type="text" id="<?php echo $this->get_field_id( 'title' ); ?>" class="widefat" name="<?php echo $this->get_field_name( 'title' ); ?>" value="<?php echo esc_attr($instance['title']); ?>" />
 		</p>
-		
+
 		<p>
 			<label for="<?php echo $this->get_field_id( 'text' ); ?>"><?php _ex('Text:', 'widget',  'the7mk2'); ?></label>
 			<textarea id="<?php echo $this->get_field_id( 'text' ); ?>" rows="10" class="widefat" name="<?php echo $this->get_field_name( 'text' ); ?>"><?php echo esc_textarea($instance['text']); ?></textarea>

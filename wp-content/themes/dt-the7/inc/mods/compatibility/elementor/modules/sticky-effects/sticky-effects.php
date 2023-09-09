@@ -174,7 +174,6 @@ class Sticky_Effects {
 		$sect_cond = [];
 		if ( $el_name == 'container' ) {
 			$sect_cond = [
-				'container_type' => 'flex',
 				'flex_direction' => [
 					'row',
 					'row-reverse',
@@ -381,7 +380,8 @@ class Sticky_Effects {
 			'selectors'   => [
 				'{{WRAPPER}}:not(.the7-e-sticky-spacer).the7-e-sticky-effects > .elementor-container, .the7-e-sticky-effects:not(.the7-e-sticky-spacer) .elementor-element.elementor-element-{{ID}}:not(.fix) > .elementor-container' => 'min-height: {{SIZE}}{{UNIT}};',
 				'.elementor-element-{{ID}} > .elementor-container'                                                                                                                                         => 'min-height: 0;',
-				'{{WRAPPER}}.e-container.the7-e-sticky-effects:not(.the7-e-sticky-spacer)'                                                                                                                 => '--min-height: {{SIZE}}{{UNIT}};',
+				'{{WRAPPER}}.e-container.the7-e-sticky-effects:not(.the7-e-sticky-spacer)'                                                                                                                => '--min-height: {{SIZE}}{{UNIT}};',
+				'{{WRAPPER}}.e-con.the7-e-sticky-effects:not(.the7-e-sticky-spacer)'                                                                                                                 => '--min-height: {{SIZE}}{{UNIT}};',
 			],
 			'description' => esc_html__( 'Note that the row height will not get smaller than the elements inside of it.', 'the7mk2' ),
 			'conditions'  => $condition,
@@ -433,31 +433,32 @@ class Sticky_Effects {
 		// Checking for `$element->get_data( 'isInner' )` in both editor & frontend causes it to work properly on the frontend but
 		// break on the editor, because the inner section is created in JS and not rendered in PHP.
 		// So this is a hack to force the editor to show the `sticky_parent` control, and still make it work properly on the frontend.
+		 if ($el_name != 'container' ) {
 
+			 if ( $el_name == 'section' && Elementor::$instance->editor->is_edit_mode() ) {
+				 $conditions['isInner'] = true;
+			 }
+			 /*if($el_name == 'container'){
+				 $conditions['_is_row'] = 'row';
+			 }*/
 
-		if ( $el_name == 'section' && Elementor::$instance->editor->is_edit_mode() ) {
-			$conditions['isInner'] = true;
-		}
-		/*if($el_name == 'container'){
-			$conditions['_is_row'] = 'row';
-		}*/
+			 $element->add_responsive_control( 'the7_hide_on_sticky_effect', [
+				 'label'              => esc_html__( 'Visibility', 'the7mk2' ),
+				 'type'               => Controls_Manager::SELECT,
+				 'default'            => '',
+				 'options'            => [
+					 ''     => esc_html__( 'Do Nothing', 'the7mk2' ),
+					 'hide' => esc_html__( 'Hide When Sticky', 'the7mk2' ),
+					 'show' => esc_html__( 'Show When Sticky', 'the7mk2' ),
+				 ],
+				 'render_type'        => 'none',
+				 'frontend_available' => true,
+				 'description'        => sprintf( esc_html__( 'When "Sticky" and "Transitions On Scroll" are ON for the parent section.', 'the7mk2' ) ),
+				 'condition'          => $conditions,
+				 'separator'          => 'before',
+			 ] );
 
-		$element->add_responsive_control( 'the7_hide_on_sticky_effect', [
-			'label'              => esc_html__( 'Visibility', 'the7mk2' ),
-			'type'               => Controls_Manager::SELECT,
-			'default'            => '',
-			'options'            => [
-				''     => esc_html__( 'Do Nothing', 'the7mk2' ),
-				'hide' => esc_html__( 'Hide When Sticky', 'the7mk2' ),
-				'show' => esc_html__( 'Show When Sticky', 'the7mk2' ),
-			],
-			'render_type'        => 'none',
-			'frontend_available' => true,
-			'description'        => sprintf( esc_html__( 'When "Sticky" and "Transitions On Scroll" are ON for the parent section.', 'the7mk2' ) ),
-			'condition'          => $conditions,
-			'separator'          => 'before',
-		] );
-
+		 }
 
 		$element->add_control( 'the7_sticky_scroll_up', [
 			'label'              => esc_html__( 'Hide/Show Section on Scroll (Experimental)', 'the7mk2' ),

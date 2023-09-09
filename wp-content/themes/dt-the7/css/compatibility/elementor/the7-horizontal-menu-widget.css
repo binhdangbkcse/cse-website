@@ -99,7 +99,6 @@
   position: relative;
   display: flex;
   justify-content: center;
-  overflow: hidden;
   font-size: var(--the7-text-big-font-size);
   line-height: var(--the7-text-big-line-height);
   color: var(--the7-title-color);
@@ -143,7 +142,7 @@
 .dt-nav-menu-horizontal > li > a .menu-item-icon i,
 .dt-nav-menu-horizontal > li > a .menu-item-icon img,
 .dt-nav-menu-horizontal > li > a .menu-item-icon svg {
-  display: inline-flex;
+  display: var(--icon-display, inline-flex);
   justify-content: center;
   align-items: center;
   height: 1em;
@@ -170,23 +169,22 @@
   top: calc(100% - var(--decoration-height, 0px));
 }
 .decoration-left-to-right .dt-nav-menu-horizontal > li > a:after {
-  width: 0;
-  opacity: 0.85;
-  transition: all 300ms cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  width: 0px;
+  transition: 0.35s cubic-bezier(0.175, 0.885, 0.32, 1.275);
 }
 .decoration-upwards .dt-nav-menu-horizontal > li > a:after {
   opacity: 0;
-  transition: opacity 0.3s, transform 0.3s;
+  transition: 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
   transform: translateY(10px);
 }
 .decoration-downwards .dt-nav-menu-horizontal > li > a:after {
   opacity: 0;
-  transition: height 0.3s, opacity 0.3s, transform 0.3s;
+  transition: 0.3s cubic-bezier(0, 0.54, 0.52, 0.76);
   transform: translateY(-10px);
 }
 .decoration-fade .dt-nav-menu-horizontal > li > a:after {
   opacity: 0;
-  transition: opacity 0.3s;
+  transition: 0.4s;
 }
 .dt-nav-menu-horizontal > li > a:hover:after {
   background: var(--the7-accent-color);
@@ -293,7 +291,7 @@
 .horizontal-sub-nav > li > a .menu-item-icon i,
 .horizontal-sub-nav > li > a .menu-item-icon img,
 .horizontal-sub-nav > li > a .menu-item-icon svg {
-  display: inline-flex;
+  display: var(--icon-display, inline-flex);
   justify-content: center;
   align-items: center;
   margin: 0 !important;
@@ -405,7 +403,8 @@
   width: 1em;
   height: auto;
   fill: var(--the7-title-color);
-  transition: fill 0.3s ease;
+  color: var(--the7-title-color);
+  transition: all 0.3s ease;
 }
 .dt-nav-menu-horizontal .subtitle-text {
   font-size: 70%;
@@ -429,7 +428,8 @@
 .horizontal-menu-toggle svg {
   width: 1em;
   fill: var(--the7-title-color);
-  transition: fill 0.3s ease;
+  color: var(--the7-title-color);
+  transition: all 0.3s ease;
 }
 .dt-nav-menu-horizontal--main .submenu-indicator > * {
   display: none;

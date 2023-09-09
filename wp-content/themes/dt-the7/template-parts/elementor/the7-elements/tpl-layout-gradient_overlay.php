@@ -7,11 +7,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$rollover_class = '';
-if ( ! empty( $icons_html ) ) {
-	$rollover_class = 'rollover-active';
-}
-
 $placeholder_class = '';
 if ( ! has_post_thumbnail() ) {
 	$placeholder_class = 'overlay-placeholder';
@@ -30,11 +25,11 @@ if ( ! has_post_thumbnail() ) {
 	</div>
 </div>
 
-<div class="post-entry-content  <?php echo $rollover_class; ?>">
+<div class="post-entry-content">
 	<div class="post-entry-body">
 		<?php
 		if ( ! empty( $icons_html ) ) {
-			echo '<div class="project-links-container">' . $icons_html . '</div>';
+			echo $icons_html;
 		}
 
 		if ( ! empty( $post_title ) ) {

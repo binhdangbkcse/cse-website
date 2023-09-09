@@ -3,12 +3,17 @@
 namespace The7\Mods\Compatibility\Elementor\Modules\Extended_Widgets;
 
 use Elementor\Controls_Manager;
+use Elementor\Controls_Stack;
+use Elementor\Core\Base\Document;
 use Elementor\Group_Control_Border;
 use Elementor\Group_Control_Box_Shadow;
 use Elementor\Group_Control_Css_Filter;
 use Elementor\Group_Control_Image_Size;
 use Elementor\Widget_Base;
+use ElementorPro\Modules\QueryControl\Controls\Template_Query;
+use ElementorPro\Modules\QueryControl\Module as QueryControlModule;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widgets;
+use The7_Elementor_Compatibility;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -36,28 +41,29 @@ class The7_Exend_Image_Widget {
 			],
 		];
 
-		if ( ! array_key_exists( $widget->get_name(), $widgets ) ) {
+		$widget_name = $widget->get_name();
+		if ( ! array_key_exists( $widget_name, $widgets ) ) {
 			return;
 		}
 
-		$curr_section = $widgets[ $widget->get_name() ]['section_name'];
-		if ( ! in_array( $section_id, $curr_section ) ) {
+		$curr_section = $widgets[ $widget_name ]['section_name'];
+		if ( ! in_array( $section_id, $curr_section, true ) ) {
 			return;
 		}
 
-		if ( $section_id == 'section_style_image' ) {
+		if ( $section_id === 'section_style_image' ) {
 			$this->add_svg_support( $widget );
 			$this->inject_sticky_settings( $widget );
 		}
-		if ( $section_id == 'section_image' ) {
+		if ( $section_id === 'section_image' ) {
 			$control_params = [
 				'label' => __( 'Inline', 'the7mk2' ),
 				'type'  => Controls_Manager::SWITCHER,
 				'classes'              => 'the7-control',
 				'prefix_class'       => 'the7-inline-image-',
 			];
-			if ( isset( $widgets[ $widget->get_name() ]['condition'] ) ) {
-				$control_params['condition'] = $widgets[ $widget->get_name() ]['condition'];
+			if ( isset( $widgets[ $widget_name ]['condition'] ) ) {
+				$control_params['condition'] = $widgets[ $widget_name ]['condition'];
 			}
 
 			$widget->start_injection( [
@@ -427,7 +433,7 @@ class The7_Exend_Image_Widget {
 	/**
 	 * Modificate image output in order to display inline svg without kses
 	 *
-	 * @param array $widget_content widget content string.
+	 * @param string $widget_content widget content string.
 	 *
 	 * @return string
 	 */

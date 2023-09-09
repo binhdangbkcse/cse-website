@@ -46,7 +46,7 @@ class Search_Form_Expand extends The7_Elementor_Widget_Base {
 	/**
 	 * @return string[]
 	 */
-	public function the7_keywords() {
+	protected function the7_keywords() {
 		return [ 'search', 'form' ];
 	}
 
@@ -946,7 +946,7 @@ class Search_Form_Expand extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-search-form-toggle' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .the7-search-form-toggle svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .the7-search-form-toggle svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'search_icon[value]!' => '',
@@ -1011,7 +1011,7 @@ class Search_Form_Expand extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-search-form-toggle:hover' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .the7-search-form-toggle:hover svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .the7-search-form-toggle:hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'search_icon[value]!' => '',
@@ -1073,7 +1073,7 @@ class Search_Form_Expand extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-search-form.show-input .the7-search-form-toggle:not(:hover)' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .the7-search-form.show-input .the7-search-form-toggle:not(:hover) svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .the7-search-form.show-input .the7-search-form-toggle:not(:hover) svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'search_icon[value]!' => '',

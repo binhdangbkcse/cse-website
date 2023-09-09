@@ -842,6 +842,13 @@ if ( ! function_exists( 'presscore_get_default_small_image' ) ) :
 
 endif;
 
+/**
+ * @return array
+ */
+function the7_get_gray_square_svg() {
+	return [ PRESSCORE_THEME_URI . '/images/gray-square.svg', 1500, 1500 ];
+}
+
 if ( ! function_exists( 'presscore_get_widgetareas_options' ) ) :
 
 	/**

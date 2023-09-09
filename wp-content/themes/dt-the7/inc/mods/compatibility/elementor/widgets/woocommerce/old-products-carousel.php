@@ -40,7 +40,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 	}
 
 	protected function the7_title() {
-		return __( 'Old Product Carousel', 'the7mk2' );
+		return esc_html__( 'Old Product Carousel', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -124,7 +124,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->start_controls_section(
 			'layout_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -132,7 +132,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'layout',
 			[
-				'label'   => __( 'Text & button position:', 'the7mk2' ),
+				'label'   => esc_html__( 'Text & button position:', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'content_below_img',
 				'options' => [
@@ -150,7 +150,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->start_controls_section(
 			'content_section',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -158,8 +158,8 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'dis_posts_total',
 			[
-				'label'       => __( 'Total number of products', 'the7mk2' ),
-				'description' => __(
+				'label'       => esc_html__( 'Total number of products', 'the7mk2' ),
+				'description' => esc_html__(
 					'Leave empty to use value from the WP Reading settings. Set "-1" to show all posts.',
 					'the7mk2'
 				),
@@ -173,7 +173,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'responsiveness_settings',
 			[
-				'label'     => __( 'Columns & Responsiveness', 'the7mk2' ),
+				'label'     => esc_html__( 'Columns & Responsiveness', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -182,7 +182,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 3,
 				'tablet_default' => 2,
@@ -192,7 +192,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'item_space_adaptor',
 			[
-				'label'      => __( 'Gap between columns', 'the7mk2' ),
+				'label'      => esc_html__( 'Gap between columns', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -212,7 +212,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'stage_padding_adapter',
 			[
-				'label'      => __( 'Stage padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Stage padding', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -232,7 +232,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'adaptive_height',
 			[
-				'label'        => __( 'Adaptive height', 'the7mk2' ),
+				'label'        => esc_html__( 'Adaptive height', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -249,7 +249,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->start_controls_section(
 			'arrows_section',
 			[
-				'label' => __( 'Arrows', 'the7mk2' ),
+				'label' => esc_html__( 'Arrows', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -257,7 +257,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows',
 			[
-				'label'        => __( 'Show arrows', 'the7mk2' ),
+				'label'        => esc_html__( 'Show arrows', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -267,7 +267,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows_heading',
 			[
-				'label'     => __( 'Arrow Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrow Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -279,7 +279,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'next_icon_adapter',
 			[
-				'label'     => __( 'Choose next arrow icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Choose next arrow icon', 'the7mk2' ),
 				'type'      => Controls_Manager::ICONS,
 				'default'   => [
 					'value'   => 'fas fa-chevron-right',
@@ -295,7 +295,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'prev_icon_adapter',
 			[
-				'label'     => __( 'Choose previous arrow icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Choose previous arrow icon', 'the7mk2' ),
 				'type'      => Controls_Manager::ICONS,
 				'default'   => [
 					'value'   => 'fas fa-chevron-left',
@@ -311,7 +311,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_icon_size',
 			[
-				'label'      => __( 'Arrow icon size', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow icon size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -334,7 +334,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows_background_heading',
 			[
-				'label'     => __( 'Arrow Background', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrow Background', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -346,7 +346,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_bg_width',
 			[
-				'label'      => __( 'Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -369,7 +369,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_bg_height',
 			[
-				'label'      => __( 'Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -392,7 +392,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_border_radius',
 			[
-				'label'      => __( 'Arrow border radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow border radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -415,7 +415,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_border_width',
 			[
-				'label'      => __( 'Arrow border width', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow border width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -438,7 +438,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows_color_heading',
 			[
-				'label'     => __( 'Color Setting', 'the7mk2' ),
+				'label'     => esc_html__( 'Color Setting', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -453,7 +453,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_icon_color',
 			[
-				'label'       => __( 'Arrow icon color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow icon color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '#ffffff',
@@ -469,7 +469,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_icon_border',
 			[
-				'label'        => __( 'Show arrow border color', 'the7mk2' ),
+				'label'        => esc_html__( 'Show arrow border color', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -485,7 +485,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_border_color',
 			[
-				'label'       => __( 'Arrow border color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow border color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -502,7 +502,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows_bg_show',
 			[
-				'label'        => __( 'Show arrow background', 'the7mk2' ),
+				'label'        => esc_html__( 'Show arrow background', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -515,7 +515,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_bg_color',
 			[
-				'label'       => __( 'Arrow background color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow background color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -532,7 +532,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows_hover_color_heading',
 			[
-				'label'     => __( 'Hover Color Setting', 'the7mk2' ),
+				'label'     => esc_html__( 'Hover Color Setting', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -547,7 +547,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_icon_color_hover',
 			[
-				'label'       => __( 'Arrow icon color hover', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow icon color hover', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => 'rgba(255,255,255,0.75)',
@@ -563,7 +563,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_icon_border_hover',
 			[
-				'label'        => __( 'Show arrow border color hover', 'the7mk2' ),
+				'label'        => esc_html__( 'Show arrow border color hover', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -576,7 +576,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_border_color_hover',
 			[
-				'label'       => __( 'Arrow border color hover', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow border color hover', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -593,7 +593,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows_bg_hover_show',
 			[
-				'label'        => __( 'Show arrow background hover', 'the7mk2' ),
+				'label'        => esc_html__( 'Show arrow background hover', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -606,7 +606,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_bg_color_hover',
 			[
-				'label'       => __( 'Arrow background hover color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow background hover color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -623,7 +623,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'right_arrow_position_heading',
 			[
-				'label'     => __( 'Right Arrow Position', 'the7mk2' ),
+				'label'     => esc_html__( 'Right Arrow Position', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -635,7 +635,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'r_arrow_v_position',
 			[
-				'label'     => __( 'Vertical position', 'the7mk2' ),
+				'label'     => esc_html__( 'Vertical position', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'center',
 				'options'   => [
@@ -652,7 +652,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'r_arrow_h_position',
 			[
-				'label'     => __( 'Horizontal position', 'the7mk2' ),
+				'label'     => esc_html__( 'Horizontal position', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'right',
 				'options'   => [
@@ -669,7 +669,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'r_arrow_v_offset',
 			[
-				'label'      => __( 'Vertical offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Vertical offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -692,7 +692,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'r_arrow_h_offset',
 			[
-				'label'      => __( 'Horizontal offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Horizontal offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -715,7 +715,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'left_arrow_position_heading',
 			[
-				'label'     => __( 'Left Arrow Position', 'the7mk2' ),
+				'label'     => esc_html__( 'Left Arrow Position', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -727,7 +727,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'l_arrow_v_position',
 			[
-				'label'     => __( 'Vertical position', 'the7mk2' ),
+				'label'     => esc_html__( 'Vertical position', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'center',
 				'options'   => [
@@ -744,7 +744,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'l_arrow_h_position',
 			[
-				'label'     => __( 'Horizontal position', 'the7mk2' ),
+				'label'     => esc_html__( 'Horizontal position', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'left',
 				'options'   => [
@@ -761,7 +761,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'l_arrow_v_offset',
 			[
-				'label'      => __( 'Vertical offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Vertical offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -784,7 +784,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'l_arrow_h_offset',
 			[
-				'label'      => __( 'Horizontal offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Horizontal offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -807,7 +807,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrows_responsiveness_heading',
 			[
-				'label'     => __( 'Arrows responsiveness', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrows responsiveness', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -819,7 +819,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'arrow_responsiveness',
 			[
-				'label'     => __( 'Responsive behaviour', 'the7mk2' ),
+				'label'     => esc_html__( 'Responsive behaviour', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'reposition-arrows',
 				'options'   => [
@@ -836,7 +836,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'hide_arrows_mobile_switch_width',
 			[
-				'label'     => __( 'Hide arrows if browser width is less then', 'the7mk2' ),
+				'label'     => esc_html__( 'Hide arrows if browser width is less then', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 778,
 				'condition' => [
@@ -849,7 +849,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'reposition_arrows_mobile_switch_width',
 			[
-				'label'     => __( 'Reposition arrows after browser width', 'the7mk2' ),
+				'label'     => esc_html__( 'Reposition arrows after browser width', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 778,
 				'condition' => [
@@ -862,7 +862,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'l_arrows_mobile_h_position',
 			[
-				'label'      => __( 'Left arrow horizontal offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Left arrow horizontal offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -886,7 +886,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->add_control(
 			'r_arrows_mobile_h_position',
 			[
-				'label'      => __( 'Right arrow horizontal offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Right arrow horizontal offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -915,7 +915,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 		$this->start_controls_section(
 			'section_query',
 			[
-				'label' => __( 'Query', 'the7mk2' ),
+				'label' => esc_html__( 'Query', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -924,7 +924,7 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 			'current_query_info',
 			[
 				'type'            => Controls_Manager::RAW_HTML,
-				'raw'             => __(
+				'raw'             => esc_html__(
 					'Note that the amount of posts per page is the product of "Products per row" and "Rows per page" settings from "Appearance"->"Customize"->"WooCommerce"->"Products Catalog".',
 					'the7mk2'
 				),
@@ -945,39 +945,39 @@ class Old_Products_Carousel extends The7_Elementor_Shortcode_Adaptor_Widget_Base
 					'post_type' => [
 						'default' => 'product',
 						'options' => [
-							'current_query'   => __( 'Current Query', 'the7mk2' ),
-							'product'         => __( 'Latest Products', 'the7mk2' ),
-							'sale'            => __( 'Sale', 'the7mk2' ),
-							'top'             => __( 'Top rated products', 'the7mk2' ),
-							'best_selling'    => __( 'Best selling', 'the7mk2' ),
-							'featured'        => __( 'Featured', 'the7mk2' ),
+							'current_query'   => esc_html__( 'Current Query', 'the7mk2' ),
+							'product'         => esc_html__( 'Latest Products', 'the7mk2' ),
+							'sale'            => esc_html__( 'Sale', 'the7mk2' ),
+							'top'             => esc_html__( 'Top rated products', 'the7mk2' ),
+							'best_selling'    => esc_html__( 'Best selling', 'the7mk2' ),
+							'featured'        => esc_html__( 'Featured', 'the7mk2' ),
 							'by_id'           => _x( 'Manual Selection', 'Posts Query Control', 'the7mk2' ),
-							'related'         => __( 'Related Products', 'the7mk2' ),
-							'recently_viewed' => __( 'Recently Viewed', 'the7mk2' ),
+							'related'         => esc_html__( 'Related Products', 'the7mk2' ),
+							'recently_viewed' => esc_html__( 'Recently Viewed', 'the7mk2' ),
 						],
 					],
 					'orderby'   => [
 						'default' => 'date',
 						'options' => [
-							'date'       => __( 'Date', 'the7mk2' ),
-							'title'      => __( 'Title', 'the7mk2' ),
-							'price'      => __( 'Price', 'the7mk2' ),
-							'popularity' => __( 'Popularity', 'the7mk2' ),
-							'rating'     => __( 'Rating', 'the7mk2' ),
-							'rand'       => __( 'Random', 'the7mk2' ),
-							'menu_order' => __( 'Menu Order', 'the7mk2' ),
+							'date'       => esc_html__( 'Date', 'the7mk2' ),
+							'title'      => esc_html__( 'Title', 'the7mk2' ),
+							'price'      => esc_html__( 'Price', 'the7mk2' ),
+							'popularity' => esc_html__( 'Popularity', 'the7mk2' ),
+							'rating'     => esc_html__( 'Rating', 'the7mk2' ),
+							'rand'       => esc_html__( 'Random', 'the7mk2' ),
+							'menu_order' => esc_html__( 'Menu Order', 'the7mk2' ),
 						],
 					],
 					'exclude'   => [
 						'options' => [
-							'current_post'     => __( 'Current Post', 'the7mk2' ),
-							'manual_selection' => __( 'Manual Selection', 'the7mk2' ),
-							'terms'            => __( 'Term', 'the7mk2' ),
+							'current_post'     => esc_html__( 'Current Post', 'the7mk2' ),
+							'manual_selection' => esc_html__( 'Manual Selection', 'the7mk2' ),
+							'terms'            => esc_html__( 'Term', 'the7mk2' ),
 						],
 					],
 					'include'   => [
 						'options' => [
-							'terms' => __( 'Term', 'the7mk2' ),
+							'terms' => esc_html__( 'Term', 'the7mk2' ),
 						],
 					],
 				],

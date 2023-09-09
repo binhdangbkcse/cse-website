@@ -1,6 +1,7 @@
 .elementor-widget.elementor-widget-the7-wc-products,
 .elementor-widget.elementor-widget-the7-wc-products-carousel {
-
+  --btn-opacity: 1;
+  --variations-opacity:1;
   .onsale {
     margin: 10px;
     -webkit-backface-visibility: hidden;
@@ -41,7 +42,7 @@
   .outofstock .woo-buttons-on-img .box-button {
     display: none;
   }
-  .variation-btn-disabled {
+  &.variations-visible-y .variation-btn-disabled {
     cursor: not-allowed;
   }
   .box-button:not(.woo-popup-button) {
@@ -95,9 +96,11 @@
           right: 13px;
       }
   }
-  .box-button.added_to_cart {
+  .box-button.added_to_cart,
+  &[class*="variations-position"] .product-type-variable .box-button.added_to_cart {
     display: none;
   }
+
   &.added-to-cart-y .box-button.added_to_cart,
   & .product_type_simple.box-button.added_to_cart {
     display: flex;
@@ -116,9 +119,18 @@
     position: relative;
     display: flex;
     justify-content: var(--justify-btn);
+    opacity: var(--btn-opacity);
+    z-index: 102;
+    -webkit-backface-visibility: hidden;
+    -webkit-transform: translate3d(0, 0, 0);
+    transition: 0.3s ease;
   }
-  .cart-btn-on-img .woo-list-buttons,
-  .cart-btn-on-hover .woo-list-buttons {
+
+  .trigger-img-hover:hover .woo-list-buttons,
+  .trigger-img-hover.is-clicked .woo-list-buttons {
+      opacity: 1;
+  }
+  .cart-btn-on-img .woo-list-buttons {
     position: absolute;
     top: var(--btn-top-position, 0);
     right: var(--btn-right-position, 0);
@@ -133,6 +145,11 @@
     //width: 100%;
     border-radius: 16px;
     z-index: 2;
+  }
+  .woo-list-buttons a {
+    width: var(--btn-width);
+    text-align: left;
+    white-space: normal;
   }
 
   .woo-popup-button {
@@ -156,6 +173,7 @@
           text-align: center;
           order: var(--icon-order) !important;
           border-radius: @image-icon-border-radius;
+          transition: all 0.3s ease;
         }
         & svg.popup-icon {
           width: 16px;
@@ -203,30 +221,15 @@
   }
 
   .wc-img-hover .is-clicked {
-    img.hide-on-hover {
-      .mobile-true & {
-        opacity: 0;
-      }
-    }
+    // img.hide-on-hover {
+    //   .mobile-true & {
+    //     opacity: 0;
+    //   }
+    // }
     img.show-on-hover {
       .mobile-true & {
         opacity: 1;
       }
-    }
-  }
-  .cart-btn-on-hover .woo-list-buttons {
-    opacity: 0;
-    transition: 0.3s ease;
-  }
-  .cart-btn-on-hover .wf-cell:hover .woo-list-buttons,
-  .cart-btn-on-hover .dt-owl-item:hover .woo-list-buttons {
-    .mobile-false & {
-      opacity:1;
-    }
-  }
-  .cart-btn-on-hover .is-clicked .woo-list-buttons {
-    .mobile-true & {
-      opacity:1;
     }
   }
   .trigger-img-hover {
@@ -234,11 +237,6 @@
   }
 
   // Force button text align left.
-  .woo-list-buttons a {
-    width: var(--btn-width);
-    text-align: left;
-    white-space: normal;
-  }
 
   .product-title {
     margin: 15px 0 0 0;
@@ -313,17 +311,20 @@
   // Fix img hover effect.
   & .wc-img-hover img.back-image {
     transform: initial;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
   }
 
   // Fix hover image dimensions for images with custom ratio.
-  &:not(.preserve-img-ratio-y) .wc-img-hover img.back-image {
-    max-width: unset;
-    max-height: unset;
-  }
+  // &:not(.preserve-img-ratio-y) .wc-img-hover img.back-image {
+  //   max-width: unset;
+  //   max-height: unset;
+  // }
 
-  &.preserve-img-ratio-y .wc-img-hover img.back-image {
-    transform: translate(-50%, -50%);
-  }
+  // &.preserve-img-ratio-y .wc-img-hover img.back-image {
+  //   transform: translate(-50%, -50%);
+  // }
 
   .woo-list-buttons-on-img:hover .img-wrap {
     &:after {
@@ -337,9 +338,17 @@
   }
 
   // Rollover on hover.
+  // TODO: Ventilate in context of img aspect-ratio settings
   .img-wrap {
     // For .wc-img-hover effect
     position: relative;
+    display: flex;
+    line-height: 0;
+  }
+  .img-wrap img:not(.back-image) {
+    position: var(--position, relative);
+    top: 0;
+    left: 0;
   }
 
   // Hode overflow since border radius is applied only to this wrapper.
@@ -385,7 +394,7 @@
 
       svg {
         background: transparent;
-        transition: fill .3s;
+        transition: all .3s;
       }
     }
 
@@ -402,11 +411,7 @@
   }
 
   // Move .woo-list-buttons on top of .onsale (z-index: 101)
-  .woo-list-buttons {
-    z-index: 102;
-    -webkit-backface-visibility: hidden;
-    -webkit-transform: translate3d(0, 0, 0);
-  }
+
   .products-variations {
     display: flex;
     flex-flow: row wrap;
@@ -460,8 +465,7 @@
     }
   }
   .products-variations-wrap {
-    .variations-position-on_image&,
-    .variations-position-on_image_hover& {
+    .variations-position-on_image& {
       position: absolute;
       left: 0;
       bottom: 0;
@@ -473,10 +477,14 @@
     display: flex;
     flex-direction: column;
     background-color: var(--the7-content-boxes-bg);
+    opacity: var(--variations-opacity);
     transition: opacity 0.3s;
   }
 
-
+  .trigger-img-hover:hover .products-variations-wrap,
+  .trigger-img-hover.is-clicked .products-variations-wrap {
+      opacity: 1;
+  }
   .product-variation-row {
     display: flex;
     flex-direction: var(--variations-direction, column);
@@ -502,20 +510,6 @@
   }
   &.variations-position-on_image .products-variations-wrap {
     z-index: 1;
-  }
-  &.variations-position-on_image_hover .products-variations-wrap {
-    opacity: 0;
-  }
-  &.variations-position-on_image_hover .wf-cell:hover .products-variations-wrap,
-  &.variations-position-on_image_hover .dt-owl-item:hover .products-variations-wrap {
-    .mobile-false & {
-      opacity: 1;
-    }
-  }
-  &.variations-position-on_image_hover .is-clicked .products-variations-wrap {
-    .mobile-true & {
-      opacity: 1;
-    }
   }
 
   @import "the7-elements-woo-masonry/defaults";

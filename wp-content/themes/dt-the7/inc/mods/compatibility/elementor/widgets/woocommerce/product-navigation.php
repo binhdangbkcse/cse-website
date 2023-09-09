@@ -18,6 +18,8 @@ use Elementor\Group_Control_Typography;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 use Elementor\Icons_Manager;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Less_Vars_Decorator_Interface;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -33,7 +35,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Product Navigation', 'the7mk2' );
+		return esc_html__( 'Product Navigation', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -68,18 +70,18 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_post_navigation_skin',
 			[
-				'label' => __( 'General', 'the7mk2' ),
+				'label' => esc_html__( 'General', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'navigation_skin',
 			[
-				'label'        => __( 'Skin', 'the7mk2' ),
+				'label'        => esc_html__( 'Skin', 'the7mk2' ),
 				'type'         => Controls_Manager::SELECT,
 				'options'      => [
-					'normal' => __( 'Normal', 'the7mk2' ),
-					'popup'  => __( 'Popup', 'the7mk2' ),
+					'normal' => esc_html__( 'Normal', 'the7mk2' ),
+					'popup'  => esc_html__( 'Popup', 'the7mk2' ),
 				],
 				'default'      => 'normal',
 				'prefix_class' => 'nav--skin-',
@@ -89,19 +91,19 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'popup_position',
 			[
-				'label'     => __( 'Popup Position', 'the7mk2' ),
+				'label'     => esc_html__( 'Popup Position', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'top'    => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 					'middle' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-bottom',
 					],
 				],
@@ -115,7 +117,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'display_products',
 			[
-				'label'   => __( 'Navigate Through', 'the7mk2' ),
+				'label'   => esc_html__( 'Navigate Through', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'options' => [
 					''            => esc_html__( 'All Products', 'the7mk2' ),
@@ -131,17 +133,19 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_post_navigation_content',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 			]
 		);
+
+		$this->template( Image_Size::class )->add_style_controls();
 
 		$this->add_control(
 			'show_content',
 			[
-				'label'        => __( 'Show Content Box On Desktop', 'the7mk2' ),
+				'label'        => esc_html__( 'Show Content Box On Desktop', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'prefix_class' => 'nav--box-',
@@ -151,10 +155,10 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_content_tablet',
 			[
-				'label'        => __( 'Show Content Box On Tablet', 'the7mk2' ),
+				'label'        => esc_html__( 'Show Content Box On Tablet', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'prefix_class' => 'nav--box-tablet-',
@@ -164,10 +168,10 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_content_mobile',
 			[
-				'label'        => __( 'Show Content Box On Mobile', 'the7mk2' ),
+				'label'        => esc_html__( 'Show Content Box On Mobile', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 				'prefix_class' => 'nav--box-mobile-',
@@ -177,23 +181,23 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'content_position',
 			[
-				'label'     => __( 'Content Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Content Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'        => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'inner-sides' => [
-						'title' => __( 'Inner', 'the7mk2' ),
+						'title' => esc_html__( 'Inner', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-center',
 					],
 					'right'       => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 					'sides'       => [
-						'title' => __( 'Outer', 'the7mk2' ),
+						'title' => esc_html__( 'Outer', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-stretch',
 					],
 				],
@@ -205,10 +209,10 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_title',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 			]
 		);
@@ -216,11 +220,11 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_width',
 			[
-				'label'        => __( 'Title Width', 'the7mk2' ),
+				'label'        => esc_html__( 'Title Width', 'the7mk2' ),
 				'type'         => Controls_Manager::SELECT,
 				'options'      => [
-					'normal'      => __( 'Normal', 'the7mk2' ),
-					'crp-to-line' => __( 'Crop to one line', 'the7mk2' ),
+					'normal'      => esc_html__( 'Normal', 'the7mk2' ),
+					'crp-to-line' => esc_html__( 'Crop to one line', 'the7mk2' ),
 				],
 				'default'      => 'normal',
 				'condition'    => [
@@ -233,8 +237,8 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'excerpt_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire title.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire title.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'min'         => 1,
@@ -249,10 +253,10 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_price',
 			[
-				'label'     => __( 'Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Price', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 			]
 		);
@@ -260,10 +264,10 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_featured_image',
 			[
-				'label'     => __( 'Featured Image', 'the7mk2' ),
+				'label'     => esc_html__( 'Featured Image', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 			]
 		);
@@ -273,30 +277,30 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_post_navigation_position',
 			[
-				'label' => __( 'Navigation', 'the7mk2' ),
+				'label' => esc_html__( 'Navigation', 'the7mk2' ),
 			]
 		);
 
 		$this->add_basic_responsive_control(
 			'alignment',
 			[
-				'label'                => __( 'Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Inner', 'the7mk2' ),
+						'title' => esc_html__( 'Inner', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 					'outer'  => [
-						'title' => __( 'Outer', 'the7mk2' ),
+						'title' => esc_html__( 'Outer', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-stretch',
 					],
 				],
@@ -339,10 +343,10 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_arrow',
 			[
-				'label'     => __( 'Arrows', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrows', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 				'separator' => 'before',
 			]
@@ -351,7 +355,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'next_icon',
 			[
-				'label'       => __( 'Next Arrow Icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Next Arrow Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'label_block' => false,
 				'skin'        => 'inline',
@@ -369,7 +373,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'prev_icon',
 			[
-				'label'       => __( 'Previous Arrow Icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Previous Arrow Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'skin'        => 'inline',
 				'label_block' => false,
@@ -388,10 +392,10 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_back_arrow',
 			[
-				'label'     => __( 'Back Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Back Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 				'separator' => 'before',
 			]
@@ -400,7 +404,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'back_icon',
 			[
-				'label'       => __( 'Back Icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Back Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'label_block' => false,
 				'skin'        => 'inline',
@@ -418,9 +422,9 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'back_link',
 			[
-				'label'       => __( 'Link', 'the7mk2' ),
+				'label'       => esc_html__( 'Link', 'the7mk2' ),
 				'type'        => Controls_Manager::URL,
-				'placeholder' => __( 'https://your-link.com', 'the7mk2' ),
+				'placeholder' => esc_html__( 'https://your-link.com', 'the7mk2' ),
 				'condition'   => [
 					'show_back_arrow' => 'yes',
 				],
@@ -433,7 +437,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'title_style',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_title' => 'yes',
@@ -454,14 +458,14 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'text_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .widget-product-info .product-title' => 'color: {{VALUE}};',
@@ -474,18 +478,17 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .the7-product-navigation .product-title { transition: color 0.3s ease; }
-					{{WRAPPER}} .the7-product-navigation .the7-nav-product:hover .widget-product-info .product-title' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .the7-product-navigation .the7-nav-product:hover .widget-product-info .product-title' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -500,7 +503,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'price_style',
 			[
-				'label'     => __( 'Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Price', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_price' => 'yes',
@@ -512,7 +515,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 			'normal_price_heading',
 			[
 				'type'  => \Elementor\Controls_Manager::HEADING,
-				'label' => __( 'Normal price', 'the7mk2' ),
+				'label' => esc_html__( 'Normal price', 'the7mk2' ),
 			]
 		);
 
@@ -520,7 +523,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'price_typography',
-				'label'    => __( 'Normal Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Normal Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .widget-product-info .price *',
 			]
 		);
@@ -528,7 +531,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'normal_price_text_color',
 			[
-				'label'     => __( 'Normal Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Normal Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .widget-product-info .price > span.woocommerce-Price-amount.amount, {{WRAPPER}} .widget-product-info .price > span.woocommerce-Price-amount span, {{WRAPPER}} .widget-product-info span.price, {{WRAPPER}} .widget-product-info .price ins span' => 'color: {{VALUE}};',
@@ -540,7 +543,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 			'sale_price_heading',
 			[
 				'type'      => \Elementor\Controls_Manager::HEADING,
-				'label'     => __( 'Sale Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Sale Price', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -549,7 +552,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_price_typography',
-				'label'    => __( 'Old Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Old Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .widget-product-info .price del, {{WRAPPER}} .widget-product-info .price del span',
 			]
 		);
@@ -557,7 +560,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sale_price_text_color',
 			[
-				'label'     => __( 'Old Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .widget-product-info .price del span' => 'color: {{VALUE}};',
@@ -568,7 +571,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'old_price_line_color',
 			[
-				'label'     => __( 'Old Price Line Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Line Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .widget-product-info .price del' => 'color: {{VALUE}};',
@@ -580,7 +583,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_new_price_typography',
-				'label'    => __( 'New Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'New Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .widget-product-info .price ins span',
 			]
 		);
@@ -588,7 +591,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sale_new_price_text_color',
 			[
-				'label'     => __( 'New Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'New Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .widget-product-info .price ins span' => 'color: {{VALUE}};',
@@ -599,7 +602,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'price_space',
 			[
-				'label'     => __( 'Gap Above Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Gap Above Price', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -623,7 +626,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'fetatured_image_style',
 			[
-				'label'     => __( 'Featured Image', 'the7mk2' ),
+				'label'     => esc_html__( 'Featured Image', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_featured_image' => 'yes',
@@ -634,7 +637,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'image_size',
 			[
-				'label'      => __( 'Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'size' => 60,
@@ -657,52 +660,12 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'item_preserve_ratio',
-			[
-				'label'        => __( 'Preserve Image Proportions', 'the7mk2' ),
-				'type'         => Controls_Manager::SWITCHER,
-				'default'      => 'y',
-				'return_value' => 'y',
-				'prefix_class' => 'preserve-img-ratio-',
-			]
-		);
-
-		$this->add_basic_responsive_control(
-			'item_ratio',
-			[
-				'label'      => __( 'Image Ratio', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'size' => 0.66,
-				],
-				'range'      => [
-					'px' => [
-						'min'  => 0.1,
-						'max'  => 2,
-						'step' => 0.01,
-					],
-				],
-				'conditions' => [
-					'terms' => [
-						[
-							'name'     => 'item_preserve_ratio',
-							'operator' => '!=',
-							'value'    => 'y',
-						],
-					],
-				],
-				'selectors'  => [
-					'{{WRAPPER}} .img-ratio-wrapper' => 'padding-bottom:  calc( {{SIZE}} * 100% )',
-				],
-			]
-		);
-
+		$this->template( Image_Aspect_Ratio::class )->add_style_controls();
 
 		$this->add_basic_responsive_control(
 			'image_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'selectors'  => [
@@ -714,7 +677,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'image_space',
 			[
-				'label'     => __( 'Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
 					'size' => 10,
@@ -742,7 +705,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'arrow_style',
 			[
-				'label'     => __( 'Arrows', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrows', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_arrow' => 'yes',
@@ -753,7 +716,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'arrow_size',
 			[
-				'label'     => __( 'Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Size', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -777,18 +740,18 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'arrow_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'arrow_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post-navigation__arrow-wrapper'          => 'color: {{VALUE}};',
-					'{{WRAPPER}} .post-navigation__arrow-wrapper svg path' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .post-navigation__arrow-wrapper svg path' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -798,19 +761,18 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'arrow_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'arrow_hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .post-navigation__arrow-wrapper { transition: all 0.3s ease; }
-					{{WRAPPER}} .post-navigation__arrow-wrapper:hover'          => 'color: {{VALUE}};',
-					'{{WRAPPER}} .post-navigation__arrow-wrapper:hover svg path' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .post-navigation__arrow-wrapper:hover'          => 'color: {{VALUE}};',
+					'{{WRAPPER}} .post-navigation__arrow-wrapper:hover svg path' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -822,7 +784,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'arrow_space',
 			[
-				'label'     => __( 'Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -849,7 +811,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'back_icon_style',
 			[
-				'label'     => __( 'Back Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Back Icon', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_back_arrow' => 'yes',
@@ -860,7 +822,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'back_icon_size',
 			[
-				'label'      => __( 'Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -885,18 +847,18 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'back_icon_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'back_icon_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .post-nav__back-wrapper a'        => 'color: {{VALUE}};',
-					'{{WRAPPER}} .post-nav__back-wrapper svg path' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .post-nav__back-wrapper svg path' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -906,19 +868,18 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'back_icon_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'back_icon_hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .post-nav__back-wrapper a { transition: color 0.3s ease; } 
-					{{WRAPPER}} .post-nav__back-wrapper:hover a'        => 'color: {{VALUE}};',
-					'{{WRAPPER}} .post-nav__back-wrapper:hover svg path' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .post-nav__back-wrapper:hover a'        => 'color: {{VALUE}};',
+					'{{WRAPPER}} .post-nav__back-wrapper:hover svg path' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -933,7 +894,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'box_style',
 			[
-				'label' => __( 'Box', 'the7mk2' ),
+				'label' => esc_html__( 'Box', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -941,7 +902,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -953,7 +914,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'min-height',
 			[
-				'label'      => __( 'Min Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -976,7 +937,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'max_width',
 			[
-				'label'      => __( 'Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1000,7 +961,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_bg_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-nav-product' => 'background-color: {{VALUE}};',
@@ -1040,7 +1001,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'box_shadow',
-				'label'    => __( 'Box Shadow', 'the7mk2' ),
+				'label'    => esc_html__( 'Box Shadow', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .the7-nav-product',
 			]
 		);
@@ -1048,7 +1009,7 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_space',
 			[
-				'label'     => __( 'Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -1158,9 +1119,9 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 										<?php if ( $settings['show_title'] ) : ?>
 											<a href="<?php echo esc_url( $prev_post->get_permalink() ); ?>" class="product-title">
 												<?php if ( $settings['excerpt_words_limit'] && $settings['title_width'] == 'normal' ) : ?>
-													<?php echo esc_html__( wp_trim_words( $prev_post->get_title(), $settings['excerpt_words_limit'] ) ); ?>
+													<?php echo esc_html( wp_trim_words( $prev_post->get_title(), $settings['excerpt_words_limit'] ) ); ?>
 												<?php else : ?>
-													<?php echo esc_html__( $prev_post->get_title() ); ?>
+													<?php echo esc_html( $prev_post->get_title() ); ?>
 												<?php endif; ?>
 											</a>
 										<?php endif; ?>
@@ -1212,9 +1173,9 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 										<?php if ( $settings['show_title'] ) : ?>
 											<a href="<?php echo esc_url( $next_post->get_permalink() ); ?>" class="product-title">
 												<?php if ( $settings['excerpt_words_limit'] && $settings['title_width'] == 'normal' ) : ?>
-													<?php echo esc_html__( wp_trim_words( $next_post->get_title(), $settings['excerpt_words_limit'] ) ); ?>
+													<?php echo esc_html( wp_trim_words( $next_post->get_title(), $settings['excerpt_words_limit'] ) ); ?>
 												<?php else : ?>
-													<?php echo esc_html__( $next_post->get_title() ); ?>
+													<?php echo esc_html( $next_post->get_title() ); ?>
 												<?php endif; ?>
 											</a>
 										<?php endif; ?>
@@ -1253,51 +1214,28 @@ class Product_Navigation extends The7_Elementor_Widget_Base {
 		return false;
 	}
 
+	/**
+	 * Get product image.
+	 *
+	 * @param \WC_Product $product
+	 *
+	 * @return string
+	 */
 	protected function get_product_image( $product ) {
-		$post_media = '';
+		$img_wrapper_class = implode( ' ', array_filter( [
+			'the7-nav-product-thumb',
+			$this->template( Image_Size::class )->get_wrapper_class(),
+			$this->template( Image_Aspect_Ratio::class )->get_wrapper_class(),
+		] ) );
+		$wrap_attributes   = [
+			'class'      => $img_wrapper_class,
+			'aria-label' => esc_html__( 'Product image', 'the7mk2' ),
+			'href'       => $product->get_permalink(),
+		];
 
-		if ( $product->get_image_id() ) {
-			$link_class = [ 'the7-nav-product-thumb', 'img-ratio-wrapper' ];
+		$image = $this->template( Image_Size::class )->get_image( $product->get_image_id() );
 
-			$thumb_args = [
-				'img_id' => $product->get_image_id(),
-				'class'  => implode( ' ', $link_class ),
-				'href'   => $product->get_permalink(),
-				'custom' => the7_get_html_attributes_string(
-					[
-						'aria-label' => __( 'Product image', 'the7mk2' ),
-					]
-				),
-				'wrap'   => '<a %HREF% %CLASS% %CUSTOM%><img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% /></a>',
-				'echo'   => false,
-			];
-
-			if ( presscore_lazy_loading_enabled() ) {
-				$thumb_args['lazy_loading'] = true;
-			}
-
-			$post_media = dt_get_thumb_img( $thumb_args );
-		} else {
-			$image = sprintf(
-				'<img class="%s" src="%s" width="%s" height="%s">',
-				'preload-me',
-				get_template_directory_uri() . '/images/gray-square.svg',
-				1500,
-				1500
-			);
-
-			$post_media = sprintf(
-				'<a %s>%s</a>',
-				the7_get_html_attributes_string(
-					[
-						'aria-label' => __( 'Product image', 'the7mk2' ),
-					]
-				),
-				$image
-			);
-		}
-
-		return $post_media;
+		return '<a ' . the7_get_html_attributes_string( $wrap_attributes ) . '>' . $image . '</a>';
 	}
 
 	protected function add_render_attributes() {

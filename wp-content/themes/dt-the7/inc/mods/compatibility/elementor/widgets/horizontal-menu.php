@@ -188,10 +188,10 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 			);
 		}
 		$icon_visible_options            = [
-			'enable'  => __( 'Show', 'the7mk2' ),
-			'disable' => __( 'Hide', 'the7mk2' ),
+			'enable'  => esc_html__( 'Show', 'the7mk2' ),
+			'disable' => esc_html__( 'Hide', 'the7mk2' ),
 		];
-		$icon_visible_options_on_devices = [ '' => __( 'Default', 'the7mk2' ) ] + $icon_visible_options;
+		$icon_visible_options_on_devices = [ '' => esc_html__( 'Default', 'the7mk2' ) ] + $icon_visible_options;
 
 		$this->add_responsive_control(
 			'icons_visible',
@@ -214,8 +214,24 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					'disable' => 'none',
 				],
 				'default'              => 'disable',
+				'selectors_dictionary' => [
+					'enable'    => $this->combine_to_css_vars_definition_string(
+						[
+							'icon-display' => 'inline-flex',
+							'icon-column-gap' => 'var(--icon-column-spacing)',
+							'icon-column-width' => 'var(--icon-column-size)',
+						]
+					),
+					'disable'   => $this->combine_to_css_vars_definition_string(
+						[
+							'icon-display' => 'none',
+							'icon-column-gap' => '0px',
+							'icon-column-width' => '0px',
+						]
+					),
+				],
 				'selectors'            => [
-					'{{WRAPPER}} li.depth-0 > a .menu-item-icon > i, {{WRAPPER}} li.depth-0 > a .menu-item-icon > img' => 'display:{{VALUE}};',
+					'{{WRAPPER}} .dt-nav-menu-horizontal li.depth-0 > a, {{WRAPPER}} .dt-nav-menu-horizontal--main .horizontal-sub-nav' => '{{VALUE}}',
 				],
 			]
 		);
@@ -765,11 +781,15 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 			[
 				'label'      => esc_html__( 'Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
+				'size_units' => [ 'px', '%' ],
 				'range'      => [
 					'px' => [
 						'min' => 0,
 						'max' => 25,
+					],
+					'%' => [
+						'min' => 0,
+						'max' => 100,
 					],
 				],
 				'selectors'  => [
@@ -800,6 +820,18 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				],
 				'condition'  => [
 					'decoration!' => '',
+				],
+			]
+		);
+
+		$this->add_basic_responsive_control(
+			'decoration_border_radius',
+			[
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'selectors'  => [
+					'{{WRAPPER}} .dt-nav-menu-horizontal > li > a:after' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}};',
 				],
 			]
 		);
@@ -997,7 +1029,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => $this->give_me_megaselectors(
-					[ self::STICKY_WRAPPER . ' .dt-nav-menu-horizontal > li:not(.act) > a' ],
+					[ self::STICKY_WRAPPER . ' .dt-nav-menu-horizontal > li.act > a' ],
 					[ ':after' => 'background: {{VALUE}}' ]
 				),
 				'condition' => [
@@ -1115,7 +1147,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					[ '{{WRAPPER}} .dt-nav-menu-horizontal > li > a' ],
 					[
 						' .submenu-indicator' => 'color: {{VALUE}}',
-						' svg'                => 'fill: {{VALUE}};',
+						' svg'                => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 				'condition' => [
@@ -1136,7 +1168,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					[ '{{WRAPPER}} .dt-nav-menu-horizontal > li:not(.act) > a:hover' ],
 					[
 						' .submenu-indicator' => 'color: {{VALUE}}',
-						' svg'                => 'fill: {{VALUE}};',
+						' svg'                => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 				'condition' => [
@@ -1157,7 +1189,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					[ '{{WRAPPER}} .dt-nav-menu-horizontal > li.act > a' ],
 					[
 						' .submenu-indicator' => 'color: {{VALUE}}',
-						' svg'                => 'fill: {{VALUE}};',
+						' svg'                => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 				'condition' => [
@@ -1203,7 +1235,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					[ self::STICKY_WRAPPER . ' .dt-nav-menu-horizontal > li > a' ],
 					[
 						' .submenu-indicator' => 'color: {{VALUE}}',
-						' svg'                => 'fill: {{VALUE}};',
+						' svg'                => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 			]
@@ -1221,7 +1253,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					[ self::STICKY_WRAPPER . ' .dt-nav-menu-horizontal > li:not(.act) > a:hover' ],
 					[
 						' .submenu-indicator' => 'color: {{VALUE}}',
-						' svg'                => 'fill: {{VALUE}};',
+						' svg'                => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 			]
@@ -1239,7 +1271,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					[ self::STICKY_WRAPPER . ' .dt-nav-menu-horizontal > li.act > a' ],
 					[
 						' .submenu-indicator' => 'color: {{VALUE}}',
-						' svg'                => 'fill: {{VALUE}};',
+						' svg'                => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 			]
@@ -2020,7 +2052,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .horizontal-sub-nav li > a .submenu-indicator' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .horizontal-sub-nav li > a .submenu-indicator svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .horizontal-sub-nav li > a .submenu-indicator svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -2035,7 +2067,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .horizontal-sub-nav li:not(.act) > a:hover .submenu-indicator' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .horizontal-sub-nav li:not(.act) > a:hover .submenu-indicator svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .horizontal-sub-nav li:not(.act) > a:hover .submenu-indicator svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -2050,7 +2082,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .horizontal-sub-nav li.act > a .submenu-indicator' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .horizontal-sub-nav li.act > a .submenu-indicator svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .horizontal-sub-nav li.act > a .submenu-indicator svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -2477,28 +2509,28 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				'selectors_dictionary' => [
 					'top'   => $this->combine_to_css_vars_definition_string(
 						[
-							'icon-margin'        => '0 0 var(--icon-column-spacing) 0',
+							'icon-margin'        => '0 0 var(--icon-column-gap) 0',
 							'icon-grid-template' => '" icon " " header " " subtitle "',
 							'icon-grid-columns'  => '1fr',
 							'column-gap'         => '0px',
-							'row-gap'            => 'var(--icon-column-spacing)',
+							'row-gap'            => 'var(--icon-column-gap)',
 						]
 					),
 					'right' => $this->combine_to_css_vars_definition_string(
 						[
-							'icon-margin'        => '0 0 0 var(--icon-column-spacing)',
+							'icon-margin'        => '0 0 0 var(--icon-column-gap)',
 							'icon-grid-template' => '" before icon " " header icon " " subtitle icon " " empty icon " ',
-							'icon-grid-columns'  => 'max-content max(var(--icon-column-size, 1em), max-content)',
-							'column-gap'         => 'var(--icon-column-spacing)',
+							'icon-grid-columns'  => 'max-content max(var(--icon-column-width, 1em), max-content)',
+							'column-gap'         => 'var(--icon-column-gap)',
 							'row-gap'            => '0px',
 						]
 					),
 					'left'  => $this->combine_to_css_vars_definition_string(
 						[
-							'icon-margin'        => '0 var(--icon-column-spacing) 0 0',
+							'icon-margin'        => '0 var(--icon-column-gap) 0 0',
 							'icon-grid-template' => '" icon before" " icon header " " icon subtitle " " icon empty"',
-							'icon-grid-columns'  => ' max(var(--icon-column-size, 1em), max-content) max-content',
-							'column-gap'         => 'var(--icon-column-spacing)',
+							'icon-grid-columns'  => ' max(var(--icon-column-width, 1em), max-content) max-content',
+							'column-gap'         => 'var(--icon-column-gap)',
 							'row-gap'            => '0px',
 						]
 					),
@@ -2580,7 +2612,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => $prefix . 'icon_border_width',
-				'label'    => __( 'Border', 'the7mk2' ),
+				'label'    => esc_html__( 'Border', 'the7mk2' ),
 				'selector' => $selector_icon . ', ' . $selector_img,
 				'exclude'  => [
 					'color',
@@ -2684,7 +2716,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				'alpha'     => true,
 				'selectors' => [
 					$icon_selector . ' i'   => 'color: {{VALUE}};',
-					$icon_selector . ' svg' => 'fill: {{VALUE}};',
+					$icon_selector . ' svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -2765,7 +2797,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 					$selectors,
 					[
 						''     => 'color: {{VALUE}}',
-						' svg' => 'fill: {{VALUE}};',
+						' svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 					]
 				),
 			]
@@ -2912,7 +2944,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector          => 'color: {{VALUE}}',
-					$selector . ' svg' => 'fill: {{VALUE}}',
+					$selector . ' svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -3070,7 +3102,7 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 		$this->add_hooks();
 
 		// Add the first divider if dividers are enabled.
-		$items_wrap = $this->add_divider_elements_for_the_top_menu_level_filter( '', null, [], 0 );
+		$items_wrap = $this->add_divider_elements_for_the_top_menu_level_filter( '', null, (object) [ 'menu_id' => $this->get_id() ], 0 );
 
 		presscore_nav_menu(
 			[
@@ -3189,10 +3221,10 @@ class Horizontal_Menu extends The7_Elementor_Widget_Base {
 	}
 
 	/**
-	 * @param  string   $after_menu_item  A code after an item.
-	 * @param  WP_Post  $item  Page data object. Not used.
-	 * @param  stdClass $args  An object of wp_nav_menu() arguments.
-	 * @param  int      $depth  Depth of page. Not Used.
+	 * @param  string       $after_menu_item  A code after an item.
+	 * @param  WP_Post|null $item  Page data object. Not used.
+	 * @param  stdClass     $args  An object of wp_nav_menu() arguments.
+	 * @param  int          $depth  Depth of page. Not Used.
 	 *
 	 * @return string
 	 */

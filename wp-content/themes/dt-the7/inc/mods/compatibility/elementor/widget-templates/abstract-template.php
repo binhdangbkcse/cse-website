@@ -8,6 +8,7 @@
 namespace The7\Mods\Compatibility\Elementor\Widget_Templates;
 
 use Elementor\Widget_Base;
+use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -33,7 +34,7 @@ abstract class Abstract_Template {
 	 *
 	 * @param Widget_Base $widget Widget objects.
 	 */
-	public function __construct( $widget ) {
+	public function __construct( Widget_Base $widget ) {
 		$this->widget = $widget;
 	}
 
@@ -69,7 +70,7 @@ abstract class Abstract_Template {
 				$args = array_merge( $args, $overrides[ $id ] );
 			}
 
-			if ( $control_type === self::CONTROL_TYPE_RESPONSIVE ) {
+			if ( $control_type === self::CONTROL_TYPE_RESPONSIVE && $this->widget instanceof The7_Elementor_Widget_Base ) {
 				$this->widget->add_basic_responsive_control( $id, $args );
 			} elseif ( $control_type === self::CONTROL_TYPE_GROUP ) {
 				$group_type = $args['type'];

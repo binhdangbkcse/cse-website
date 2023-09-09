@@ -38,7 +38,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 	 * @return string
 	 */
 	protected function the7_title() {
-		return __( 'Product Sorting', 'the7mk2' );
+		return esc_html__( 'Product Sorting', 'the7mk2' );
 	}
 
 	/**
@@ -48,6 +48,13 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 	 */
 	protected function the7_icon() {
 		return 'eicon-table-of-contents';
+	}
+
+	/**
+	 * @return string[]
+	 */
+	protected function the7_keywords() {
+		return [ 'woocommerce', 'shop', 'store', 'product', 'sorting', 'order', 'catalog' ];
 	}
 
 	/**
@@ -114,26 +121,26 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'select_section',
 			[
-				'label' => __( 'Settings', 'the7mk2' ),
+				'label' => esc_html__( 'Settings', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
 		$this->add_basic_responsive_control(
 			'widget_align',
 			[
-				'label'     => __( 'Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -146,7 +153,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'text_typography',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'selector'       => '{{WRAPPER}} .orderby',
 				'fields_options' => [
 					'font_size'   => [
@@ -170,7 +177,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon',
 			[
-				'label'   => __( 'Icon', 'the7mk2' ),
+				'label'   => esc_html__( 'Icon', 'the7mk2' ),
 				'type'    => Controls_Manager::ICONS,
 				'default' => [
 					'value'   => 'fas fa-chevron-down',
@@ -183,15 +190,15 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_align',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'  => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -215,7 +222,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_size',
 			[
-				'label'      => __( 'Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -246,7 +253,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_spacing',
 			[
-				'label'      => __( 'Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -279,7 +286,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'width',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'selectors' => [
 					'{{WRAPPER}} .woocommerce-ordering' => 'max-width: 100%; width: {{SIZE}}px;',
@@ -290,7 +297,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'min_height',
 			[
-				'label'     => __( 'Min Height', 'the7mk2' ),
+				'label'     => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'selectors' => [
 					'{{WRAPPER}} .orderby' => 'min-height: {{SIZE}}px;',
@@ -301,7 +308,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -325,7 +332,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -345,7 +352,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'text_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -369,14 +376,14 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'normal_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'text_color',
 			[
-				'label'     => __( 'Text', 'the7mk2' ),
+				'label'     => esc_html__( 'Text', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -390,7 +397,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_color',
 			[
-				'label'     => __( 'Border', 'the7mk2' ),
+				'label'     => esc_html__( 'Border', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -403,7 +410,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'background_color',
 			[
-				'label'     => __( 'Background', 'the7mk2' ),
+				'label'     => esc_html__( 'Background', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -416,13 +423,13 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_color',
 			[
-				'label'     => __( 'Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .the7-wc-catalog-ordering .orderby-icon' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .the7-wc-catalog-ordering svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .the7-wc-catalog-ordering svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -432,14 +439,14 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'hover_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'text_hover_color',
 			[
-				'label'     => __( 'Text', 'the7mk2' ),
+				'label'     => esc_html__( 'Text', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -453,7 +460,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_hover_color',
 			[
-				'label'     => __( 'Border', 'the7mk2' ),
+				'label'     => esc_html__( 'Border', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -466,7 +473,7 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'background_hover_color',
 			[
-				'label'     => __( 'Background', 'the7mk2' ),
+				'label'     => esc_html__( 'Background', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -479,13 +486,13 @@ class Product_Sorting extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_hover_color',
 			[
-				'label'     => __( 'Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .the7-wc-catalog-ordering:hover .orderby-icon' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .the7-wc-catalog-ordering:hover svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .the7-wc-catalog-ordering:hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);

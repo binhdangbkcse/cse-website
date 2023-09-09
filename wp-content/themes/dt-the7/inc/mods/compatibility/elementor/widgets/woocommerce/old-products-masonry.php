@@ -42,7 +42,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 	}
 
 	protected function the7_title() {
-		return __( 'Old Product Masonry & Grid', 'the7mk2' );
+		return esc_html__( 'Old Product Masonry & Grid', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -94,7 +94,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->start_controls_section(
 			'layout_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -102,7 +102,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'mode',
 			[
-				'label'   => __( 'Mode', 'the7mk2' ),
+				'label'   => esc_html__( 'Mode', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'masonry',
 				'options' => [
@@ -115,7 +115,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'layout',
 			[
-				'label'   => __( 'Text & button position:', 'the7mk2' ),
+				'label'   => esc_html__( 'Text & button position:', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'content_below_img',
 				'options' => [
@@ -129,7 +129,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'responsiveness',
 			[
-				'label'     => __( 'Responsiveness mode', 'the7mk2' ),
+				'label'     => esc_html__( 'Responsiveness mode', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'browser_width_based',
 				'options'   => [
@@ -144,7 +144,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 3,
 				'tablet_default' => 2,
@@ -157,7 +157,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'pwb_column_min_width',
 			[
-				'label'      => __( 'Column minimum width', 'the7mk2' ),
+				'label'      => esc_html__( 'Column minimum width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -181,7 +181,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'pwb_columns',
 			[
-				'label'     => __( 'Desired columns number', 'the7mk2' ),
+				'label'     => esc_html__( 'Desired columns number', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 3,
 				'min'       => 1,
@@ -195,8 +195,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'gap_between_posts_adapter',
 			[
-				'label'       => __( 'Gap between columns', 'the7mk2' ),
-				'description' => __(
+				'label'       => esc_html__( 'Gap between columns', 'the7mk2' ),
+				'description' => esc_html__(
 					'Please note that this setting affects post paddings. So, for example: a value 10px will give you 20px gaps between posts)',
 					'the7mk2'
 				),
@@ -223,7 +223,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->start_controls_section(
 			'section_query',
 			[
-				'label' => __( 'Query', 'the7mk2' ),
+				'label' => esc_html__( 'Query', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -232,7 +232,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 			'current_query_info',
 			[
 				'type'            => Controls_Manager::RAW_HTML,
-				'raw'             => __(
+				'raw'             => esc_html__(
 					'Note that the amount of posts per page is the product of "Products per row" and "Rows per page" settings from "Appearance"->"Customize"->"WooCommerce"->"Products Catalog".',
 					'the7mk2'
 				),
@@ -253,39 +253,39 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 					'post_type' => [
 						'default' => 'product',
 						'options' => [
-							'current_query'   => __( 'Current Query', 'the7mk2' ),
-							'product'         => __( 'Latest Products', 'the7mk2' ),
-							'sale'            => __( 'Sale', 'the7mk2' ),
-							'top'             => __( 'Top rated products', 'the7mk2' ),
-							'best_selling'    => __( 'Best selling', 'the7mk2' ),
-							'featured'        => __( 'Featured', 'the7mk2' ),
+							'current_query'   => esc_html__( 'Current Query', 'the7mk2' ),
+							'product'         => esc_html__( 'Latest Products', 'the7mk2' ),
+							'sale'            => esc_html__( 'Sale', 'the7mk2' ),
+							'top'             => esc_html__( 'Top rated products', 'the7mk2' ),
+							'best_selling'    => esc_html__( 'Best selling', 'the7mk2' ),
+							'featured'        => esc_html__( 'Featured', 'the7mk2' ),
 							'by_id'           => _x( 'Manual Selection', 'Posts Query Control', 'the7mk2' ),
-							'related'         => __( 'Related Products', 'the7mk2' ),
-							'recently_viewed' => __( 'Recently Viewed', 'the7mk2' ),
+							'related'         => esc_html__( 'Related Products', 'the7mk2' ),
+							'recently_viewed' => esc_html__( 'Recently Viewed', 'the7mk2' ),
 						],
 					],
 					'orderby'   => [
 						'default' => 'date',
 						'options' => [
-							'date'       => __( 'Date', 'the7mk2' ),
-							'title'      => __( 'Title', 'the7mk2' ),
-							'price'      => __( 'Price', 'the7mk2' ),
-							'popularity' => __( 'Popularity', 'the7mk2' ),
-							'rating'     => __( 'Rating', 'the7mk2' ),
-							'rand'       => __( 'Random', 'the7mk2' ),
-							'menu_order' => __( 'Menu Order', 'the7mk2' ),
+							'date'       => esc_html__( 'Date', 'the7mk2' ),
+							'title'      => esc_html__( 'Title', 'the7mk2' ),
+							'price'      => esc_html__( 'Price', 'the7mk2' ),
+							'popularity' => esc_html__( 'Popularity', 'the7mk2' ),
+							'rating'     => esc_html__( 'Rating', 'the7mk2' ),
+							'rand'       => esc_html__( 'Random', 'the7mk2' ),
+							'menu_order' => esc_html__( 'Menu Order', 'the7mk2' ),
 						],
 					],
 					'exclude'   => [
 						'options' => [
-							'current_post'     => __( 'Current Post', 'the7mk2' ),
-							'manual_selection' => __( 'Manual Selection', 'the7mk2' ),
-							'terms'            => __( 'Term', 'the7mk2' ),
+							'current_post'     => esc_html__( 'Current Post', 'the7mk2' ),
+							'manual_selection' => esc_html__( 'Manual Selection', 'the7mk2' ),
+							'terms'            => esc_html__( 'Term', 'the7mk2' ),
 						],
 					],
 					'include'   => [
 						'options' => [
-							'terms' => __( 'Term', 'the7mk2' ),
+							'terms' => esc_html__( 'Term', 'the7mk2' ),
 						],
 					],
 				],
@@ -310,7 +310,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->start_controls_section(
 			'categorization_section',
 			[
-				'label'     => __( 'Filter bar', 'the7mk2' ),
+				'label'     => esc_html__( 'Filter bar', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_CONTENT,
 				'condition' => [
 					'query_post_type!' => [ 'current_query', 'related', 'recently_viewed' ],
@@ -321,10 +321,10 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'show_categories_filter',
 			[
-				'label'        => __( 'Taxonomy filter', 'the7mk2' ),
+				'label'        => esc_html__( 'Taxonomy filter', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 			]
@@ -333,8 +333,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'gap_below_category_filter_adapter',
 			[
-				'label'       => __( 'Gap', 'the7mk2' ),
-				'description' => __( 'Leave empty to use default gap', 'the7mk2' ),
+				'label'       => esc_html__( 'Gap', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to use default gap', 'the7mk2' ),
 				'type'        => Controls_Manager::SLIDER,
 				'default'     => [
 					'unit' => 'px',
@@ -363,7 +363,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->start_controls_section(
 			'pagination',
 			[
-				'label' => __( 'Pagination', 'the7mk2' ),
+				'label' => esc_html__( 'Pagination', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -377,7 +377,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'loading_mode',
 			[
-				'label'     => __( 'Pagination mode', 'the7mk2' ),
+				'label'     => esc_html__( 'Pagination mode', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'disabled',
 				'options'   => [
@@ -397,8 +397,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'dis_posts_total',
 			[
-				'label'       => __( 'Total number of posts', 'the7mk2' ),
-				'description' => __( 'Leave empty to display all posts.', 'the7mk2' ),
+				'label'       => esc_html__( 'Total number of posts', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to display all posts.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'conditions'  => [
@@ -433,8 +433,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'st_posts_per_page',
 			[
-				'label'       => __( 'Number of posts to display on one page', 'the7mk2' ),
-				'description' => __(
+				'label'       => esc_html__( 'Number of posts to display on one page', 'the7mk2' ),
+				'description' => esc_html__(
 					'Leave empty to use value from the WP Reading settings. Set "-1" to show all posts.',
 					'the7mk2'
 				),
@@ -451,8 +451,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'jsp_posts_total',
 			[
-				'label'       => __( 'Total number of posts', 'the7mk2' ),
-				'description' => __( 'Leave empty to display all posts.', 'the7mk2' ),
+				'label'       => esc_html__( 'Total number of posts', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to display all posts.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -465,8 +465,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'jsp_posts_per_page',
 			[
-				'label'       => __( 'Number of posts to display on one page', 'the7mk2' ),
-				'description' => __( 'Leave empty to use value from the WP Reading settings.', 'the7mk2' ),
+				'label'       => esc_html__( 'Number of posts to display on one page', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to use value from the WP Reading settings.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -480,8 +480,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'jsm_posts_total',
 			[
-				'label'       => __( 'Total number of posts', 'the7mk2' ),
-				'description' => __( 'Leave empty to display all posts.', 'the7mk2' ),
+				'label'       => esc_html__( 'Total number of posts', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to display all posts.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -494,8 +494,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'jsm_posts_per_page',
 			[
-				'label'       => __( 'Number of posts to display on one page', 'the7mk2' ),
-				'description' => __( 'Leave empty to use value from the WP Reading settings.', 'the7mk2' ),
+				'label'       => esc_html__( 'Number of posts to display on one page', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to use value from the WP Reading settings.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -509,8 +509,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'jsl_posts_total',
 			[
-				'label'       => __( 'Total number of posts', 'the7mk2' ),
-				'description' => __( 'Leave empty to display all posts.', 'the7mk2' ),
+				'label'       => esc_html__( 'Total number of posts', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to display all posts.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -523,8 +523,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'jsl_posts_per_page',
 			[
-				'label'       => __( 'Number of posts to display on one page', 'the7mk2' ),
-				'description' => __( 'Leave empty to use value from the WP Reading settings.', 'the7mk2' ),
+				'label'       => esc_html__( 'Number of posts to display on one page', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to use value from the WP Reading settings.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -537,7 +537,7 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'show_all_pages',
 			[
-				'label'        => __( 'Show all pages in paginator', 'the7mk2' ),
+				'label'        => esc_html__( 'Show all pages in paginator', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -562,8 +562,8 @@ class Old_Products_Masonry extends The7_Elementor_Shortcode_Adaptor_Widget_Base 
 		$this->add_control(
 			'gap_before_pagination_adapter',
 			[
-				'label'       => __( 'Spacing', 'the7mk2' ),
-				'description' => __( 'Leave empty to use default spacing', 'the7mk2' ),
+				'label'       => esc_html__( 'Spacing', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to use default spacing', 'the7mk2' ),
 				'type'        => Controls_Manager::SLIDER,
 				'default'     => [
 					'unit' => 'px',

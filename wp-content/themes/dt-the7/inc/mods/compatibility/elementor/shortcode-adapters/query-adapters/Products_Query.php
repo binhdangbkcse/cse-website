@@ -217,18 +217,7 @@ class Products_Query extends Query_Interface {
 				$terms[ $term_data->taxonomy ][] = $id;
 			}
 		}
-		$tax_query = [];
-		foreach ( $terms as $taxonomy => $ids ) {
-			$tax_query[] = [
-				'taxonomy' => $taxonomy,
-				'field'    => 'term_taxonomy_id',
-				'terms'    => $ids,
-			];
-		}
-
-		if ( ! empty( $tax_query ) ) {
-			$query_args['tax_query'] = array_merge( $query_args['tax_query'], $tax_query );
-		}
+		$this->insert_tax_query( $query_args, $terms );
 	}
 
 	protected function set_exclude_query_args( &$query_args ) {
@@ -258,25 +247,41 @@ class Products_Query extends Query_Interface {
 
 		if ( in_array( 'terms', $this->get_att( $this->query_prefix . 'exclude' ) ) && ! empty( $this->get_att( $this->query_prefix . 'exclude_term_ids' ) ) ) {
 			$terms = [];
-			foreach ( $this->get_att( $this->query_prefix . 'exclude_term_ids' ) as $to_exclude ) {
-				$term_data                       = get_term_by( 'term_taxonomy_id', $to_exclude );
-				$terms[ $term_data->taxonomy ][] = $to_exclude;
+			foreach ( $this->get_att( $this->query_prefix . 'exclude_term_ids' ) as $id ) {
+				$term_data = get_term_by( 'term_taxonomy_id', $id );
+				if ( isset( $term_data->taxonomy ) ) {
+					$terms[ $term_data->taxonomy ][] = $id;
+				}
 			}
-			$tax_query = [];
-			foreach ( $terms as $taxonomy => $ids ) {
-				$tax_query[] = [
-					'taxonomy' => $taxonomy,
-					'field'    => 'term_id',
-					'terms'    => $ids,
-					'operator' => 'NOT IN',
-				];
+			$this->insert_tax_query( $query_args, $terms, true );
+		}
+	}
+
+	protected function insert_tax_query(&$query_args, $terms, $exclude = false ) {
+		$tax_query = [];
+		foreach ( $terms as $taxonomy => $ids ) {
+			$query = [
+				'taxonomy' => $taxonomy,
+				'field' => 'term_taxonomy_id',
+				'terms' => $ids,
+			];
+
+			if ( $exclude ) {
+				$query['operator'] = 'NOT IN';
 			}
-			if ( empty( $query_args['tax_query'] ) ) {
-				$query_args['tax_query'] = $tax_query;
-			} else {
-				$query_args['tax_query']['relation'] = 'AND';
-				$query_args['tax_query'][]           = $tax_query;
-			}
+
+			$tax_query[] = $query;
+		}
+
+		if ( empty( $tax_query ) ) {
+			return;
+		}
+
+		if ( empty( $query_args['tax_query'] ) ) {
+			$query_args['tax_query'] = $tax_query;
+		} else {
+			$query_args['tax_query']['relation'] = 'AND';
+			$query_args['tax_query'][] = $tax_query;
 		}
 	}
 

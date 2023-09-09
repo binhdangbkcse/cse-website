@@ -33,7 +33,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 	 * Get element title.
 	 */
 	protected function the7_title() {
-		return __( 'Product Categories List', 'the7mk2' );
+		return esc_html__( 'Product Categories List', 'the7mk2' );
 	}
 
 	/**
@@ -51,33 +51,21 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 	 * @return array Element scripts dependencies.
 	 */
 	public function get_script_depends() {
-		return [ $this->get_name() ];
+		return [ 'the7-categories-handler' ];
 	}
 
 	/**
-	 * Register widget assets.
-	 */
-	protected function register_assets() {
-		the7_register_script_in_footer(
-			$this->get_name(),
-			THE7_ELEMENTOR_JS_URI . '/the7-product-categories.js',
-			[ 'jquery' ]
-		);
-		the7_register_style(
-			$this->get_name(),
-			THE7_ELEMENTOR_CSS_URI . '/the7-product-categories.css'
-		);
-	}
-
-	/**
-	 * Get style dependencies.
-	 *
-	 * Retrieve the list of style dependencies the element requires.
-	 *
-	 * @return array Element styles dependencies.
+	 * @return string[]
 	 */
 	public function get_style_depends() {
-		return [ $this->get_name() ];
+		return [ $this->get_name(), 'the7-vertical-list-common' ];
+	}
+
+	/**
+	 * Register assets.
+	 */
+	protected function register_assets() {
+		the7_register_style( $this->get_name(), THE7_ELEMENTOR_CSS_URI . '/the7-product-categories.css' );
 	}
 
 	/**
@@ -105,14 +93,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_layout',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'widget_title_text',
 			[
-				'label'   => __( 'Title', 'the7mk2' ),
+				'label'   => esc_html__( 'Title', 'the7mk2' ),
 				'type'    => Controls_Manager::TEXT,
 				'default' => 'Widget title',
 
@@ -122,10 +110,10 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle',
 			[
-				'label'        => __( 'Widget Toggle', 'the7mk2' ),
+				'label'        => esc_html__( 'Widget Toggle', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'On', 'the7mk2' ),
-				'label_off'    => __( 'Off', 'the7mk2' ),
+				'label_on'     => esc_html__( 'On', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Off', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default'      => 'yes',
 				'separator'    => 'before',
@@ -138,17 +126,16 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle_closed_by_default',
 			[
-				'label'        => __( 'Closed By Default', 'the7mk2' ),
+				'label'        => esc_html__( 'Closed By Default', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'closed',
 				'default'      => '',
 				'condition'    => [
 					'toggle!'            => '',
 					'widget_title_text!' => '',
 				],
-				'prefix_class' => '',
 				'render_type'  => 'template',
 			]
 		);
@@ -156,7 +143,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle_icon',
 			[
-				'label'            => __( 'Icon', 'the7mk2' ),
+				'label'            => esc_html__( 'Icon', 'the7mk2' ),
 				'type'             => Controls_Manager::ICONS,
 				'fa4compatibility' => 'icon',
 				'default'          => [
@@ -187,7 +174,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'toggle_active_icon',
 			[
-				'label'            => __( 'Active Icon', 'the7mk2' ),
+				'label'            => esc_html__( 'Active Icon', 'the7mk2' ),
 				'type'             => Controls_Manager::ICONS,
 				'fa4compatibility' => 'icon_active',
 				'default'          => [
@@ -220,14 +207,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'submenu_display',
 			[
-				'label'              => __( 'Display the subcategories', 'the7mk2' ),
+				'label'              => esc_html__( 'Display the subcategories', 'the7mk2' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'on_click',
 				'options'            => [
-					'always'         => __( 'Standard', 'the7mk2' ),
-					'all_categories' => __( 'All categories at once', 'the7mk2' ),
-					'only_children'  => __( 'Only children of the category', 'the7mk2' ),
-					'on_click'       => __( 'Drop down', 'the7mk2' ),
+					'always'         => esc_html__( 'Standard', 'the7mk2' ),
+					'all_categories' => esc_html__( 'All categories at once', 'the7mk2' ),
+					'only_children'  => esc_html__( 'Only children of the category', 'the7mk2' ),
+					'on_click'       => esc_html__( 'Drop down', 'the7mk2' ),
 				],
 				'frontend_available' => true,
 				'render_type'        => 'template',
@@ -237,10 +224,10 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_hierarchical',
 			[
-				'label'        => __( 'Show hierarchy', 'the7mk2' ),
+				'label'        => esc_html__( 'Show hierarchy', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'condition'    => [
 					'submenu_display' => 'all_categories',
 				],
@@ -253,12 +240,12 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'orderby',
 			[
-				'label'              => __( 'Order by', 'the7mk2' ),
+				'label'              => esc_html__( 'Order by', 'the7mk2' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'name',
 				'options'            => [
-					'order' => __( 'Category order', 'the7mk2' ),
-					'name'  => __( 'Name', 'the7mk2' ),
+					'order' => esc_html__( 'Category order', 'the7mk2' ),
+					'name'  => esc_html__( 'Name', 'the7mk2' ),
 				],
 				'frontend_available' => true,
 			]
@@ -267,10 +254,10 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'count',
 			[
-				'label'        => __( 'Product counts', 'the7mk2' ),
+				'label'        => esc_html__( 'Product counts', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'default'      => 'y',
 				'return_value' => 'y',
 			]
@@ -279,10 +266,10 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'hide_empty',
 			[
-				'label'        => __( 'empty categories', 'the7mk2' ),
+				'label'        => esc_html__( 'empty categories', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'default'      => 'y',
 				'return_value' => 'y',
 			]
@@ -291,7 +278,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'max_depth',
 			[
-				'label'      => __( 'Maximum depth', 'the7mk2' ),
+				'label'      => esc_html__( 'Maximum depth', 'the7mk2' ),
 				'type'       => Controls_Manager::TEXT,
 				'default'    => '',
 				'conditions' => [
@@ -330,7 +317,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_layout_icon',
 			[
-				'label'     => __( 'Subcategory Indicator Icons', 'the7mk2' ),
+				'label'     => esc_html__( 'Subcategory Indicator Icons', 'the7mk2' ),
 				'condition' => [
 					'submenu_display' => 'on_click',
 				],
@@ -340,7 +327,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'selected_icon',
 			[
-				'label'       => __( 'Main level icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Main level icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-caret-right',
@@ -354,7 +341,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'selected_active_icon',
 			[
-				'label'       => __( 'Main level active icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Main level active icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-caret-down',
@@ -370,7 +357,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'selected_sub_icon',
 			[
-				'label'       => __( 'Secondary levels icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Secondary levels icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-caret-right',
@@ -385,7 +372,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'selected_sub_active_icon',
 			[
-				'label'       => __( 'Secondary levels Active icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Secondary levels Active icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-caret-down',
@@ -408,7 +395,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_style_main-menu',
 			[
-				'label' => __( 'Main categories', 'the7mk2' ),
+				'label' => esc_html__( 'Main categories', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 
 			]
@@ -417,7 +404,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'list_heading',
 			[
-				'label' => __( 'List', 'the7mk2' ),
+				'label' => esc_html__( 'List', 'the7mk2' ),
 				'type'  => \Elementor\Controls_Manager::HEADING,
 			]
 		);
@@ -425,7 +412,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'rows_gap',
 			[
-				'label'      => __( 'Rows Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -449,10 +436,10 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider',
 			[
-				'label'        => __( 'Dividers', 'the7mk2' ),
+				'label'        => esc_html__( 'Dividers', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_off'    => __( 'Off', 'elementor' ),
-				'label_on'     => __( 'On', 'elementor' ),
+				'label_off'    => esc_html__( 'Off', 'elementor' ),
+				'label_on'     => esc_html__( 'On', 'elementor' ),
 				'prefix_class' => 'widget-divider-',
 			]
 		);
@@ -460,13 +447,13 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_style',
 			[
-				'label'     => __( 'Style', 'the7mk2' ),
+				'label'     => esc_html__( 'Style', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'solid'  => __( 'Solid', 'the7mk2' ),
-					'double' => __( 'Double', 'the7mk2' ),
-					'dotted' => __( 'Dotted', 'the7mk2' ),
-					'dashed' => __( 'Dashed', 'the7mk2' ),
+					'solid'  => esc_html__( 'Solid', 'the7mk2' ),
+					'double' => esc_html__( 'Double', 'the7mk2' ),
+					'dotted' => esc_html__( 'Dotted', 'the7mk2' ),
+					'dashed' => esc_html__( 'Dashed', 'the7mk2' ),
 				],
 				'default'   => 'solid',
 				'condition' => [
@@ -486,7 +473,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_weight',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
 					'size' => 1,
@@ -509,7 +496,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'condition' => [
 					'divider' => 'yes',
@@ -523,12 +510,12 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_first_border',
 			[
-				'label'        => __( 'First Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'First Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'condition'    => [
 					'divider' => 'yes',
 				],
@@ -538,7 +525,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_last_border',
 			[
-				'label'        => __( 'Last Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'Last Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -551,7 +538,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'items_heading',
 			[
-				'label'     => __( 'Item', 'the7mk2' ),
+				'label'     => esc_html__( 'Item', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -560,19 +547,19 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'align_items',
 			[
-				'label'                => __( 'Text alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Text alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -587,6 +574,8 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 					'{{WRAPPER}} .dt-product-categories > li > a' => ' --justify-count: {{VALUE}};',
 					'{{WRAPPER}} .dt-product-categories > li > a, {{WRAPPER}} .dt-product-categories > li > a .item-content' => ' {{VALUE}};',
 				],
+
+
 			]
 		);
 
@@ -603,15 +592,15 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_alignment',
 			[
-				'label'                => __( 'Indicator Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Indicator Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'with_text' => [
-						'title' => __( 'With text', 'the7mk2' ),
+						'title' => esc_html__( 'With text', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'side'      => [
-						'title' => __( 'Side', 'the7mk2' ),
+						'title' => esc_html__( 'Side', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -632,7 +621,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_size',
 			[
-				'label'      => __( 'Indicator size', 'the7mk2' ),
+				'label'      => esc_html__( 'Indicator size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem', 'vw' ],
 				'range'      => [
@@ -656,7 +645,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_space',
 			[
-				'label'     => __( 'Indicator Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -689,7 +678,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'border_menu_item_width',
 			[
-				'label'      => __( 'Border width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -710,7 +699,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_menu_item',
 			[
-				'label'      => __( 'Item paddings', 'the7mk2' ),
+				'label'      => esc_html__( 'Item paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -730,7 +719,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'menu_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -752,14 +741,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_menu_item_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_menu_item',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -775,11 +764,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_color',
 			[
-				'label'     => __( 'Indicator Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .dt-product-categories > li > a .next-level-button' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .dt-product-categories > li > a svg'                => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .dt-product-categories > li > a svg'                => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'selected_icon[value]!' => '',
@@ -791,7 +780,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_menu_item',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -804,7 +793,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_menu_item',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -819,14 +808,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_menu_item_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_menu_item_hover',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -841,11 +830,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_hover_color',
 			[
-				'label'     => __( 'Indicator Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .dt-product-categories > li > a .next-level-button:hover ' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .dt-sub-menu-display-on_click .dt-product-categories > li > a svg:hover' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .dt-product-categories > li > a .next-level-button:hover, {{WRAPPER}} .dt-product-categories > li.current-cat > a .next-level-button:hover ' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .dt-product-categories > li > a .next-level-button:hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'selected_icon[value]!' => '',
@@ -857,7 +846,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_menu_item_hover',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -870,7 +859,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_menu_item_hover',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -885,14 +874,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_menu_item_active',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_menu_item_active',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -904,11 +893,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_active_color',
 			[
-				'label'     => __( 'Indicator Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .dt-product-categories > li.open-sub > a .next-level-button' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .dt-product-categories > li.open-sub > a svg'                 => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .dt-product-categories > li.current-cat > a .next-level-button' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .dt-product-categories > li.current-cat > a svg'                 => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'selected_icon[value]!' => '',
@@ -920,7 +909,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_menu_item_active',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -933,7 +922,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_menu_item_active',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -951,7 +940,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'items_count',
 			[
-				'label'     => __( 'Items Count', 'the7mk2' ),
+				'label'     => esc_html__( 'Items Count', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -965,15 +954,15 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'item_count_align',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'  => [
-						'title' => __( 'Start', 'the7mk2' ),
+						'title' => esc_html__( 'Start', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'right' => [
-						'title' => __( 'End', 'the7mk2' ),
+						'title' => esc_html__( 'End', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -997,10 +986,9 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'item_count_align_hidden',
 			[
-				'label'        => __( 'Alignment', 'the7mk2' ),
+				'label'        => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'         => Controls_Manager::HIDDEN,
 				'default'      => 'left',
-				'prefix_class' => 'filter-count-align-',
 				'condition'    => [
 					'count' => 'y',
 				],
@@ -1021,7 +1009,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'item_count_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1042,7 +1030,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'item_count_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1063,7 +1051,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'item_count_min_width',
 			[
-				'label'      => __( 'Min Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1085,7 +1073,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'item_count_min_height',
 			[
-				'label'      => __( 'Min Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1107,7 +1095,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'item_count_space',
 			[
-				'label'     => __( 'Gap', 'the7mk2' ),
+				'label'     => esc_html__( 'Gap', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -1127,11 +1115,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tabs( 'item_count_tabs_style' );
 
-		$this->add_items_count_tab_controls( 'normal_', __( 'Normal', 'the7mk2' ) );
+		$this->add_items_count_tab_controls( 'normal_', esc_html__( 'Normal', 'the7mk2' ) );
 
-		$this->add_items_count_tab_controls( 'hover_', __( 'Hover', 'the7mk2' ) );
+		$this->add_items_count_tab_controls( 'hover_', esc_html__( 'Hover', 'the7mk2' ) );
 
-		$this->add_items_count_tab_controls( 'active_', __( 'Active', 'the7mk2' ) );
+		$this->add_items_count_tab_controls( 'active_', esc_html__( 'Active', 'the7mk2' ) );
 
 		$this->end_controls_tabs();
 
@@ -1140,7 +1128,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_style_sub-menu',
 			[
-				'label'      => __( 'Sub Categories', 'the7mk2' ),
+				'label'      => esc_html__( 'Sub Categories', 'the7mk2' ),
 				'tab'        => Controls_Manager::TAB_STYLE,
 				'conditions' => [
 					'relation' => 'or',
@@ -1176,7 +1164,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_list_heading',
 			[
-				'label' => __( 'List', 'the7mk2' ),
+				'label' => esc_html__( 'List', 'the7mk2' ),
 				'type'  => \Elementor\Controls_Manager::HEADING,
 			]
 		);
@@ -1184,7 +1172,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_sub_menu',
 			[
-				'label'      => __( '2 menu level Paddings', 'the7mk2' ),
+				'label'      => esc_html__( '2 menu level Paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -1204,7 +1192,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_sub_sub_menu',
 			[
-				'label'      => __( '3+ menu level Paddings', 'the7mk2' ),
+				'label'      => esc_html__( '3+ menu level Paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -1224,7 +1212,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sub_rows_gap',
 			[
-				'label'      => __( 'Rows Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1253,10 +1241,10 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider',
 			[
-				'label'        => __( 'Dividers', 'the7mk2' ),
+				'label'        => esc_html__( 'Dividers', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_off'    => __( 'Off', 'elementor' ),
-				'label_on'     => __( 'On', 'elementor' ),
+				'label_off'    => esc_html__( 'Off', 'elementor' ),
+				'label_on'     => esc_html__( 'On', 'elementor' ),
 				'prefix_class' => 'sub-widget-divider-',
 			]
 		);
@@ -1264,13 +1252,13 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider_style',
 			[
-				'label'     => __( 'Style', 'the7mk2' ),
+				'label'     => esc_html__( 'Style', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'solid'  => __( 'Solid', 'the7mk2' ),
-					'double' => __( 'Double', 'the7mk2' ),
-					'dotted' => __( 'Dotted', 'the7mk2' ),
-					'dashed' => __( 'Dashed', 'the7mk2' ),
+					'solid'  => esc_html__( 'Solid', 'the7mk2' ),
+					'double' => esc_html__( 'Double', 'the7mk2' ),
+					'dotted' => esc_html__( 'Dotted', 'the7mk2' ),
+					'dashed' => esc_html__( 'Dashed', 'the7mk2' ),
 				],
 				'default'   => 'solid',
 				'condition' => [
@@ -1290,7 +1278,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider_weight',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
 					'size' => 1,
@@ -1313,7 +1301,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'condition' => [
 					'sub_divider' => 'yes',
@@ -1327,12 +1315,12 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_sub_first_border',
 			[
-				'label'        => __( 'First Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'First Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'condition'    => [
 					'sub_divider' => 'yes',
 				],
@@ -1342,7 +1330,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_sub_last_border',
 			[
-				'label'        => __( 'Last Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'Last Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -1355,7 +1343,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_heading',
 			[
-				'label'     => __( 'Item', 'the7mk2' ),
+				'label'     => esc_html__( 'Item', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -1364,19 +1352,19 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'align_sub_items',
 			[
-				'label'                => __( 'Text alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Text alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -1406,15 +1394,15 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_icon_alignment',
 			[
-				'label'                => __( 'Indicator Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Indicator Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'with_text' => [
-						'title' => __( 'With text', 'the7mk2' ),
+						'title' => esc_html__( 'With text', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'side'      => [
-						'title' => __( 'Side', 'the7mk2' ),
+						'title' => esc_html__( 'Side', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -1435,7 +1423,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sub_icon_size',
 			[
-				'label'      => __( 'Indicator size', 'the7mk2' ),
+				'label'      => esc_html__( 'Indicator size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem', 'vw' ],
 				'range'      => [
@@ -1459,7 +1447,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sub_icon_space',
 			[
-				'label'     => __( 'Indicator Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -1490,7 +1478,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'border_sub_menu_item_width',
 			[
-				'label'      => __( 'Border width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1511,7 +1499,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_sub_menu_item',
 			[
-				'label'      => __( 'Item paddings', 'the7mk2' ),
+				'label'      => esc_html__( 'Item paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -1531,7 +1519,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'menu_sub_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -1553,14 +1541,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_item_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_sub_menu_item',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -1576,11 +1564,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_menu_icon_color',
 			[
-				'label'     => __( 'Indicator Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .children > li > a .next-level-button' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .children > li > a svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .children > li > a svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'selected_icon[value]!' => '',
@@ -1592,7 +1580,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_sub_menu_item',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1605,7 +1593,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_sub_menu_item',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1620,14 +1608,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_item_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_sub_menu_item_hover',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -1642,11 +1630,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_menu_icon_hover_color',
 			[
-				'label'     => __( 'Indicator Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .dt-sub-menu-display-on_click .children > li > a .next-level-button:hover, {{WRAPPER}} .dt-sub-menu-display-on_item_click .children > li > a:hover .next-level-button' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .dt-sub-menu-display-on_click .children > li > a svg:hover,  {{WRAPPER}} .dt-sub-menu-display-on_item_click .children > li > a:hover svg'                                    => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .children > li > a .next-level-button:hover' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .children > li > a .next-level-button:hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'selected_icon[value]!' => '',
@@ -1658,7 +1646,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_sub_menu_item_hover',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1671,7 +1659,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_sub_menu_item_hover',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1686,14 +1674,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_item_active',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_sub_menu_item_active',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -1705,11 +1693,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_menu_icon_active_color',
 			[
-				'label'     => __( 'Indicator Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .children .current-cat a .next-level-button' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .children .current-cat a svg'                => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .children .current-cat a svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'selected_icon[value]!' => '',
@@ -1721,7 +1709,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_sub_menu_item_active',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1734,7 +1722,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_sub_menu_item_active',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1752,7 +1740,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_items_count',
 			[
-				'label'     => __( 'Items Count', 'the7mk2' ),
+				'label'     => esc_html__( 'Items Count', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -1766,15 +1754,15 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_count_align',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'  => [
-						'title' => __( 'Start', 'the7mk2' ),
+						'title' => esc_html__( 'Start', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'right' => [
-						'title' => __( 'End', 'the7mk2' ),
+						'title' => esc_html__( 'End', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -1798,7 +1786,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_count_align_hidden',
 			[
-				'label'     => __( 'Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::HIDDEN,
 				'default'   => 'left',
 				'condition' => [
@@ -1821,7 +1809,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_count_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1842,7 +1830,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_count_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1863,7 +1851,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_count_min_width',
 			[
-				'label'      => __( 'Min Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1885,7 +1873,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_count_min_height',
 			[
-				'label'      => __( 'Min Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1907,7 +1895,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sub_item_count_space',
 			[
-				'label'     => __( 'Gap', 'the7mk2' ),
+				'label'     => esc_html__( 'Gap', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -1927,11 +1915,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tabs( 'sub_item_count_tabs_style' );
 
-		$this->add_sub_items_count_tab_controls( 'normal_', __( 'Normal', 'the7mk2' ) );
+		$this->add_sub_items_count_tab_controls( 'normal_', esc_html__( 'Normal', 'the7mk2' ) );
 
-		$this->add_sub_items_count_tab_controls( 'hover_', __( 'Hover', 'the7mk2' ) );
+		$this->add_sub_items_count_tab_controls( 'hover_', esc_html__( 'Hover', 'the7mk2' ) );
 
-		$this->add_sub_items_count_tab_controls( 'active_', __( 'Active', 'the7mk2' ) );
+		$this->add_sub_items_count_tab_controls( 'active_', esc_html__( 'Active', 'the7mk2' ) );
 
 		$this->end_controls_tabs();
 
@@ -1964,7 +1952,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_color',
 			[
-				'label'     => __( 'Text  Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text  Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1980,7 +1968,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -1994,7 +1982,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'border-color: {{VALUE}};',
@@ -2034,7 +2022,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'sub_item_count_color',
 			[
-				'label'     => __( 'Text  Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text  Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2050,7 +2038,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'sub_item_count_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -2064,7 +2052,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'sub_item_count_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'border-color: {{VALUE}};',
@@ -2094,6 +2082,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 
 		if ( $settings['toggle'] === 'yes' ) {
 			$this->add_render_attribute( 'product-categories', 'class', 'collapsible' );
+			$this->add_render_attribute( '_wrapper', 'class', $settings['toggle_closed_by_default'] );
 
 			if ( $settings['toggle_closed_by_default'] ) {
 				$this->add_render_attribute( 'dt-product-categories', 'style', 'display:none' );
@@ -2146,12 +2135,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$list_args['echo']                       = false;
 		$list_args['title_li']                   = '';
 		$list_args['pad_counts']                 = 1;
-		$list_args['show_option_none']           = __( 'No product categories exist.', 'woocommerce' );
+		$list_args['show_option_none']           = esc_html__( 'No product categories exist.', 'woocommerce' );
 		$list_args['current_category']           = $current_cat ? $current_cat->term_id : '';
 		$list_args['current_category_ancestors'] = $cat_ancestors;
 		$list_args['max_depth']                  = $max_depth;
+
 		if ( $show_children_only && $current_cat ) {
 			if ( $hierarchical ) {
+
 				$include = array_merge(
 					$cat_ancestors,
 					[ $current_cat->term_id ],
@@ -2177,6 +2168,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 				// Gather siblings of ancestors.
 				if ( $cat_ancestors ) {
 					foreach ( $cat_ancestors as $ancestor ) {
+
 						$include = array_merge(
 							$include,
 							get_terms(
@@ -2245,6 +2237,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		}
 
 		$class     = [
+			'the7-vertical-list',
 			'dt-product-categories',
 			'dt-sub-menu-display-' . $settings['submenu_display'],
 			'dt-icon-align-' . $settings['icon_alignment'],
@@ -2276,7 +2269,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'widget_style_section',
 			[
-				'label'     => __( 'Widget Title Area', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Title Area', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'widget_title_text!' => '',
@@ -2296,7 +2289,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'title_arrow_size',
 			[
-				'label'     => __( 'Toggle Icon Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Toggle Icon Size', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -2379,13 +2372,13 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'normal_title_arrow_style',
 			[
-				'label' => __( 'Closed', 'the7mk2' ),
+				'label' => esc_html__( 'Closed', 'the7mk2' ),
 			]
 		);
         $this->add_control(
             'widget_title_color',
             [
-                'label'     => __( 'Title Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Title Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'alpha'     => true,
                 'default'   => '',
@@ -2398,11 +2391,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_arrow_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-closed i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-closed svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-closed svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
                 'condition' => [
                     'toggle!'             => '',
@@ -2422,7 +2415,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
         $this->add_control(
             'title_border_color',
             [
-                'label'     => __( 'Border Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Border Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'alpha'     => true,
                 'default'   => '',
@@ -2438,13 +2431,13 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'hover_title_arrow_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
         $this->add_control(
             'hover_title_color',
             [
-                'label'     => __( 'Title Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Title Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'alpha'     => true,
                 'default'   => '',
@@ -2457,11 +2450,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
         $this->add_control(
             'hover_title_arrow_color',
             [
-                'label'     => __( 'Icon Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .filter-header:hover .filter-toggle-icon .elementor-icon i'   => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .filter-header:hover .filter-toggle-icon .elementor-icon svg' => 'fill: {{VALUE}};',
+                    '{{WRAPPER}} .filter-header:hover .filter-toggle-icon .elementor-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
                 ],
                 'condition' => [
                     'toggle!'             => '',
@@ -2481,7 +2474,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
         $this->add_control(
             'hover_title_border_color',
             [
-                'label'     => __( 'Border Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Border Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'alpha'     => true,
                 'default'   => '',
@@ -2496,14 +2489,14 @@ class Product_Categories extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'active_title_arrow_style',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
         $this->add_control(
             'active_title_color',
             [
-                'label'     => __( 'Title Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Title Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'alpha'     => true,
                 'default'   => '',
@@ -2516,11 +2509,11 @@ class Product_Categories extends The7_Elementor_Widget_Base {
         $this->add_control(
             'active_title_arrow_color',
             [
-                'label'     => __( 'Icon Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-active i'   => 'color: {{VALUE}};',
-                    '{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-active svg' => 'fill: {{VALUE}};',
+                    '{{WRAPPER}} .filter-header .filter-toggle-icon .filter-toggle-active svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
                 ],
                 'condition' => [
                     'toggle!'             => '',
@@ -2541,7 +2534,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
         $this->add_control(
             'active_title_border_color',
             [
-                'label'     => __( 'Border Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Border Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'alpha'     => true,
                 'default'   => '',
@@ -2562,7 +2555,7 @@ class Product_Categories extends The7_Elementor_Widget_Base {
         $this->start_controls_section(
             'container_section',
             [
-                'label'     => __( 'Widget Content Area', 'the7mk2' ),
+                'label'     => esc_html__( 'Widget Content Area', 'the7mk2' ),
                 'tab'       => Controls_Manager::TAB_STYLE,
             ]
         );

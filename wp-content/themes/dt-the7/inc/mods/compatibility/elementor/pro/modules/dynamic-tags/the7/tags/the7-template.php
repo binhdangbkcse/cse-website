@@ -7,6 +7,7 @@ use Elementor\Core\DynamicTags\Tag;
 use Elementor\Plugin as Elementor;
 use ElementorPro\Modules\QueryControl\Module as QueryControlModule;
 use The7\Mods\Compatibility\Elementor\Pro\Modules\Dynamic_Tags\The7\Module;
+use The7_Elementor_Compatibility;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -41,7 +42,8 @@ class The7_Template extends Tag {
 		?>
         <div class="elementor-template">
 			<?php
-			echo Elementor::$instance->frontend->get_builder_content_for_display( $template_id );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			echo The7_Elementor_Compatibility::get_builder_content_for_display( $template_id );
 			?>
         </div>
 		<?php

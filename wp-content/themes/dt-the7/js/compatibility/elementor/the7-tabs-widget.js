@@ -160,13 +160,13 @@
                     $navScrollWrapper.on('scroll', methods.updateNav);
                     $navButtons.on('click', methods.onNavButtonClick);
                 }
-                elementorFrontend.elements.$window.on('resize', methods.handleResize);
+                elementorFrontend.elements.$window.on('the7-resize-width', methods.handleResize);
             },
             unBindEvents: function () {
                 $tabTitles.off('click', methods.onTabClick);
                 $navScrollWrapper.off('scroll', methods.updateNav);
                 $navButtons.off('click', methods.onNavButtonClick);
-                elementorFrontend.elements.$window.off('resize', methods.handleResize);
+                elementorFrontend.elements.$window.off('the7-resize-width', methods.handleResize);
             },
             onTabClick: function (e) {
                 methods.changeActiveTab($(e.target).closest('.the7-e-tab-title').attr('data-tab'));

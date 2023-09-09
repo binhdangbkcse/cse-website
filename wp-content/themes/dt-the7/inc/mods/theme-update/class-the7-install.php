@@ -23,150 +23,150 @@ class The7_Install {
 	 */
 	public static function get_update_callbacks() {
 		return [
-			'5.5.0'   => [
+			'5.5.0'    => [
 				'the7_update_550_fancy_titles_parallax',
 				'the7_update_550_fancy_titles_font_size',
 				'the7_update_550_fancy_subtitles_font_size',
 			],
-			'6.0.0'   => [
+			'6.0.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.1.0'   => [],
-			'6.1.1'   => [
+			'6.1.0'    => [],
+			'6.1.1'    => [
 				'the7_update_611_page_transparent_top_bar_migration',
 			],
-			'6.2.0'   => [
+			'6.2.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.3.0'   => [
+			'6.3.0'    => [
 				'the7_update_630_microsite_content_visibility_settings_migration',
 			],
-			'6.4.0'   => [
+			'6.4.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.4.1'   => [
+			'6.4.1'    => [
 				'the7_update_641_carousel_backward_compatibility',
 			],
-			'6.4.3'   => [
+			'6.4.3'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.5.0'   => [
+			'6.5.0'    => [
 				'the7_update_650_disable_options_autoload',
 			],
-			'6.6.0'   => [
+			'6.6.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.6.1'   => [
+			'6.6.1'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.7.0'   => [
+			'6.7.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.8.0'   => [
+			'6.8.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.8.1'   => [
+			'6.8.1'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'6.9.3'   => [
+			'6.9.3'    => [
 				'the7_update_693_migrate_custom_menu_widgets',
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'7.0.0'   => [
+			'7.0.0'    => [
 				'the7_update_700_shortcodes_gradient_backward_compatibility',
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'7.1.0'   => [
+			'7.1.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'7.3.0'   => [
+			'7.3.0'    => [
 				'the7_update_730_set_fancy_title_zero_top_padding',
 				'the7_update_730_fancy_title_responsiveness_settings',
 			],
-			'7.4.0'   => [
+			'7.4.0'    => [
 				'the7_update_740_fancy_title_uppercase_migration',
 			],
-			'7.4.3'   => [
+			'7.4.3'    => [
 				'the7_update_743_back_button_migration',
 			],
-			'7.5.0'   => [
+			'7.5.0'    => [
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'7.6.0'   => [
+			'7.6.0'    => [
 				'the7_update_760_mega_menu_migration',
 			],
-			'7.6.2'   => [],
-			'7.7.0'   => [
+			'7.6.2'    => [],
+			'7.7.0'    => [
 				'the7_update_770_shortcodes_blog_backward_compatibility',
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'7.7.1'   => [
+			'7.7.1'    => [
 				'the7_update_771_shortcodes_blog_backward_compatibility',
 				'the7_update_771_shortcodes_button_backward_compatibility',
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'7.7.2'   => [],
-			'7.7.5'   => [
+			'7.7.2'    => [],
+			'7.7.5'    => [
 				'the7_update_775_fontawesome_compatibility',
 			],
-			'7.7.6'   => [],
-			'7.8.0'   => [
+			'7.7.6'    => [],
+			'7.8.0'    => [
 				'the7_update_780_shortcodes_backward_compatibility',
 			],
-			'7.9.0'   => [
+			'7.9.0'    => [
 				'the7_update_790_silence_plugins_purchase_notification',
 			],
-			'7.9.1'   => [
+			'7.9.1'    => [
 				'the7_regenerate_post_css',
 			],
-			'8.0.0'   => [],
-			'8.1.0'   => [],
-			'8.2.0'   => [],
-			'8.3.0'   => [
+			'8.0.0'    => [],
+			'8.1.0'    => [],
+			'8.2.0'    => [],
+			'8.3.0'    => [
 				'the7_update_830_fix_post_padding_meta',
 				'the7_update_830_migrate_post_mobile_padding',
 				'the7_regenerate_post_css',
 			],
-			'8.4.0'   => [
+			'8.4.0'    => [
 				'the7_regenerate_post_css',
 			],
-			'8.5.0'   => [
+			'8.5.0'    => [
 				'the7_update_850_migrate_post_footer_visibility',
 			],
-			'8.5.0.2' => [
+			'8.5.0.2'  => [
 				'the7_update_8502_migrate_post_footer_source_for_elementor',
 			],
-			'8.6.0'   => [],
-			'8.7.0'   => [
+			'8.6.0'    => [],
+			'8.7.0'    => [
 				'the7_update_purge_elementor_cache',
 			],
-			'8.9.0'   => [
+			'8.9.0'    => [
 				'the7_update_890_elementor_the7_elements',
 			],
-			'9.1.2'   => [
+			'9.1.2'    => [
 				'the7_update_912_elementor_the7_elements',
 			],
-			'9.2.0'   => [],
-			'9.3.1'   => [
+			'9.2.0'    => [],
+			'9.3.1'    => [
 				'the7_update_931_elementor_the7_photo_scroller',
 			],
-			'9.4.0'   => [
+			'9.4.0'    => [
 				'the7_update_940_theme_options',
 				'the7_update_940_elementor_the7_posts_masonry',
 			],
-			'9.4.0.2' => [
+			'9.4.0.2'  => [
 				'the7_update_9402_theme_options',
 			],
-			'9.6.0'   => [
+			'9.6.0'    => [
 				'the7_update_9600_theme_options',
 				'the7_update_960_elementor_the7_posts_carousel',
 			],
-			'9.13.0'  => [
+			'9.13.0'   => [
 				'the7_update_9130_elementor_the7_posts_carousel',
 				'the7_update_9130_elementor_the7_testimonials_carousel',
 				'the7_update_9130_elementor_the7_text_and_icon_carousel',
 			],
-			'9.14.0'  => [
+			'9.14.0'   => [
 				'the7_update_9140_simple_posts_widget',
 				'the7_update_9140_simple_posts_carousel_widget',
 				'the7_update_9140_simple_products_widget',
@@ -175,10 +175,10 @@ class The7_Install {
 				'the7_update_9140_simple_product_category_carousel_widget',
 				'the7_elementor_flush_css_cache',
 			],
-			'9.14.2'  => [
+			'9.14.2'   => [
 				'the7_update_9142_theme_options',
 			],
-			'9.15.1'  => [
+			'9.15.1'   => [
 				'the7_update_9150_posts_carousel_widget',
 				'the7_update_9150_multipurpose_carousel_widget',
 				'the7_update_9150_testimonials_carousel_widget',
@@ -190,7 +190,7 @@ class The7_Install {
 				'the7_update_91501_simple_products_carousel_widget_border',
 				'the7_elementor_flush_css_cache',
 			],
-			'9.16.0'  => [
+			'9.16.0'   => [
 				'the7_update_9160_set_buttons_integration_off',
 				'the7_update_9160_posts_masonry_widget_buttons',
 				'the7_update_9160_posts_carousel_widget_buttons',
@@ -206,81 +206,96 @@ class The7_Install {
 				'the7_update_9160_text_and_icon_carousel_widget_buttons',
 				'the7_elementor_flush_css_cache',
 			],
-			'9.17.0'  => [
+			'9.17.0'   => [
 				'the7_update_9170_the7_nav_menu_widget',
 				'the7_elementor_flush_css_cache',
 				'the7_mass_regenerate_short_codes_inline_css',
 			],
-			'10.0.0'  => [
+			'10.0.0'   => [
 				'the7_update_10_0_0_manage_flags',
 			],
-			'10.1.0'  => [
+			'10.1.0'   => [
 				'the7_update_10_1_0_products_add_to_cart_icon_migration',
 				'the7_update_10_1_0_products_carousel_add_to_cart_icon_migration',
 				'the7_elementor_flush_css_cache',
 			],
-			'10.2.0'  => [
+			'10.2.0'   => [
 				'the7_update_10_2_0_horizontal_menu_gap_migration',
 				'the7_elementor_flush_css_cache',
 			],
-			'10.3.0'  => [
+			'10.3.0'   => [
 				'the7_update_10_3_0_activate_deprecated_elementor_widgets',
 				'the7_update_10_3_0_migrate_portfolio_bredcrumbs_text',
 				'the7_update_10_3_0_activate_deprecated_mega_menu_settings',
 			],
-			'10.4.0'  => [
+			'10.4.0'   => [
 				'the7_update_10_4_0_posts_masonry_grid_filters_migration',
 				'the7_update_10_4_0_replace_andale_mono_font_in_theme_options',
 				'the7_elementor_flush_css_cache',
 			],
-			'10.4.3'  => [
+			'10.4.3'   => [
 				'the7_update_10_4_3_maybe_turn_on_elementor_custom_breakpoints',
 				'the7_elementor_flush_css_cache',
 			],
-			'10.5.0'  => [
+			'10.5.0'   => [
 				'the7_update_10_5_0_turn_off_elementor_paragraph_last_spacing',
 				Migrations\v10_5_0\Bullets_Switch_Migration::class,
 				Migrations\v10_5_0\Posts_Masonry_Gap_Migration::class,
 				Migrations\v10_5_0\Submenu_Visibility_Migration::class,
 				'the7_elementor_flush_css_cache',
 			],
-			'10.6.1'  => [
+			'10.6.1'   => [
 				Migrations\v10_6_1\Carousel_Stage_Padding_Migration::class,
 			],
-			'10.7.0'  => [
+			'10.7.0'   => [
 				Migrations\v10_7_0\Arrows_Visibility_Migration::class,
 			],
-			'10.8.0'  => [
+			'10.8.0'   => [
 				Migrations\v10_8_0\Arrows_Visibility_Migration::class,
 				'the7_elementor_activate_deprecated_widgets',
 			],
-			'10.12.0' => [
+			'10.12.0'  => [
 				Migrations\v10_12_0\Horizontal_Menu_Decoration_Migration::class,
 				'the7_elementor_flush_css_cache',
 			],
-			'10.13.1' => [
+			'10.13.1'  => [
 				'the7_update_10_13_1_responsive_scroll_top_offsets',
 				Migrations\v10_13_1\Search_Border_Radius_Migration::class,
 				'the7_elementor_flush_css_cache',
 			],
-			'11.0.0'  => [
+			'11.0.0'   => [
 				Migrations\v11_0_0\Search_Button_Border_Radius_Migration::class,
 				'the7_update_11_0_0_prepare_dashboard_settings',
 				'the7_update_11_0_0_dismiss_splash_screen_notice',
 				'the7_elementor_flush_css_cache',
 			],
-			'11.0.2'  => [
+			'11.0.2'   => [
 				'the7_update_11_0_2_return_dashboard_setting_defaults',
 				'the7_elementor_flush_css_cache',
 			],
-			'11.1.0'  => [
+			'11.1.0'   => [
 				Migrations\v11_1_0\Menu_Cart_Migration::class,
 				Migrations\v11_1_0\Products_Widget_Title_Margin_Migration::class,
 				'the7_elementor_flush_css_cache',
 			],
-			'11.4.0'  => [
+			'11.4.0'   => [
 				Migrations\v11_4_0\Preview_Cart_Migration::class,
 				Migrations\v11_4_0\Products_Variation_Migration::class,
+				'the7_elementor_flush_css_cache',
+			],
+			'11.5.0'   => [
+				Migrations\v11_5_0\Simple_Widgets_Image_Aspect_Ratio_Migration::class,
+				Migrations\v11_5_0\Product_Widgets_Image_Aspect_Ratio_Migration::class,
+				Migrations\v11_5_0\Image_Aspect_Ratio_Setting_Name_Migration::class,
+				Migrations\v11_5_0\Products_Variation_Responsiveness_Migration::class,
+				'the7_elementor_flush_css_cache',
+			],
+			'11.6.0'   => [
+				Migrations\v11_6_0\Bullets_And_Arrows_Migration::class,
+				'the7_elementor_flush_css_cache',
+			],
+			'11.6.0.1' => [
+				Migrations\v11_6_0_1\Bullets_Vertical_Offset_Migration::class,
 				'the7_elementor_flush_css_cache',
 			],
 		];
@@ -363,7 +378,7 @@ class The7_Install {
 			return;
 		}
 
-		if ( ! empty( $_GET['force_update_the7'] ) && is_admin() ) {
+		if ( ! empty( $_GET['force_update_the7'] ) && is_admin() && check_admin_referer( 'force_update_the7_nonce' ) ) {
 			do_action( 'wp_the7_updater_cron' );
 			wp_safe_redirect( admin_url( 'admin.php?page=the7-dashboard' ) );
 			exit;
@@ -379,7 +394,7 @@ class The7_Install {
 			return;
 		}
 
-		if ( ! empty( $_GET['do_update_the7'] ) && is_admin() ) {
+		if ( ! empty( $_GET['do_update_the7'] ) && is_admin() && check_admin_referer( 'do_update_the7_nonce' ) ) {
 			self::update();
 			wp_safe_redirect( add_query_arg( 'do_updating_the7', 'true', admin_url( 'admin.php?page=the7-dashboard' ) ) );
 			exit;

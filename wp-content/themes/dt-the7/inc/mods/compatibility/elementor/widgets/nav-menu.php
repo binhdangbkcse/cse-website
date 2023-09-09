@@ -32,7 +32,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 	 * Get element title.
 	 */
 	protected function the7_title() {
-		return __( 'Vertical Menu', 'the7mk2' );
+		return esc_html__( 'Vertical Menu', 'the7mk2' );
 	}
 
 	/**
@@ -121,7 +121,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_layout',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 			]
 		);
 
@@ -131,15 +131,16 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 			$this->add_control(
 				'menu',
 				[
-					'label'          => __( 'Menu', 'the7mk2' ),
+					'label'          => esc_html__( 'Menu', 'the7mk2' ),
 					'type'           => Controls_Manager::SELECT,
 					'options'        => $menus,
 					'default'        => array_keys( $menus )[0],
 					'save_default'   => true,
-					'description'    => sprintf(
-					// translators: %s - edit menu admin page.
-						__( 'Go to the <a href="%s" target="_blank">Menus screen</a> to manage your menus.', 'the7mk2' ),
-						admin_url( 'nav-menus.php' )
+					'desctiption'    => sprintf(
+					/* translators: 1: Link open tag, 2: Link closing tag. */
+						esc_html__( 'Go to the %1$sMenus screen%2$s to manage your menus.', 'the7mk2' ),
+						sprintf( '<a href="%s" target="_blank">', admin_url( 'nav-menus.php' ) ),
+						'</a>'
 					),
 					'style_transfer' => false,
 				]
@@ -149,20 +150,22 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 				'menu',
 				[
 					'type'            => Controls_Manager::RAW_HTML,
-					'raw'             => '<strong>' . __( 'There are no menus in your site.', 'the7mk2' ) . '</strong><br>' . sprintf(
-						// translators: %s - edit menu admin page.
-						__( 'Go to the <a href="%s" target="_blank">Menus screen</a> to create one.', 'the7mk2' ),
-						admin_url( 'nav-menus.php?action=edit&menu=0' )
-					),
+					'raw'             => '<strong>' . esc_html__( 'There are no menus in your site.', 'the7mk2' ) . '</strong><br>' .
+	                     sprintf(
+							 /* translators: 1: Link open tag, 2: Link closing tag. */
+		                     esc_html__( 'Go to the %1$sMenus screen%2$s to create one.', 'the7mk2' ),
+		                     sprintf( '<a href="%s" target="_blank">', admin_url( 'nav-menus.php?action=edit&menu=0' ) ),
+		                     '</a>'
+	                     ),
 					'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
 				]
 			);
 		}
 		$icon_visible_options            = [
-			'enable'  => __( 'Show', 'the7mk2' ),
-			'disable' => __( 'Hide', 'the7mk2' ),
+			'enable'  => esc_html__( 'Show', 'the7mk2' ),
+			'disable' => esc_html__( 'Hide', 'the7mk2' ),
 		];
-		$icon_visible_options_on_devices = [ '' => __( 'Default', 'the7mk2' ) ] + $icon_visible_options;
+		$icon_visible_options_on_devices = [ '' => esc_html__( 'Default', 'the7mk2' ) ] + $icon_visible_options;
 
 		$this->add_responsive_control(
 			'icons_visible',
@@ -194,13 +197,13 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'submenu_display',
 			[
-				'label'              => __( 'Display the submenu', 'the7mk2' ),
+				'label'              => esc_html__( 'Display the submenu', 'the7mk2' ),
 				'type'               => Controls_Manager::SELECT,
 				'default'            => 'always',
 				'options'            => [
-					'always'        => __( 'Always', 'the7mk2' ),
-					'on_click'      => __( 'On icon click (parent clickable)', 'the7mk2' ),
-					'on_item_click' => __( 'On item click (parent unclickable)', 'the7mk2' ),
+					'always'        => esc_html__( 'Always', 'the7mk2' ),
+					'on_click'      => esc_html__( 'On icon click (parent clickable)', 'the7mk2' ),
+					'on_item_click' => esc_html__( 'On item click (parent unclickable)', 'the7mk2' ),
 				],
 				'frontend_available' => true,
 			]
@@ -209,10 +212,10 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_widget_title',
 			[
-				'label'        => __( 'Widget Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Widget Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 			]
@@ -221,7 +224,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'widget_title_text',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => 'Widget title',
 				'condition' => [
@@ -233,7 +236,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'widget_title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -255,7 +258,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_layout_icon',
 			[
-				'label'     => __( 'Submenu Indicator Icons', 'the7mk2' ),
+				'label'     => esc_html__( 'Submenu Indicator Icons', 'the7mk2' ),
 				'condition' => [
 					'submenu_display!' => 'always',
 				],
@@ -265,7 +268,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'selected_icon',
 			[
-				'label'       => __( 'Icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-caret-right',
@@ -279,7 +282,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'selected_active_icon',
 			[
-				'label'       => __( 'Active icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Active icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-caret-down',
@@ -301,7 +304,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_style_main-menu',
 			[
-				'label' => __( 'Main Menu', 'the7mk2' ),
+				'label' => esc_html__( 'Main Menu', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 
 			]
@@ -310,7 +313,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'list_heading',
 			[
-				'label' => __( 'List', 'the7mk2' ),
+				'label' => esc_html__( 'List', 'the7mk2' ),
 				'type'  => \Elementor\Controls_Manager::HEADING,
 			]
 		);
@@ -318,7 +321,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'rows_gap',
 			[
-				'label'      => __( 'Rows Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -342,10 +345,10 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider',
 			[
-				'label'        => __( 'Dividers', 'the7mk2' ),
+				'label'        => esc_html__( 'Dividers', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_off'    => __( 'Off', 'elementor' ),
-				'label_on'     => __( 'On', 'elementor' ),
+				'label_off'    => esc_html__( 'Off', 'elementor' ),
+				'label_on'     => esc_html__( 'On', 'elementor' ),
 				'prefix_class' => 'widget-divider-',
 			]
 		);
@@ -353,13 +356,13 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_style',
 			[
-				'label'     => __( 'Style', 'the7mk2' ),
+				'label'     => esc_html__( 'Style', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'solid'  => __( 'Solid', 'the7mk2' ),
-					'double' => __( 'Double', 'the7mk2' ),
-					'dotted' => __( 'Dotted', 'the7mk2' ),
-					'dashed' => __( 'Dashed', 'the7mk2' ),
+					'solid'  => esc_html__( 'Solid', 'the7mk2' ),
+					'double' => esc_html__( 'Double', 'the7mk2' ),
+					'dotted' => esc_html__( 'Dotted', 'the7mk2' ),
+					'dashed' => esc_html__( 'Dashed', 'the7mk2' ),
 				],
 				'default'   => 'solid',
 				'condition' => [
@@ -379,7 +382,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_weight',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
 					'size' => 1,
@@ -402,7 +405,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'condition' => [
 					'divider' => 'yes',
@@ -416,12 +419,12 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_first_border',
 			[
-				'label'        => __( 'First Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'First Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'condition'    => [
 					'divider' => 'yes',
 				],
@@ -431,7 +434,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_last_border',
 			[
-				'label'        => __( 'Last Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'Last Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -444,7 +447,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'items_heading',
 			[
-				'label'     => __( 'Item', 'the7mk2' ),
+				'label'     => esc_html__( 'Item', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -453,19 +456,19 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'align_items',
 			[
-				'label'                => __( 'Text alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Text alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -518,7 +521,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'border_menu_item_width',
 			[
-				'label'      => __( 'Border width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -539,7 +542,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_menu_item',
 			[
-				'label'      => __( 'Item paddings', 'the7mk2' ),
+				'label'      => esc_html__( 'Item paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -561,7 +564,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'menu_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -584,14 +587,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_menu_item_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_menu_item',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -608,7 +611,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_menu_item',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -621,7 +624,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_menu_item',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -636,14 +639,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_menu_item_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_menu_item_hover',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -659,7 +662,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_menu_item_hover',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -672,7 +675,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_menu_item_hover',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -687,14 +690,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_menu_item_active',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_menu_item_active',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -707,7 +710,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_menu_item_active',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -720,7 +723,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_menu_item_active',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -751,15 +754,15 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_align',
 			[
-				'label'     => __( 'Indicator Position', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Position', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'  => [
-						'title' => __( 'Start', 'the7mk2' ),
+						'title' => esc_html__( 'Start', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'right' => [
-						'title' => __( 'End', 'the7mk2' ),
+						'title' => esc_html__( 'End', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -774,11 +777,11 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_alignment',
 			[
-				'label'                => __( 'Indicator Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Indicator Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'options'              => [
-					'with_text' => __( 'With text', 'the7mk2' ),
-					'side'      => __( 'Side', 'the7mk2' ),
+					'with_text' => esc_html__( 'With text', 'the7mk2' ),
+					'side'      => esc_html__( 'Side', 'the7mk2' ),
 				],
 				'default'              => 'with_text',
 				'selectors_dictionary' => [
@@ -794,7 +797,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_size',
 			[
-				'label'      => __( 'Indicator size', 'the7mk2' ),
+				'label'      => esc_html__( 'Indicator size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem', 'vw' ],
 				'range'      => [
@@ -817,7 +820,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_space',
 			[
-				'label'     => __( 'Indicator Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -852,14 +855,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_indicator_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'icon_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .dt-nav-menu > li > a .next-level-button' => 'color: {{VALUE}};',
@@ -876,14 +879,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_indicator_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'icon_hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .dt-sub-menu-display-on_click .dt-nav-menu > li > a .next-level-button:hover ' => 'color: {{VALUE}};',
@@ -902,18 +905,18 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_indicator_active',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'icon_active_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}}  .dt-nav-menu > li > .active-item .next-level-button, {{WRAPPER}}  .dt-nav-menu > li > .active .next-level-button' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .dt-nav-menu > li > .active-item .next-level-button svg, {{WRAPPER}} .dt-nav-menu > li > .active .next-level-button svg'                 => 'fill: {{VALUE}}; color: {{VALUE}}',
+					'{{WRAPPER}}  .dt-nav-menu > li > .active-item .next-level-button' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .dt-nav-menu > li > .active-item .next-level-button svg'                 => 'fill: {{VALUE}}; color: {{VALUE}}',
 				],
 				'condition' => [
 					'selected_icon[value]!' => '',
@@ -930,7 +933,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_style_sub-menu',
 			[
-				'label' => __( 'Sub Menu', 'the7mk2' ),
+				'label' => esc_html__( 'Sub Menu', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -938,7 +941,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_list_heading',
 			[
-				'label' => __( 'List', 'the7mk2' ),
+				'label' => esc_html__( 'List', 'the7mk2' ),
 				'type'  => \Elementor\Controls_Manager::HEADING,
 			]
 		);
@@ -946,7 +949,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_sub_menu',
 			[
-				'label'      => __( '2 menu level Paddings', 'the7mk2' ),
+				'label'      => esc_html__( '2 menu level Paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -966,7 +969,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_sub_sub_menu',
 			[
-				'label'      => __( '3+ menu level Paddings', 'the7mk2' ),
+				'label'      => esc_html__( '3+ menu level Paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -986,7 +989,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sub_rows_gap',
 			[
-				'label'      => __( 'Rows Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1015,10 +1018,10 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider',
 			[
-				'label'        => __( 'Dividers', 'the7mk2' ),
+				'label'        => esc_html__( 'Dividers', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_off'    => __( 'Off', 'elementor' ),
-				'label_on'     => __( 'On', 'elementor' ),
+				'label_off'    => esc_html__( 'Off', 'elementor' ),
+				'label_on'     => esc_html__( 'On', 'elementor' ),
 				'prefix_class' => 'sub-widget-divider-',
 			]
 		);
@@ -1026,13 +1029,13 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider_style',
 			[
-				'label'     => __( 'Style', 'the7mk2' ),
+				'label'     => esc_html__( 'Style', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'solid'  => __( 'Solid', 'the7mk2' ),
-					'double' => __( 'Double', 'the7mk2' ),
-					'dotted' => __( 'Dotted', 'the7mk2' ),
-					'dashed' => __( 'Dashed', 'the7mk2' ),
+					'solid'  => esc_html__( 'Solid', 'the7mk2' ),
+					'double' => esc_html__( 'Double', 'the7mk2' ),
+					'dotted' => esc_html__( 'Dotted', 'the7mk2' ),
+					'dashed' => esc_html__( 'Dashed', 'the7mk2' ),
 				],
 				'default'   => 'solid',
 				'condition' => [
@@ -1053,7 +1056,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider_weight',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
 					'size' => 1,
@@ -1076,7 +1079,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_divider_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'condition' => [
 					'sub_divider' => 'yes',
@@ -1090,12 +1093,12 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_sub_first_border',
 			[
-				'label'        => __( 'First Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'First Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'condition'    => [
 					'sub_divider' => 'yes',
 				],
@@ -1105,7 +1108,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_sub_last_border',
 			[
-				'label'        => __( 'Last Divider', 'the7mk2' ),
+				'label'        => esc_html__( 'Last Divider', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -1118,7 +1121,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_item_heading',
 			[
-				'label'     => __( 'Item', 'the7mk2' ),
+				'label'     => esc_html__( 'Item', 'the7mk2' ),
 				'type'      => \Elementor\Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -1127,19 +1130,19 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'align_sub_items',
 			[
-				'label'                => __( 'Text alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Text alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -1194,7 +1197,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'border_sub_menu_item_width',
 			[
-				'label'      => __( 'Border width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1215,7 +1218,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'padding_sub_menu_item',
 			[
-				'label'      => __( 'Item paddings', 'the7mk2' ),
+				'label'      => esc_html__( 'Item paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -1237,7 +1240,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'menu_sub_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -1260,14 +1263,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_item_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_sub_menu_item',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -1284,7 +1287,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_sub_menu_item',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1297,7 +1300,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_sub_menu_item',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1312,14 +1315,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_item_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_sub_menu_item_hover',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'scheme'    => [
 					'type'  => Schemes\Color::get_type(),
@@ -1335,7 +1338,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_sub_menu_item_hover',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1348,7 +1351,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_sub_menu_item_hover',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1363,14 +1366,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_item_active',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'color_sub_menu_item_active',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -1383,7 +1386,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bg_sub_menu_item_active',
 			[
-				'label'     => __( 'Background color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1396,7 +1399,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_sub_menu_item_active',
 			[
-				'label'     => __( 'Border color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1428,15 +1431,15 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_icon_align',
 			[
-				'label'     => __( 'Indicator Position', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Position', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'  => [
-						'title' => __( 'Start', 'the7mk2' ),
+						'title' => esc_html__( 'Start', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'right' => [
-						'title' => __( 'End', 'the7mk2' ),
+						'title' => esc_html__( 'End', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -1451,11 +1454,11 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sub_icon_alignment',
 			[
-				'label'                => __( 'Indicator Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Indicator Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'options'              => [
-					'with_text' => __( 'With text', 'the7mk2' ),
-					'side'      => __( 'Side', 'the7mk2' ),
+					'with_text' => esc_html__( 'With text', 'the7mk2' ),
+					'side'      => esc_html__( 'Side', 'the7mk2' ),
 				],
 				'default'              => 'with_text',
 				'selectors_dictionary' => [
@@ -1471,7 +1474,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sub_icon_size',
 			[
-				'label'      => __( 'Indicator size', 'the7mk2' ),
+				'label'      => esc_html__( 'Indicator size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', 'rem', 'vw' ],
 				'range'      => [
@@ -1494,7 +1497,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'sub_icon_space',
 			[
-				'label'     => __( 'Indicator Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Indicator Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -1530,14 +1533,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_indicator_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'sub_menu_icon_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .vertical-sub-nav > li > a .next-level-button' => 'color: {{VALUE}};',
@@ -1554,14 +1557,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_indicator_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'sub_menu_icon_hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .dt-sub-menu-display-on_click .vertical-sub-nav > li > a .next-level-button:hover, {{WRAPPER}} .dt-sub-menu-display-on_item_click .vertical-sub-nav > li > a:hover .next-level-button' => 'color: {{VALUE}};',
@@ -1578,14 +1581,14 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_sub_menu_indicator_active',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'sub_menu_icon_active_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .vertical-sub-nav a.active-item .next-level-button, {{WRAPPER}} .vertical-sub-nav a.active .next-level-button' => 'color: {{VALUE}};',
@@ -1852,7 +1855,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 			Group_Control_Border::get_type(),
 			[
 				'name'     => $prefix . 'icon_border_width',
-				'label'    => __( 'Border', 'the7mk2' ),
+				'label'    => esc_html__( 'Border', 'the7mk2' ),
 				'selector' => $selector_icon . ', ' . $selector_img,
 				'exclude'  => [
 					'color',
@@ -1898,7 +1901,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'widget_style_section',
 			[
-				'label'     => __( 'Widget Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_widget_title' => 'y',
@@ -1909,19 +1912,19 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_title_align',
 			[
-				'label'     => __( 'Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -1942,7 +1945,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'widget_title_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1955,7 +1958,7 @@ class Nav_Menu extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'widget_title_bottom_margin',
 			[
-				'label'      => __( 'Spacing Below Title', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing Below Title', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',

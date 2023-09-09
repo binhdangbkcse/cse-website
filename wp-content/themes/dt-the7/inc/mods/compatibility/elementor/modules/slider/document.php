@@ -232,7 +232,7 @@ class Document extends Library_Document {
 				'selector'       => $selector,
 			] );
 
-		$this->add_control( 'background_overlay_opacity', [
+		$this->add_responsive_control('background_overlay_opacity', [
 				'label'     => esc_html__( 'Opacity', 'elementor' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [

@@ -336,6 +336,7 @@ function dt_get_thumb_img( $opts = array() ) {
 			$src_att .= ', ' . sprintf( $srcset_tpl, esc_attr( $hd_src ), $resized_image_hd[1] );
 		}
 		$src_att = 'src="' . $lazy_loading_src . '" data-src="' . $esc_src . '" data-srcset="' . $src_att . '"';
+		$src_att .= ' loading="eager"';
 		$opts['img_class'] .= ' ' . $opts['lazy_class'];
 		$opts['class'] .= ' ' . $opts['lazy_bg_class'];
 	} else {
@@ -343,8 +344,23 @@ function dt_get_thumb_img( $opts = array() ) {
 		if ( $resized_image_hd ) {
 			$src_att .= ', ' . sprintf( $srcset_tpl, $hd_src, $resized_image_hd[1] );
 		}
-		$src_sizes = $resized_image[1] . 'px';
-		$src_att = 'src="' . esc_attr( $src ) . '" srcset="' . esc_attr( $src_att ) . '" sizes="' . esc_attr( $src_sizes ) . '"';
+		$src_att = 'src="' . esc_attr( $src ) . '" srcset="' . esc_attr( $src_att ) . '"';
+	}
+
+	$img_ratio = "--ratio: $_width / $_height";
+
+	// If there are style in custom options, add img_ratio to it.
+	if ( strpos( $opts['custom'], 'style="' ) !== false ) {
+		$opts['custom'] = str_replace( 'style="', 'style="' . $img_ratio . ';', $opts['custom'] );
+	} else {
+		$src_att .= ' style="' . $img_ratio . '"';
+	}
+
+	$opts['img_class'] .= ' aspect';
+
+	$src_sizes = wp_calculate_image_sizes( [ $_width, $_height ] );
+	if ( $src_sizes ) {
+		$src_att .= ' sizes="' . esc_attr( $src_sizes ) . '"';
 	}
 
 	$class = empty( $opts['class'] ) ? '' : 'class="' . esc_attr( trim($opts['class']) ) . '"';

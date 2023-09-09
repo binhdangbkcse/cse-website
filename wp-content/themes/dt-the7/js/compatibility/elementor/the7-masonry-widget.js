@@ -4,12 +4,10 @@
             the7ApplyColumns($scope.attr("data-id"), $scope.find(".iso-container"), the7GetElementorMasonryColumnsConfig);
             the7ApplyMasonryWidgetCSSGridFiltering($scope.find(".jquery-filter .dt-css-grid"));
         });
+
         elementorFrontend.hooks.addAction("frontend/element_ready/the7-wc-products.default", function ($scope) {
             the7ApplyColumns($scope.attr("data-id"), $scope.find(".iso-container"), the7GetElementorMasonryColumnsConfig);
             the7ApplyMasonryWidgetCSSGridFiltering($scope.find(".jquery-filter .dt-css-grid"));
-            if (!$scope.hasClass("preserve-img-ratio-y")) {
-                window.the7ApplyWidgetImageRatio($scope);
-            }
 
             the7ProductsFixAddToCartStyle($scope);
         });
@@ -37,7 +35,7 @@
     function the7GetElementorMasonryColumnsConfig($container) {
         var $dataAttrContainer = $container.parent().hasClass("mode-masonry") ? $container.parent() : $container;
 
-        var  attrDesktop = "data-desktop-columns-num",
+        var attrDesktop = "data-desktop-columns-num",
             attrTablet ="data-tablet-columns-num",
             attrMobile = "data-mobile-columns-num";
 
@@ -48,56 +46,49 @@
 
         var containerWidth = $container.width() - 1;
         var breakpoints = elementorFrontend.config.breakpoints;
-        var columnsNum = "";
-        var singleWidth = "";
-        var doubleWidth = "";
+        var columnsNum = 1;
 
         const widgetSettings = new The7ElementorSettings($container.closest(".elementor-widget"));
         const widgetColumnsWideDesktopBreakpoint = widgetSettings.getSettings("widget_columns_wide_desktop_breakpoint");
 
-        let switchPointsDesktop = dtLocal.elementor.settings.container_width + 1;
+        let switchPointWide = dtLocal.elementor.settings.container_width + 1;
         if (widgetColumnsWideDesktopBreakpoint) {
-            switchPointsDesktop = widgetColumnsWideDesktopBreakpoint + 1;
+            switchPointWide = widgetColumnsWideDesktopBreakpoint + 1;
         }
 
-        if (Modernizr.mq("all and (min-width:" + switchPointsDesktop + "px)")) {
-            columnsNum = parseInt($dataAttrContainer.attr("data-wide-desktop-columns-num"));
-
-            return {
-                singleWidth: Math.floor(containerWidth / columnsNum) + "px",
-                doubleWidth: Math.floor(containerWidth / columnsNum) * 2 + "px",
-                columnsNum: columnsNum
-            };
+        if (switchPointWide <= window.innerWidth) {
+            columnsNum = parseInt($dataAttrContainer.attr("data-wide-desktop-columns-num") )
         }
+        else {
+            var modernizrMqPoints = [
+                {
+                    breakpoint: breakpoints.xl,
+                    columns: parseInt($dataAttrContainer.attr(attrDesktop))
+                },
+                {
+                    breakpoint: breakpoints.lg,
+                    columns: parseInt($dataAttrContainer.attr(attrTablet))
+                },
+                {
+                    breakpoint: breakpoints.md,
+                    columns: parseInt($dataAttrContainer.attr(attrMobile))
+                }
+            ];
 
-        var modernizrMqPoints = [
-            {
-                breakpoint: breakpoints.xl,
-                columns: parseInt($dataAttrContainer.attr(attrDesktop))
-            },
-            {
-                breakpoint: breakpoints.lg,
-                columns: parseInt($dataAttrContainer.attr(attrTablet))
-            },
-            {
-                breakpoint: breakpoints.md,
-                columns: parseInt($dataAttrContainer.attr(attrMobile))
-            }
-        ];
+            modernizrMqPoints = modernizrMqPoints.sort((a, b) => b.breakpoint - a.breakpoint);
 
-        modernizrMqPoints.forEach(function (mgPoint) {
-            if (Modernizr.mq("all and (max-width:" + (mgPoint.breakpoint - 1) + "px)")) {
-                columnsNum = mgPoint.columns;
-                singleWidth = Math.floor(containerWidth / columnsNum) + "px";
-                doubleWidth = Math.floor(containerWidth / columnsNum) * 2 + "px";
+            columnsNum = modernizrMqPoints[0].columns;
 
-                return false;
-            }
-        });
+            modernizrMqPoints.forEach(function (mgPoint) {
+                if (window.innerWidth < mgPoint.breakpoint) {
+                    columnsNum = mgPoint.columns;
+                }
+            });
+        }
 
         return {
-            singleWidth: singleWidth,
-            doubleWidth: doubleWidth,
+            singleWidth: Math.floor(containerWidth / columnsNum) + "px",
+            doubleWidth: Math.floor(containerWidth / columnsNum) * 2 + "px",
             columnsNum: columnsNum
         };
     }

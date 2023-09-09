@@ -52,7 +52,7 @@
 .dt-menu-cart__toggle .dt-button-icon .elementor-icon svg {
   height: auto;
   width: var(--toggle-icon-size, 1em);
-  transition: fill 0.3s;
+  transition: all 0.3s;
 }
 .elementor-widget-the7-woocommerce-menu-cart .dt-cart-indicator,
 .elementor-widget-the7-woocommerce-menu-cart [data-counter]:before {

@@ -4,6 +4,7 @@ namespace The7\Mods\Compatibility\Elementor\Modules\Extended_Widgets;
 
 use Elementor\Controls_Manager;
 use Elementor\Controls_Stack;
+use Elementor\Plugin;
 
 if ( ! defined( 'ABSPATH' ) ) {
 	exit; // Exit if accessed directly
@@ -47,40 +48,36 @@ class Extend_Column {
 			'at' => 'before',
 		] );
 
-		$consditions = [
-			'relation' => 'or',
-			'terms'    => [
-				[
-					'name'     => 'the7_auto_width',
-					'operator' => 'in',
-					'value'    => [ 'minimize', 'maximize', 'fit-content' ],
+		if ( Plugin::$instance->experiments->is_feature_active( 'additional_custom_breakpoints' ) ) {
+			$conditions = null;
+		} else {
+			$conditions = [
+				'relation' => 'or',
+				'terms'    => [
+					[
+						'name'     => 'the7_auto_width',
+						'operator' => 'in',
+						'value'    => [ 'minimize', 'maximize', 'fit-content' ],
+					],
+					[
+						'name'     => 'the7_auto_width_tablet',
+						'operator' => 'in',
+						'value'    => [ 'minimize', 'maximize', 'fit-content' ],
+					],
+					[
+						'name'     => 'the7_auto_width_mobile',
+						'operator' => 'in',
+						'value'    => [ 'minimize', 'maximize', 'fit-content' ],
+					],
 				],
-				[
-					'name'     => 'the7_auto_width_tablet',
-					'operator' => 'in',
-					'value'    => [ 'minimize', 'maximize', 'fit-content' ],
-				],
-				[
-					'name'     => 'the7_auto_width_mobile',
-					'operator' => 'in',
-					'value'    => [ 'minimize', 'maximize', 'fit-content' ],
-				],
-			],
-		];
+			];
+		}
 
 		$widget->add_responsive_control( 'the7_auto_width_notice', [
 			'raw'             => esc_html__( 'When "Column Stretching" is enabled, "Column Width" setting will be ignored.', 'the7mk2' ),
 			'type'            => Controls_Manager::RAW_HTML,
 			'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
-			'conditions'      => $consditions,
-			'device_args'     => [
-				Controls_Stack::RESPONSIVE_TABLET => [
-					'conditions' => $consditions,
-				],
-				Controls_Stack::RESPONSIVE_MOBILE => [
-					'conditions' => $consditions,
-				],
-			],
+			'conditions'      => $conditions,
 		] );
 
 		$widget->add_responsive_control( 'the7_auto_width', [
@@ -108,27 +105,30 @@ class Extend_Column {
 			'classes'              => 'the7-control',
 		] );
 
-
-		$consditions = [
-			'relation' => 'or',
-			'terms'    => [
-				[
-					'name'     => 'the7_auto_width',
-					'operator' => 'in',
-					'value'    => [ 'minimize' ],
+		if ( Plugin::$instance->experiments->is_feature_active( 'additional_custom_breakpoints' ) ) {
+			$conditions = null;
+		} else {
+			$conditions = [
+				'relation' => 'or',
+				'terms'    => [
+					[
+						'name'     => 'the7_auto_width',
+						'operator' => 'in',
+						'value'    => [ 'minimize' ],
+					],
+					[
+						'name'     => 'the7_auto_width_tablet',
+						'operator' => 'in',
+						'value'    => [ 'minimize' ],
+					],
+					[
+						'name'     => 'the7_auto_width_mobile',
+						'operator' => 'in',
+						'value'    => [ 'minimize' ],
+					],
 				],
-				[
-					'name'     => 'the7_auto_width_tablet',
-					'operator' => 'in',
-					'value'    => [ 'minimize' ],
-				],
-				[
-					'name'     => 'the7_auto_width_mobile',
-					'operator' => 'in',
-					'value'    => [ 'minimize' ],
-				],
-			],
-		];
+			];
+		}
 
 		$widget->add_responsive_control( 'the7_target_width', [
 			'label'       => esc_html__( 'Target Width', 'the7mk2' ) . ' (px)',
@@ -145,15 +145,7 @@ class Extend_Column {
 				'div{{WRAPPER}}' => '--the7-target-width:{{SIZE}}{{UNIT}}',
 			],
 			'classes'     => 'the7-control',
-			'conditions'  => $consditions,
-			'device_args' => [
-				Controls_Stack::RESPONSIVE_TABLET => [
-					'conditions' => $consditions,
-				],
-				Controls_Stack::RESPONSIVE_MOBILE => [
-					'conditions' => $consditions,
-				],
-			],
+			'conditions'  => $conditions,
 		] );
 		$widget->end_injection();
 	}

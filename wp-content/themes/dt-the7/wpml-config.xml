@@ -105,6 +105,11 @@
         <field type="Link" editor_type="LINK" key_of="empty_cart_button_link">url</field>
       </fields>
     </widget>
+    <widget name="the7-woocommerce-product-sale-flash">
+      <fields>
+        <field type="Text" editor_type="LINE">onsale_text</field>
+      </fields>
+    </widget>
     <widget name="the7_button_widget">
       <fields>
         <field type="Text" editor_type="LINE">button_text</field>
@@ -115,6 +120,7 @@
     <widget name="the7_icon_widget">
       <fields>
         <field type="Link" editor_type="LINK" key_of="link">url</field>
+        <field type="Accessibility Description" editor_type="LINE">description</field>
       </fields>
     </widget>
     <widget name="the7_icon_box_widget">
@@ -135,6 +141,11 @@
         <field type="Button Text" editor_type="LINE">button_text</field>
         <field type="Link" editor_type="LINK" key_of="link">url</field>
       </fields-in-item>
+    </widget>
+    <widget name="the7-image-widget">
+      <fields>
+        <field type="Link" editor_type="LINK" key_of="image_link">url</field>
+      </fields>
     </widget>
     <widget name="the7_image_box_widget">
       <fields>
@@ -177,6 +188,14 @@
     <widget name="the7_horizontal-menu">
       <fields>
         <field type="Toggle Text" editor_type="LINE">toggle_text</field>
+      </fields>
+    </widget>
+    <widget name="the7-login-widget">
+      <fields>
+        <field type="Text" editor_type="LINE">logged_out_text</field>
+        <field type="Link" editor_type="LINK" key_of="logged_out_link">url</field>
+        <field type="Text" editor_type="LINE">logged_in_text</field>
+        <field type="Link" editor_type="LINK" key_of="account_link">url</field>
       </fields>
     </widget>
     <widget name="the7_content_carousel">
@@ -242,6 +261,34 @@
       <fields-in-item items_of="slides">
         <field type="Name" editor_type="LINE">slide_name</field>
       </fields-in-item>
+    </widget>
+    <widget name="the7-categories-list">
+      <fields>
+        <field type="Title" editor_type="LINE">widget_title_text</field>
+        <field type="Maximum depth" editor_type="LINE">max_depth</field>
+      </fields>
+    </widget>
+    <widget name="the7_svg_image_widget">
+      <fields>
+        <field type="Link" editor_type="LINK" key_of="svg_link">url</field>
+      </fields>
+    </widget>
+    <widget name="the7-heading">
+      <fields>
+        <field type="Title" editor_type="AREA">title</field>
+        <field type="Link" editor_type="LINK" key_of="link">url</field>
+      </fields>
+    </widget>
+    <widget name="the7-taxonomies">
+      <fields>
+        <field type="Title" editor_type="LINE">taxonomy_label_text</field>
+      </fields>
+    </widget>
+    <widget name="the7-post-loop">
+      <fields>
+        <field type="&quot;All&quot; Filter Label" editor_type="LINE">filter_all_text</field>
+        <field type="Button Text" editor_type="LINE">pagination_load_more_text</field>
+      </fields>
     </widget>
     <widget name="the7-wc-products">
       <fields>

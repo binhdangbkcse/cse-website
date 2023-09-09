@@ -12,7 +12,10 @@
  *
  * @see     https://docs.woocommerce.com/document/template-structure/
  * @package WooCommerce\Templates
- * @version 7.2.0
+ * @version 7.8.0
+ *
+ * @var bool   $readonly If the input should be set to readonly mode.
+ * @var string $type     The input type attribute.
  */
 
 defined( 'ABSPATH' ) || exit;
@@ -20,23 +23,37 @@ defined( 'ABSPATH' ) || exit;
 /* translators: %s: Quantity. */
 $label = ! empty( $args['product_name'] ) ? sprintf( esc_html__( '%s quantity', 'woocommerce' ), wp_strip_all_tags( $args['product_name'] ) ) : esc_html__( 'Quantity', 'woocommerce' );
 
-// Modified.
-$qty_end   = '<input type="button" value="﹢" class="plus button is-form">';
-$qty_start = '<input type="button" value="﹣" class="minus button is-form">';
+// Modification: start.
+// Compatibility with 7.2.0.
+if ( ! isset( $readonly, $type ) ) {
+	// In some cases we wish to display the quantity but not allow for it to be changed.
+	if ( $max_value && $min_value === $max_value ) {
+		$readonly    = true;
+		$input_value = $min_value;
+		$type        = $max_value > 1 ? 'text' : 'hidden';
+	} else {
+		$readonly = false;
+		$type     = 'number';
+	}
+}
 
-// In some cases we wish to display the quantity but not allow for it to be changed.
-if ( $max_value && $min_value === $max_value ) {
-	$is_readonly = true;
-	$input_value = $min_value;
+$qty_class = ' buttons_added';
+// Hide the whole block if $type is 'hidden'.
+if ( $type === 'hidden' ) {
+	$qty_class .= ' hidden';
+}
 
-	// Modified. Hide buttons.
+// Hide buttons.
+if ( $readonly || $type === 'hidden' ) {
 	$qty_end   = '';
 	$qty_start = '';
 } else {
-	$is_readonly = false;
+	$qty_end   = '<button type="button" class="plus is-form">﹢</button>';
+	$qty_start = '<button type="button" class="minus is-form">﹣</button>';
 }
+// Modification: end.
 ?>
-<div class="quantity buttons_added">
+<div class="quantity<?php echo esc_attr( $qty_class ); ?>">
 	<?php
 	/**
 	 * Hook to output something before the quantity input field.
@@ -53,17 +70,17 @@ if ( $max_value && $min_value === $max_value ) {
 	?>
 
 	<input
-		type="<?php echo $is_readonly ? 'text' : 'number'; ?>"
-		<?php wp_readonly( $is_readonly ); ?>
+		type="<?php echo esc_attr( $type ); ?>"
+		<?php echo $readonly ? 'readonly="readonly"' : ''; ?>
 		id="<?php echo esc_attr( $input_id ); ?>"
 		class="<?php echo esc_attr( join( ' ', (array) $classes ) ); ?>"
 		name="<?php echo esc_attr( $input_name ); ?>"
 		value="<?php echo esc_attr( $input_value ); ?>"
-		title="<?php echo esc_attr_x( 'Qty', 'Product quantity input tooltip', 'woocommerce' ); ?>"
+		aria-label="<?php esc_attr_e( 'Product quantity', 'woocommerce' ); ?>"
 		size="4"
 		min="<?php echo esc_attr( $min_value ); ?>"
 		max="<?php echo esc_attr( 0 < $max_value ? $max_value : '' ); ?>"
-		<?php if ( ! $is_readonly ): ?>
+		<?php if ( ! $readonly ) : ?>
 			step="<?php echo esc_attr( $step ); ?>"
 		placeholder="<?php echo esc_attr( $placeholder ); ?>"
 		inputmode="<?php echo esc_attr( $inputmode ); ?>"

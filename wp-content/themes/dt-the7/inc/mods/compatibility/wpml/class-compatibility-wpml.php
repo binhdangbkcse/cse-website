@@ -18,6 +18,12 @@ if ( ! class_exists( 'Presscore_Modules_Compatibility_WPML', false ) ) :
 			// load wpml helpers
 			require_once trailingslashit( PRESSCORE_MODS_DIR ) . 'compatibility/' . basename( dirname( __FILE__ ) ) . '/wpml-integration.php';
 
+			// Translate Elementor object IDs.
+			if ( class_exists( \WPML\Utils\DebugBackTrace::class ) ) {
+				$elementor_translate_ids = new The7\Mods\Compatibility\WPML\Elementor_Translate_Ids( new \WPML\Utils\DebugBackTrace() );
+				$elementor_translate_ids->add_hooks();
+			}
+
 			/**
 			 * Do not load wpml language switcher css.
 			 */

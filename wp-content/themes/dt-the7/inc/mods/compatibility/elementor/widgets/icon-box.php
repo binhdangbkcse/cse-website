@@ -16,12 +16,12 @@ use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Less_Vars_Decorator_Interface;
 use Elementor\Utils;
 use Elementor\Group_Control_Box_Shadow;
+use Elementor\Group_Control_Text_Shadow;
 use Elementor\Core\Schemes;
 use Elementor\Group_Control_Border;
 use Elementor\Core\Responsive\Responsive;
 use Elementor\Group_Control_Background;
 use Elementor\Group_Control_Css_Filter;
-use Elementor\Group_Control_Image_Size;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Button;
 
 defined( 'ABSPATH' ) || exit;
@@ -40,11 +40,15 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Icon Box', 'the7mk2' );
+		return esc_html__( 'Icon Box', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
 		return 'eicon-icon-box';
+	}
+
+	protected function the7_keywords() {
+		return [ 'icon', 'box' ];
 	}
 
 	protected function get_less_file_name() {
@@ -72,14 +76,14 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_icon',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'selected_icon',
 			[
-				'label' => __( 'Icon', 'the7mk2' ),
+				'label' => esc_html__( 'Icon', 'the7mk2' ),
 				'type' => Controls_Manager::ICONS,
 				'fa4compatibility' => 'icon',
 				'default' => [
@@ -92,7 +96,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_heading',
 			[
-				'label'     => __( 'Title & Description', 'the7mk2' ),
+				'label'     => esc_html__( 'Title & Description', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -101,23 +105,23 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'text_align',
 			[
-				'label' => __( 'Alignment', 'the7mk2' ),
+				'label' => esc_html__( 'Alignment', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-text-align-right',
 					],
 					'justify' => [
-						'title' => __( 'Justified', 'the7mk2' ),
+						'title' => esc_html__( 'Justified', 'the7mk2' ),
 						'icon' => 'eicon-text-align-justify',
 					],
 				],
@@ -138,7 +142,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_html_tag',
 			[
-				'label' => __( 'Title HTML Tag', 'the7mk2' ),
+				'label' => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
 					'h1' => 'H1',
@@ -156,13 +160,13 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_text',
 			[
-				'label' => __( 'Title & Description', 'the7mk2' ),
+				'label' => esc_html__( 'Title & Description', 'the7mk2' ),
 				'type' => Controls_Manager::TEXT,
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => __( 'This is the heading', 'the7mk2' ),
-				'placeholder' => __( 'Enter your title', 'the7mk2' ),
+				'default' => esc_html__( 'This is the heading', 'the7mk2' ),
+				'placeholder' => esc_html__( 'Enter your title', 'the7mk2' ),
 				'label_block' => true,
 			]
 		);
@@ -175,8 +179,8 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 				'dynamic' => [
 					'active' => true,
 				],
-				'default' => __( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'the7mk2' ),
-				'placeholder' => __( 'Enter your description', 'the7mk2' ),
+				'default' => esc_html__( 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Ut elit tellus, luctus nec ullamcorper mattis, pulvinar dapibus leo.', 'the7mk2' ),
+				'placeholder' => esc_html__( 'Enter your description', 'the7mk2' ),
 				'rows' => 10,
 				'separator' => 'none',
 				'show_label' => false,
@@ -186,7 +190,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'button_heading',
 			[
-				'label'     => __( 'Button', 'the7mk2' ),
+				'label'     => esc_html__( 'Button', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -195,7 +199,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'button_text',
 			[
-				'label'       => __( 'Button Text', 'the7mk2' ),
+				'label'       => esc_html__( 'Button Text', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
 				'placeholder' => '',
 			]
@@ -206,7 +210,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'link_heading',
 			[
-				'label'     => __( 'Link & Hover', 'the7mk2' ),
+				'label'     => esc_html__( 'Link & Hover', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -215,24 +219,24 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'link',
 			[
-				'label' => __( 'Link', 'the7mk2' ),
+				'label' => esc_html__( 'Link', 'the7mk2' ),
 				'type' => Controls_Manager::URL,
 				'dynamic' => [
 					'active' => true,
 				],
-				'placeholder' => __( 'https://your-link.com', 'the7mk2' ),
+				'placeholder' => esc_html__( 'https://your-link.com', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'link_click',
 			[
-				'label'     => __( 'Apply Link & Hover', 'the7mk2' ),
+				'label'     => esc_html__( 'Apply Link & Hover', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'button',
 				'options'   => [
-					'box'  => __( 'Whole box', 'the7mk2' ),
-					'button' => __( "Separate element's", 'the7mk2' ),
+					'box'  => esc_html__( 'Whole box', 'the7mk2' ),
+					'button' => esc_html__( "Separate element's", 'the7mk2' ),
 				],
 			]
 		);
@@ -244,7 +248,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_design_box',
 			[
-				'label' => __( 'Box', 'the7mk2' ),
+				'label' => esc_html__( 'Box', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -252,7 +256,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_height',
 			[
-				'label'      => __( 'Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -274,23 +278,48 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 				],
 			]
 		);
+		$this->add_basic_responsive_control(
+			'box_fixed_height',
+			[
+				'label'      => esc_html__( 'Height', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'size_units' => [ 'px', 'vh' ],
+				'range'      => [
+					'px' => [
+						'min' => 1,
+						'max' => 500,
+					],
+					'vh' => [
+						'min' => 1,
+						'max' => 100,
+					],
+				],
+				'selectors'  => [
+					'{{WRAPPER}} .the7-box-wrapper' => 'height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
 
 		$this->add_basic_responsive_control(
 			'content_position',
 			[
-				'label'                => __( 'Content Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Content Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options' => [
 					'top' => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon' => 'eicon-v-align-top',
 					],
 					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon' => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon' => 'eicon-v-align-bottom',
 					],
 				],
@@ -311,7 +340,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Border::get_type(),
 			[
 				'name' => 'box_border',
-				'label' => __( 'Border', 'the7mk2' ),
+				'label' => esc_html__( 'Border', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .the7-box-wrapper',
 				'exclude'	=> [
 					'color'
@@ -322,7 +351,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 	    $this->add_basic_responsive_control(
 	     	'box_border_radius',
 	     	[
-	     		'label' => __('Border Radius', 'the7mk2'),
+	     		'label' => esc_html__('Border Radius', 'the7mk2'),
 	     		'type' => Controls_Manager::DIMENSIONS,
 	     		'size_units' => ['px', '%'],
 	     		'selectors' =>  [
@@ -334,7 +363,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -358,14 +387,14 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'box_bg_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-box-wrapper' => 'background: {{VALUE}};',
@@ -376,7 +405,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
             'box_border_color',
             [
-                'label'     => __( 'Border Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Border Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .the7-box-wrapper' => 'border-color: {{VALUE}}',
@@ -388,7 +417,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'box_shadow',
-				'label' => __( 'Box Shadow', 'the7mk2' ),
+				'label' => esc_html__( 'Box Shadow', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .the7-box-wrapper',
 			]
 		);
@@ -398,14 +427,14 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'bg_hover_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-box-wrapper:hover' => 'background: {{VALUE}};',
@@ -416,7 +445,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
             'box_hover_border_color',
             [
-                'label'     => __( 'Border Color', 'the7mk2' ),
+                'label'     => esc_html__( 'Border Color', 'the7mk2' ),
                 'type'      => Controls_Manager::COLOR,
                 'selectors' => [
                     '{{WRAPPER}} .the7-box-wrapper:hover' => 'border-color: {{VALUE}}',
@@ -428,7 +457,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 			\Elementor\Group_Control_Box_Shadow::get_type(),
 			[
 				'name' => 'box_hover_shadow',
-				'label' => __( 'Box Shadow', 'the7mk2' ),
+				'label' => esc_html__( 'Box Shadow', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .the7-box-wrapper:hover',
 			]
 		);
@@ -444,7 +473,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_style_icon',
 			[
-				'label' => __( 'Icon', 'the7mk2' ),
+				'label' => esc_html__( 'Icon', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -452,19 +481,19 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'position',
 			[
-				'label'                => __( 'Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'  => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'top'   => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -491,16 +520,16 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		);
 
 		$icon_position_options            = [
-			'start'  => __( 'Start', 'the7mk2' ),
-			'center' => __( 'Center', 'the7mk2' ),
-			'end'    => __( 'End', 'the7mk2' ),
+			'start'  => esc_html__( 'Start', 'the7mk2' ),
+			'center' => esc_html__( 'Center', 'the7mk2' ),
+			'end'    => esc_html__( 'End', 'the7mk2' ),
 		];
-		$icon_position_options_on_devices = [ '' => __( 'Default', 'the7mk2' ) ] + $icon_position_options;
+		$icon_position_options_on_devices = [ '' => esc_html__( 'Default', 'the7mk2' ) ] + $icon_position_options;
 
 		$this->add_basic_responsive_control(
 			'icon_position',
 			[
-				'label'                => __( 'Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'default'              => 'start',
 				'options'              => $icon_position_options,
@@ -529,7 +558,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'size',
 			[
-				'label' => __( 'Size', 'the7mk2' ),
+				'label' => esc_html__( 'Size', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -543,11 +572,58 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 				]
 			]
 		);
+		$this->add_responsive_control(
+			'icon_min_width',
+			[
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min' => 1,
+						'max' => 500,
+					],
+				],
+				'selectors'  => [
+					'{{WRAPPER}} .elementor-icon-div .elementor-icon' => 'min-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'icon_min_height',
+			[
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
+					'unit' => 'px',
+					'size' => '',
+				],
+				'size_units' => [ 'px', 'vh' ],
+				'range'      => [
+					'px' => [
+						'min' => 1,
+						'max' => 500,
+					],
+					'vh' => [
+						'min' => 1,
+						'max' => 100,
+					],
+				],
+				'selectors'  => [
+					'{{WRAPPER}} .elementor-icon-div .elementor-icon' => 'min-height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
 
 		$this->add_basic_responsive_control(
 			'icon_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'selectors'  => [
 					'{{WRAPPER}} .elementor-icon-div .elementor-icon' => 'padding: {{SIZE}}{{UNIT}};',
@@ -570,7 +646,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%', 'em' ],
 				'selectors'  => [
@@ -582,7 +658,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -596,19 +672,19 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'icon_colors_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'primary_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
 					'{{WRAPPER}} .elementor-icon-div i'   => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-icon-div svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-icon-div svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -616,7 +692,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -628,7 +704,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_bg_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -642,19 +718,19 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'icon_colors_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'hover_primary_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .elementor-icon i { transition: color 0.3s ease; } {{WRAPPER}} .elementor-icon svg { transition: fill 0.3s ease; } {{WRAPPER}} .elementor-icon-div:hover i, {{WRAPPER}} a.the7-box-wrapper:hover .elementor-icon-div i'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-icon-div:hover svg, {{WRAPPER}} a.the7-box-wrapper:hover .elementor-icon-div svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-icon-div:hover i, {{WRAPPER}} a.the7-box-wrapper:hover .elementor-icon-div i'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .elementor-icon-div:hover svg, {{WRAPPER}} a.the7-box-wrapper:hover .elementor-icon-div svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -662,7 +738,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'hover_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -674,7 +750,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon_hover_bg_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -690,7 +766,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'icon_spacing',
 			[
-				'label'      => __( 'Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -724,7 +800,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'title_style',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -736,20 +812,32 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 				'selector' => '{{WRAPPER}} .the7-box-wrapper .box-heading, {{WRAPPER}} .the7-box-wrapper .box-heading a',
 			]
 		);
+		$this->add_group_control(
+			Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => 'title_text_shadow',
+				'selector' => '{{WRAPPER}} .the7-box-wrapper .box-heading, {{WRAPPER}} .the7-box-wrapper .box-heading a',
+				'fields_options' => [
+					'text_shadow_type' => [
+						'label' => esc_html__( 'Text Shadow', 'the7mk2' ),
+					],
+				],
+			]
+		);
 
 		$this->start_controls_tabs( 'tabs_title_style' );
 
 		$this->start_controls_tab(
 			'tab_title_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'tab_title_text_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-box-wrapper .box-heading, {{WRAPPER}} .the7-box-wrapper .box-heading a' => 'color: {{VALUE}};',
@@ -762,17 +850,17 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_title_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'tab_title_hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .box-heading, {{WRAPPER}} .box-heading a { transition: color 0.3s ease; } {{WRAPPER}} .the7-box-wrapper .box-heading:hover, {{WRAPPER}} .the7-box-wrapper .box-heading:hover a' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .the7-box-wrapper .box-heading:hover, {{WRAPPER}} .the7-box-wrapper .box-heading:hover a' => 'color: {{VALUE}};',
 					'{{WRAPPER}} a.the7-box-wrapper:hover .box-heading, {{WRAPPER}} a.the7-box-wrapper:hover .box-heading a' => 'color: {{VALUE}};',
 				],
 			]
@@ -789,7 +877,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_style_desc',
 			[
-				'label' => __( 'Description', 'the7mk2' ),
+				'label' => esc_html__( 'Description', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -801,20 +889,32 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 				'selector' => '{{WRAPPER}} .box-description',
 			]
 		);
+		$this->add_group_control(
+			Group_Control_Text_Shadow::get_type(),
+			[
+				'name' => 'description_text_shadow',
+				'selector' => '{{WRAPPER}} .box-description',
+				'fields_options' => [
+					'text_shadow_type' => [
+						'label' => esc_html__( 'Text Shadow', 'the7mk2' ),
+					],
+				],
+			]
+		);
 
 		$this->start_controls_tabs( 'tabs_description_style' );
 
 		$this->start_controls_tab(
 			'tab_desc_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'short_desc_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -829,19 +929,19 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_desc_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'short_desc_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .box-description { transition: color 0.3s ease; } {{WRAPPER}} .box-description:hover, {{WRAPPER}} a.the7-box-wrapper:hover .box-description' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .box-description:hover, {{WRAPPER}} a.the7-box-wrapper:hover .box-description' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -853,7 +953,7 @@ class Icon_Box extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'gap_above_description',
 			[
-				'label'      => __( 'Description Spacing Above', 'the7mk2' ),
+				'label'      => esc_html__( 'Description Spacing Above', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [

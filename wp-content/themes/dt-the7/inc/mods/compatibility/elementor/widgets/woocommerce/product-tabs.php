@@ -25,7 +25,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Product Data Tabs', 'the7mk2' );
+		return esc_html__( 'Product Data Tabs', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -53,36 +53,36 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 	protected function register_controls() {
 		$this->start_controls_section( 'section_product_tabs_style', [
-			'label' => __( 'Content', 'the7mk2' ),
+			'label' => esc_html__( 'Content', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 		$this->add_basic_responsive_control(
 			'type',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'horizontal',
 				'mobile_default' => 'accordion',
 				'options' => [
-					'horizontal' => __( 'Top', 'the7mk2' ),
-					'vertical' => __( 'Side', 'the7mk2' ),
-					'accordion' => __( 'Accordion', 'the7mk2' ),
+					'horizontal' => esc_html__( 'Top', 'the7mk2' ),
+					'vertical' => esc_html__( 'Side', 'the7mk2' ),
+					'accordion' => esc_html__( 'Accordion', 'the7mk2' ),
 				],
 				'device_args' => [
 					'tablet' => [
 						'options' => [
-							'default'  => __( 'No change', 'the7mk2' ),
-							'horizontal' => __( 'Top', 'the7mk2' ),
-							'vertical' => __( 'Side', 'the7mk2' ),
-							'accordion' => __( 'Accordion', 'the7mk2' ),
+							'default'  => esc_html__( 'No change', 'the7mk2' ),
+							'horizontal' => esc_html__( 'Top', 'the7mk2' ),
+							'vertical' => esc_html__( 'Side', 'the7mk2' ),
+							'accordion' => esc_html__( 'Accordion', 'the7mk2' ),
 						],
 					],
 					'mobile' => [
 						'options' => [
-							'default'  => __( 'No change', 'the7mk2' ),
-							'horizontal' => __( 'Top', 'the7mk2' ),
-							'vertical' => __( 'Side', 'the7mk2' ),
-							'accordion' => __( 'Accordion', 'the7mk2' ),
+							'default'  => esc_html__( 'No change', 'the7mk2' ),
+							'horizontal' => esc_html__( 'Top', 'the7mk2' ),
+							'vertical' => esc_html__( 'Side', 'the7mk2' ),
+							'accordion' => esc_html__( 'Accordion', 'the7mk2' ),
 						],
 					],
 				],
@@ -91,10 +91,10 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_description',
 			[
-				'label' => __( 'Description', 'the7mk2' ),
+				'label' => esc_html__( 'Description', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on' => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default' => 'yes',
 
@@ -103,10 +103,10 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_additional',
 			[
-				'label' => __( 'Additional information', 'the7mk2' ),
+				'label' => esc_html__( 'Additional information', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on' => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default' => 'yes',
 			]
@@ -114,10 +114,10 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_reviews',
 			[
-				'label' => __( 'Reviews', 'the7mk2' ),
+				'label' => esc_html__( 'Reviews', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on' => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default' => 'yes',
 			]
@@ -125,29 +125,29 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 		$this->end_controls_section();
 		$this->start_controls_section( 'section_product_tabs_top', [
-			'label' => __( 'Top tabs', 'the7mk2' ),
+			'label' => esc_html__( 'Top tabs', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 		$this->add_control(
 			'align',
 			[
-				'label' => __( 'Alignment', 'the7mk2' ),
+				'label' => esc_html__( 'Alignment', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon' => 'eicon-h-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-h-align-right',
 					],
 					'justify' => [
-						'title' => __( 'Justified', 'the7mk2' ),
+						'title' => esc_html__( 'Justified', 'the7mk2' ),
 						'icon' => 'eicon-h-align-stretch',
 					],
 				],
@@ -158,21 +158,21 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		);
 		$this->end_controls_section();
 		$this->start_controls_section( 'section_product_tabs_side', [
-			'label' => __( 'Side tabs', 'the7mk2' ),
+			'label' => esc_html__( 'Side tabs', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 		$this->add_control(
 			'position',
 			[
-				'label' => __( 'Position', 'the7mk2' ),
+				'label' => esc_html__( 'Position', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-h-align-left',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-h-align-right',
 					],
 				],
@@ -185,7 +185,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'navigation_width',
 			[
-				'label' => __( 'Navigation Width', 'the7mk2' ),
+				'label' => esc_html__( 'Navigation Width', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'unit' => '%',
@@ -212,26 +212,26 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		);
 		$this->end_controls_section();
 		$this->start_controls_section( 'section_product_tabs_accordion', [
-			'label' => __( 'Accordion tabs', 'the7mk2' ),
+			'label' => esc_html__( 'Accordion tabs', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 
 		$this->add_control(
 			'align_accord',
 			[
-				'label' => __( 'Alignment', 'the7mk2' ),
+				'label' => esc_html__( 'Alignment', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'left'    => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon' => 'eicon-h-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-h-align-right',
 					],
 				],
@@ -246,14 +246,14 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'skin_section',
 			[
-				'label'     => __( 'General', 'the7mk2' ),
+				'label'     => esc_html__( 'General', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 			]
 		);
 		$this->add_control(
 			'tabs_panel_bg_color',
 			[
-				'label' => __( 'Background Color', 'the7mk2' ),
+				'label' => esc_html__( 'Background Color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active, {{WRAPPER}} .woocommerce-tabs .woocommerce-Tabs-panel, {{WRAPPER}} .dt-tab-accordion-title, #the7-body.woocommerce {{WRAPPER}} .wc-tabs li.active:before, #the7-body.woocommerce {{WRAPPER}} .wc-tabs li.active:after' => 'background-color: {{VALUE}}',
@@ -263,7 +263,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'tabs_panel_border_width',
 			[
-				'label' => __( 'Border Width', 'the7mk2' ),
+				'label' => esc_html__( 'Border Width', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => '1',
@@ -280,7 +280,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'tabs_panel_border_color',
 			[
-				'label' => __( 'Border Color', 'the7mk2' ),
+				'label' => esc_html__( 'Border Color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'.woocommerce {{WRAPPER}} .dt-tab-accordion-title'  => 'border-color: {{VALUE}}',
@@ -295,7 +295,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'tab_content_header_color',
 			[
-				'label' => __( 'Headers font color', 'the7mk2' ),
+				'label' => esc_html__( 'Headers font color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .woocommerce-Tabs-panel h1, {{WRAPPER}} .woocommerce-Tabs-panel h2, {{WRAPPER}} .woocommerce-Tabs-panel h3, {{WRAPPER}} .woocommerce-Tabs-panel h4, {{WRAPPER}} .woocommerce-Tabs-panel h5, {{WRAPPER}} .woocommerce-Tabs-panel h6, {{WRAPPER}} #reply-title, {{WRAPPER}} .woocommerce-Reviews label, {{WRAPPER}} .woocommerce-Reviews label .required' => 'color: {{VALUE}}',
@@ -305,7 +305,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'tab_content_text_color',
 			[
-				'label' => __( 'Text font color', 'the7mk2' ),
+				'label' => esc_html__( 'Text font color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .woocommerce-Tabs-panel' => 'color: {{VALUE}}',
@@ -315,7 +315,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'attribute_value_link_heading',
 			[
-				'label'     => __( 'Link', 'the7mk2' ),
+				'label'     => esc_html__( 'Link', 'the7mk2' ),
 				'type'      => Controls_Manager::RAW_HTML,
 			]
 		);
@@ -324,14 +324,14 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tab( 'normal_tabs_link_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 			$this->add_control(
 				'tab_link_color',
 				[
-					'label' => __( 'Color', 'the7mk2' ),
+					'label' => esc_html__( 'Color', 'the7mk2' ),
 					'type' => Controls_Manager::COLOR,
 					'selectors' => [
 						'{{WRAPPER}} .woocommerce-Tabs-panel a' => 'color: {{VALUE}}',
@@ -342,11 +342,11 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 			$this->add_control(
 				'tab_text_decoration',
 				[
-					'label' => __( 'Decoration', 'the7mk2' ),
+					'label' => esc_html__( 'Decoration', 'the7mk2' ),
 					'type' => Controls_Manager::SELECT,
 					'default' => '',
 					'options' => [
-						'' => __( 'Default', 'the7mk2' ),
+						'' => esc_html__( 'Default', 'the7mk2' ),
 						'underline' => _x( 'Underline', 'Typography Control', 'the7mk2' ),
 						'overline' => _x( 'Overline', 'Typography Control', 'the7mk2' ),
 						'line-through' => _x( 'Line Through', 'Typography Control', 'the7mk2' ),
@@ -362,14 +362,14 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tab( 'active_tabs_link_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 			$this->add_control(
 				'active_tab_link_color',
 				[
-					'label' => __( 'Color', 'the7mk2' ),
+					'label' => esc_html__( 'Color', 'the7mk2' ),
 					'type' => Controls_Manager::COLOR,
 					'selectors' => [
 						' {{WRAPPER}} .woocommerce-Tabs-panel a:hover' => 'color: {{VALUE}}',
@@ -380,11 +380,11 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 			$this->add_control(
 				'active_tab_text_decoration',
 				[
-					'label' => __( 'Decoration', 'the7mk2' ),
+					'label' => esc_html__( 'Decoration', 'the7mk2' ),
 					'type' => Controls_Manager::SELECT,
 					'default' => '',
 					'options' => [
-						'' => __( 'Default', 'the7mk2' ),
+						'' => esc_html__( 'Default', 'the7mk2' ),
 						'underline' => _x( 'Underline', 'Typography Control', 'the7mk2' ),
 						'overline' => _x( 'Overline', 'Typography Control', 'the7mk2' ),
 						'line-through' => _x( 'Line Through', 'Typography Control', 'the7mk2' ),
@@ -404,7 +404,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_tabs_style',
 			[
-				'label' => __( 'Tabs', 'the7mk2' ),
+				'label' => esc_html__( 'Tabs', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -412,7 +412,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 				Group_Control_Typography::get_type(),
 				[
 					'name' => 'tabs_typography',
-					'label' => __( 'Tabs font', 'the7mk2' ),
+					'label' => esc_html__( 'Tabs font', 'the7mk2' ),
 					'selector' => '.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li a, {{WRAPPER}} .dt-tab-accordion-title',
 				]
 			);
@@ -424,14 +424,14 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 			$this->start_controls_tab( 'normal_tabs_style',
 				[
-					'label' => __( 'Normal', 'the7mk2' ),
+					'label' => esc_html__( 'Normal', 'the7mk2' ),
 				]
 			);
 
 			$this->add_control(
 				'tab_text_color',
 				[
-					'label' => __( 'Text Color', 'the7mk2' ),
+					'label' => esc_html__( 'Text Color', 'the7mk2' ),
 					'type' => Controls_Manager::COLOR,
 					'selectors' => [
 						'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li a, {{WRAPPER}} .dt-tab-accordion-title' => 'color: {{VALUE}}',
@@ -443,14 +443,14 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tab( 'hover_tabs_style',
 				[
-					'label' => __( 'Hover', 'the7mk2' ),
+					'label' => esc_html__( 'Hover', 'the7mk2' ),
 				]
 			);
 
 			$this->add_control(
 				'tab_hover_text_color',
 				[
-					'label' => __( 'Text Color', 'the7mk2' ),
+					'label' => esc_html__( 'Text Color', 'the7mk2' ),
 					'type' => Controls_Manager::COLOR,
 					'selectors' => [
 						'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li:not(.active) a:hover, {{WRAPPER}} .dt-tab-accordion-title:hover' => 'color: {{VALUE}}',
@@ -462,14 +462,14 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tab( 'active_tabs_style',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 			$this->add_control(
 				'active_tab_text_color',
 				[
-					'label' => __( 'Text Color', 'the7mk2' ),
+					'label' => esc_html__( 'Text Color', 'the7mk2' ),
 					'type' => Controls_Manager::COLOR,
 					'selectors' => [
 						'.woocommerce {{WRAPPER}} .woocommerce-tabs ul.wc-tabs li.active a, {{WRAPPER}} .dt-tab-accordion-title.active' => 'color: {{VALUE}}',
@@ -487,7 +487,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'tabs_padding',
 			[
-				'label'      => __( 'Paddings, px', 'the7mk2' ),
+				'label'      => esc_html__( 'Paddings, px', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -515,7 +515,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_product_panel_style',
 			[
-				'label' => __( 'Description', 'the7mk2' ),
+				'label' => esc_html__( 'Description', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 
 				'condition'   => [
@@ -527,7 +527,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'tabs_content_padding',
 			[
-				'label'      => __( 'Description Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Description Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -559,7 +559,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_product_info_style',
 			[
-				'label' => __( 'Additional information', 'the7mk2' ),
+				'label' => esc_html__( 'Additional information', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 
 				'condition'   => [
@@ -571,7 +571,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'tabs_info_padding',
 			[
-				'label'      => __( 'Additional Information Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Additional Information Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -601,15 +601,15 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'align_items',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -622,7 +622,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'space_between',
 			[
-				'label' => __( 'Space Between', 'the7mk2' ),
+				'label' => esc_html__( 'Space Between', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 10,
@@ -644,10 +644,10 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider',
 			[
-				'label' => __( 'Divider', 'the7mk2' ),
+				'label' => esc_html__( 'Divider', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_off' => __( 'Off', 'elementor' ),
-				'label_on' => __( 'On', 'elementor' ),
+				'label_off' => esc_html__( 'Off', 'elementor' ),
+				'label_on' => esc_html__( 'On', 'elementor' ),
 				'default' => 'yes',
 				'prefix_class' => 'wc-product-info-',
 			]
@@ -656,13 +656,13 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_style',
 			[
-				'label' => __( 'Style', 'the7mk2' ),
+				'label' => esc_html__( 'Style', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'solid' => __( 'Solid', 'the7mk2' ),
-					'double' => __( 'Double', 'the7mk2' ),
-					'dotted' => __( 'Dotted', 'the7mk2' ),
-					'dashed' => __( 'Dashed', 'the7mk2' ),
+					'solid' => esc_html__( 'Solid', 'the7mk2' ),
+					'double' => esc_html__( 'Double', 'the7mk2' ),
+					'dotted' => esc_html__( 'Dotted', 'the7mk2' ),
+					'dashed' => esc_html__( 'Dashed', 'the7mk2' ),
 				],
 				'default' => 'solid',
 				'condition' => [
@@ -677,7 +677,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_weight',
 			[
-				'label' => __( 'Weight', 'the7mk2' ),
+				'label' => esc_html__( 'Weight', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 1,
@@ -700,7 +700,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				//'default'	=> of_get_option( 'dividers-color', '#cccccc' ),
 				'condition' => [
@@ -714,7 +714,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'tabs_info_width',
 			[
-				'label' => __( 'Width', 'the7mk2' ),
+				'label' => esc_html__( 'Width', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'unit' => '%',
@@ -741,7 +741,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_product_reviews_style',
 			[
-				'label' => __( 'Reviews', 'the7mk2' ),
+				'label' => esc_html__( 'Reviews', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 
 				'condition'   => [
@@ -753,7 +753,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'tabs_reviews_padding',
 			[
-				'label'      => __( 'Reviews Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Reviews Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -783,7 +783,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'tabs_reviews_width',
 			[
-				'label' => __( 'Width', 'the7mk2' ),
+				'label' => esc_html__( 'Width', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'unit' => '%',
@@ -808,12 +808,12 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 
 		$text_columns = range( 1, 2 );
 		$text_columns = array_combine( $text_columns, $text_columns );
-		$text_columns[''] = __( 'Default', 'the7mk2' );
+		$text_columns[''] = esc_html__( 'Default', 'the7mk2' );
 
 		$this->add_basic_responsive_control(
 			'text_columns',
 			[
-				'label' => __( 'Columns', 'the7mk2' ),
+				'label' => esc_html__( 'Columns', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => $text_columns,
 				'selectors' => [
@@ -826,7 +826,7 @@ class Product_Tabs extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'column_gap',
 			[
-				'label' => __( 'Columns Gap', 'the7mk2' ),
+				'label' => esc_html__( 'Columns Gap', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%', 'em', 'vw' ],
 				'range' => [

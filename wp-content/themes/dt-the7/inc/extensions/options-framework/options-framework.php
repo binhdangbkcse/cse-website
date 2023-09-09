@@ -1741,6 +1741,8 @@ function optionsframework_validate( $input ) {
 
 function optionsframework_save_options_via_ajax() {
     try {
+	    check_ajax_referer('optionsframework-options');
+
 	    $optionsframework_settings = get_option( 'optionsframework' );
 	    $options_id = $optionsframework_settings['id'];
 		$options_to_save = array();

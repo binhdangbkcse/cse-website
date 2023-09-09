@@ -93,7 +93,7 @@ class Price extends Abstract_Template {
 				'label'     => __( 'Normal Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .price > span.woocommerce-Price-amount.amount, {{WRAPPER}} .price > span.woocommerce-Price-amount span, {{WRAPPER}} .price, {{WRAPPER}} .price ins span' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .price > span.woocommerce-Price-amount.amount, {{WRAPPER}} .price > span.woocommerce-Price-amount span, {{WRAPPER}} .price, {{WRAPPER}} .price ins span, {{WRAPPER}} .price, {{WRAPPER}} .price ins span *' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -122,7 +122,7 @@ class Price extends Abstract_Template {
 				'label'     => __( 'Old Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .price del span' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .price del *' => 'color: {{VALUE}};',
 				],
 			]
 		);
@@ -153,7 +153,7 @@ class Price extends Abstract_Template {
 				'label'     => __( 'New Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .price ins span' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .price ins span, {{WRAPPER}} .price ins span *' => 'color: {{VALUE}};',
 				],
 			]
 		);

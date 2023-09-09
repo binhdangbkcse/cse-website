@@ -191,7 +191,6 @@ class Tax_Meta_Class {
    * @access public
    */
   public function check_field_color() {
-
     if ( $this->has_field( 'color' ) && $this->is_edit_page() ) {
       // Enqueu built-in script and style for color picker.
       wp_enqueue_style( 'wp-color-picker' );
@@ -740,7 +739,7 @@ class Tax_Meta_Class {
   public function show_field_color( $field, $meta ) {
 
     if ( empty( $meta ) )
-      $meta = '#';
+      $meta = '';
 
     $this->show_field_begin( $field, $meta );
     echo '<input class="at-color" type="text" name="'.$field['id'].'" value="'.esc_attr($meta).'"/>';
@@ -1130,7 +1129,7 @@ class Tax_Meta_Class {
    */
   public function is_edit_page() {
     global $pagenow;
-    return ( $pagenow == 'edit-tags.php' );
+	return in_array( $pagenow, [ 'term.php', 'edit-tags.php' ], true );
   }
 
   /**
@@ -1492,7 +1491,7 @@ class Tax_Meta_Class {
    *  @param $repeater bool  is this a field inside a repeatr? true|false(default)
    */
   public function addImage($id,$args,$repeater=false){
-    $new_field = array('type' => 'image','id'=> $id,'desc' => '','style' =>'','name' => 'Image Field', 'std' => '','multiple' => false);
+    $new_field = array('type' => 'image','id'=> $id,'desc' => '','style' =>'','name' => 'Image Field', 'std' => array('id' => '', 'url' => ''), 'multiple' => false);
     $new_field = array_merge($new_field, $args);
     if(false === $repeater){
       $this->_fields[] = $new_field;

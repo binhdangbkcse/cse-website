@@ -38,7 +38,14 @@ class Products_Counter extends The7_Elementor_Widget_Base {
 	 * @return string
 	 */
 	protected function the7_title() {
-		return __( 'Product Counter', 'the7mk2' );
+		return esc_html__( 'Product Counter', 'the7mk2' );
+	}
+
+	/**
+	 * @return string[]
+	 */
+	protected function the7_keywords() {
+		return [ 'woocommerce', 'products', 'counter', 'count', 'shop', 'archive' ];
 	}
 
 	/**
@@ -85,7 +92,7 @@ class Products_Counter extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'select_section',
 			[
-				'label' => __( 'Settings', 'the7mk2' ),
+				'label' => esc_html__( 'Settings', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -124,7 +131,7 @@ class Products_Counter extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'text_typography',
-				'label'    => __( 'Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .woocommerce-result-count',
 			]
 		);
@@ -132,7 +139,7 @@ class Products_Counter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'text_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',

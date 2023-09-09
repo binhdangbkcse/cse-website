@@ -243,26 +243,28 @@ if ( vc_has_class( 'prettyphoto', $el_class ) ) {
 	$el_class = vc_remove_class( 'prettyphoto', $el_class );
 }
 
-$wrapperClass = 'vc_single_image-wrapper ' . $style . ' ' . $border_color;
+$wrapper_class = 'vc_single_image-wrapper ' . $style . ' ' . $border_color;
 
 if ( $lazy_loading ) {
-	$wrapperClass .= ' layzr-bg';
+	$wrapper_class .= ' layzr-bg';
 }
 
-if ( $link ) {
-	$a_attrs['href'] = $link;
+$link_datas = (array) wp_get_attachment_image_src( $img_id, 'large' );
+
+if ( $link && $link_datas && ! empty( $link_datas[1] ) && ! empty( $link_datas[2] ) ) {
+	$a_attrs['href']   = $link;
 	$a_attrs['target'] = $img_link_target;
 	if ( $rel_no_follow ) {
 		$a_attrs['rel'] = 'nofollow';
 	}
 	if ( ! empty( $a_attrs['class'] ) ) {
-		$wrapperClass .= ' ' . $a_attrs['class'];
+		$wrapper_class .= ' ' . $a_attrs['class'];
 		unset( $a_attrs['class'] );
 	}
-	$link_datas = wp_get_attachment_image_src( $img_id, 'large' );
-	$html = '<a ' . vc_stringify_attributes( $a_attrs ) . '  class="' . $wrapperClass . '" data-large_image_width="' . (int) $link_datas[1] . '" data-large_image_height = "' . (int) $link_datas[2]. '"   ' . presscore_get_share_buttons_for_prettyphoto( 'photo' ) . '  >' . $img['thumbnail'] . '</a>';
+
+	$html = '<a ' . vc_stringify_attributes( $a_attrs ) . '  class="' . $wrapper_class . '" data-large_image_width="' . (int) $link_datas[1] . '" data-large_image_height = "' . (int) $link_datas[2] . '"   ' . presscore_get_share_buttons_for_prettyphoto( 'photo' ) . '  >' . $img['thumbnail'] . '</a>';
 } else {
-	$html = '<div class="' . $wrapperClass . '">' . $img['thumbnail'] . '</div>';
+	$html = '<div class="' . $wrapper_class . '">' . $img['thumbnail'] . '</div>';
 }
 
 // The7: Custom animation.

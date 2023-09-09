@@ -6,12 +6,21 @@ use Elementor\Core\Common\Modules\Ajax\Module as Ajax;
 use Elementor\Plugin;
 use Elementor\Widget_Base;
 use Elementor\TemplateLibrary\Source_Local;
+use ElementorPro\Modules\QueryControl\Classes\Elementor_Post_Query;
+use ElementorPro\Modules\QueryControl\Classes\Elementor_Related_Query;
 use The7\Mods\Compatibility\Elementor\Pro\Modules\Query_Control\The7_Control_Query;
 use The7\Mods\Compatibility\Elementor\Pro\Modules\Query_Control\The7_Group_Control_Query;
 
 defined( 'ABSPATH' ) || exit;
 
 class The7_Query_Control_Module{
+	static protected $instance;
+	public static function get_instance() {
+		if ( !self::$instance ) {
+			self::$instance = new The7_Query_Control_Module();
+		}
+		return self::$instance;
+	}
 
 	const QUERY_CONTROL_ID = 'the7-query';
 	const AUTOCOMPLETE_ERROR_CODE = 'QueryControlAutocomplete';
@@ -547,7 +556,7 @@ class The7_Query_Control_Module{
 				$query = new \WP_Query( $query_args );
 
 				foreach ( $query->posts as $post ) {
-					$document = Plugin::elementor()->documents->get( $post->ID );
+					$document = Plugin::$instance->documents->get( $post->ID );
 					if ( $document ) {
 						$text = $post->post_title . ' (' . $document->get_post_type_title() . ')';
 						$results[] = [
@@ -692,7 +701,7 @@ class The7_Query_Control_Module{
 				$query = new \WP_Query( $query_args );
 
 				foreach ( $query->posts as $post ) {
-					$document = Plugin::elementor()->documents->get( $post->ID );
+					$document = Plugin::$instance->documents->get( $post->ID );
 					if ( $document ) {
 						$results[ $post->ID ] = $post->post_title . ' (' . $document->get_post_type_title() . ')';
 					}
@@ -875,6 +884,93 @@ class The7_Query_Control_Module{
 		return $name_string . '...' . $separator . $post->post_title;
 	}
 
+	protected function fix_offset( $query_args, $settings, $prefix = '' ) {
+		if ( 0 < $settings[ $prefix . 'offset' ] ) {
+			/**
+			 * Due to a WordPress bug, the offset will be set later, in $this->fix_query_offset()
+			 * @see https://codex.wordpress.org/Making_Custom_Queries_using_Offset_and_Pagination
+			 */
+			$query_args['offset_to_fix'] = $settings[ $prefix . 'offset' ];
+		}
+
+		return $query_args;
+	}
+
+	protected function build_query_args( $settings, $control_id_prefix ) {
+
+		$prefix = $control_id_prefix . '_';
+
+		$post_type = $settings[ $prefix . 'post_type' ];
+
+		$query_args = [
+			'orderby' => $settings['orderby'],
+			'order' => $settings['order'],
+			'ignore_sticky_posts' => 1,
+			'post_status' => 'publish', // Hide drafts/private posts for admins
+		];
+
+		if ( 'by_id' === $post_type ) {
+			$post_types = the7_get_public_post_types();
+
+			$query_args['post_type'] = array_keys( $post_types );
+			$query_args['posts_per_page'] = -1;
+
+			$query_args['post__in'] = $settings[ $prefix . 'posts_ids' ];
+
+			if ( empty( $query_args['post__in'] ) ) {
+				// If no selection - return an empty query
+				$query_args['post__in'] = [ 0 ];
+			}
+		} else {
+			$query_args['post_type'] = $post_type;
+			$query_args['posts_per_page'] = $settings['posts_per_page'];
+			$query_args['tax_query'] = [];
+
+			$query_args = $this->fix_offset( $query_args, $settings );
+
+			$taxonomies = get_object_taxonomies( $post_type, 'objects' );
+
+			foreach ( $taxonomies as $object ) {
+				$setting_key = $prefix . $object->name . '_ids';
+
+				if ( ! empty( $settings[ $setting_key ] ) ) {
+					$query_args['tax_query'][] = [
+						'taxonomy' => $object->name,
+						'field' => 'term_id',
+						'terms' => $settings[ $setting_key ],
+					];
+				}
+			}
+		}
+
+		if ( ! empty( $settings[ $prefix . 'authors' ] ) ) {
+			$query_args['author__in'] = $settings[ $prefix . 'authors' ];
+		}
+
+		$post__not_in = [];
+		if ( ! empty( $settings['exclude'] ) ) {
+			if ( in_array( 'current_post', $settings['exclude'], true ) ) {
+				if ( wp_doing_ajax() && ! empty( $_REQUEST['post_id'] ) ) {
+					$post__not_in[] = $_REQUEST['post_id'];
+				} elseif ( is_singular() ) {
+					$post__not_in[] = get_queried_object_id();
+				}
+			}
+
+			if ( in_array( 'manual_selection', $settings['exclude'], true ) && ! empty( $settings['exclude_ids'] ) ) {
+				$post__not_in = array_merge( $post__not_in, $settings['exclude_ids'] );
+			}
+		}
+
+		if ( ! empty( $settings['avoid_duplicates'] ) && 'yes' === $settings['avoid_duplicates'] ) {
+			$post__not_in = array_merge( $post__not_in, The7_Query_Control_Module::$displayed_ids );
+		}
+
+		$query_args['post__not_in'] = $post__not_in;
+
+		return $query_args;
+	}
+
 	/**
 	 * @deprecated use Elementor_Post_Query capabilities
 	 *
@@ -883,15 +979,39 @@ class The7_Query_Control_Module{
 	 *
 	 * @return array
 	 */
-	public function get_query_args( $control_id, $settings ) {
-		// TODO: _deprecated_function( __METHOD__, '2.5.0', 'class Elementor_Post_Query' );
+	public function get_query_args( $control_id_prefix, $settings ) {
 
-		$controls_manager = Plugin::elementor()->controls_manager;
+		$defaults = [
+			$control_id_prefix . '_post_type' => 'post',
+			$control_id_prefix . '_posts_ids' => [],
+			'orderby' => 'date',
+			'order' => 'desc',
+			'posts_per_page' => 3,
+			'offset' => 0,
+		];
 
-		/** @var Group_Control_Posts $posts_query */
-		$posts_query = $controls_manager->get_control_groups( Group_Control_Posts::get_type() );
+		$settings = wp_parse_args( $settings, $defaults );
 
-		return $posts_query->get_query_args( $control_id, $settings );
+		$post_type = $settings[ $control_id_prefix . '_post_type' ];
+
+		if ( 'current_query' === $post_type ) {
+			$current_query_vars = $GLOBALS['wp_query']->query_vars;
+
+			/**
+			 * Current query variables.
+			 *
+			 * Filters the query variables for the current query.
+			 *
+			 * @since 1.0.0
+			 *
+			 * @param array $current_query_vars Current query variables.
+			 */
+			$current_query_vars = apply_filters( 'elementor_pro/query_control/get_query_args/current_query', $current_query_vars );
+
+			return $current_query_vars;
+		}
+
+		return $this->build_query_args( $settings, $control_id_prefix );
 	}
 
 	/**
@@ -906,9 +1026,9 @@ class The7_Query_Control_Module{
 		$prefix = $name . '_';
 		$post_type = $widget->get_settings( $prefix . 'post_type' );
 		if ( 'related' === $post_type ) {
-			$elementor_query = new Elementor_Related_Query( $widget, $name, $query_args, $fallback_args );
+			//$elementor_query = new Elementor_Related_Query( $widget, $name, $query_args, $fallback_args );
 		} else {
-			$elementor_query = new Elementor_Post_Query( $widget, $name, $query_args );
+			$elementor_query = new The7_Post_Query( $widget, $name, $query_args );
 		}
 		return $elementor_query->get_query();
 	}

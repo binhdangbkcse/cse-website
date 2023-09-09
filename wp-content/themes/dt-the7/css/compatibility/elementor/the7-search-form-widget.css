@@ -99,6 +99,7 @@
 }
 .elementor-widget-the7-search-form-widget .the7-search-form__submit svg {
   fill: var(--e-search-form-submit-text-color, #fff);
+  color: var(--e-search-form-submit-text-color, #fff);
   width: var(--e-search-form-submit-icon-size, 16px);
   height: var(--e-search-form-submit-icon-size, 16px);
 }
@@ -119,13 +120,14 @@
   color: var(--e-search-form-submit-text-color, #fff);
 }
 .elementor-widget-the7-search-form-widget .the7-search-form__submit svg {
-  transition: fill 0.3s;
+  transition: all 0.3s;
 }
 .elementor-widget-the7-search-form-widget .the7-search-form__submit:hover {
   color: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
 }
 .elementor-widget-the7-search-form-widget .the7-search-form__submit:hover svg {
   fill: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
+  color: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
 }
 .elementor-widget-the7-search-form-widget.the7-search-form-icon-position-inside.icon-hide-y .the7-search-form__submit {
   display: none;
@@ -146,9 +148,10 @@
 }
 .the7-clear-search svg {
   fill: var(--clear-color, var(--the7-base-color));
+  color: var(--clear-color, var(--the7-base-color));
   width: 1em;
   height: auto;
-  transition: fill 0.3s;
+  transition: all 0.3s;
 }
 .show-clear .the7-clear-search {
   display: inline-flex;

@@ -259,6 +259,22 @@ abstract class Widget_Migration {
 	}
 
 	/**
+	 * @param  string  $key
+	 * @param  string  $subkey
+	 * @param  mixed   $val
+	 *
+	 * @return void
+	 */
+	protected function set_subkey( $key, $subkey, $val ) {
+		$key_value = $this->get( $key );
+
+		if ( is_array( $key_value ) ) {
+			$key_value[ $subkey ] = $val;
+			$this->set( $key, $key_value );
+		}
+	}
+
+	/**
 	 * @param string $key
 	 * @param mixed $val
 	 *
@@ -312,6 +328,23 @@ abstract class Widget_Migration {
 		}
 
 		return ! empty( $value );
+	}
+
+	/**
+	 * @param string $global_endpoint Endpoint to get global value.
+	 *
+	 * @return null|mixed Global value.
+	 */
+	protected function get_global_value( $global_endpoint ) {
+		$value = null;
+		if ( isset( \Elementor\Plugin::$instance->data_manager_v2 ) ) {
+			$value = \Elementor\Plugin::$instance->data_manager_v2->run( $global_endpoint );
+		} elseif ( property_exists( \Elementor\Plugin::$instance, 'data_manager' ) && is_object( \Elementor\Plugin::$instance->data_manager ) ) {
+			// Prevent fatal errors with Elementor 2.9.x.
+			$value = \Elementor\Plugin::$instance->data_manager->run( $global_endpoint );
+		}
+
+		return isset( $value['value'] ) ? $value['value'] : null;
 	}
 
 	protected function get_global( $key ) {

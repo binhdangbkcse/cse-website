@@ -47,11 +47,15 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 	 * @return string Widget title.
 	 */
 	protected function the7_title() {
-		return __( 'Photo Scroller', 'the7mk2' );
+		return esc_html__( 'Photo Scroller', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
 		return 'eicon-slider-push';
+	}
+
+	protected function the7_keywords() {
+		return [ 'photo', 'scroller', 'slider', 'carousel', 'gallery' ];
 	}
 
 	public function get_style_depends() {
@@ -78,7 +82,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
         $this->start_controls_section(
 			'section_photo_scroller_img',
 			[
-				'label' => __( 'Images', 'the7mk2' ),
+				'label' => esc_html__( 'Images', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_LAYOUT,
 			]
 		);
@@ -86,7 +90,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'scroller',
 			[
-				'label' => __( 'Add Images', 'the7mk2' ),
+				'label' => esc_html__( 'Add Images', 'the7mk2' ),
 				'type' => Controls_Manager::GALLERY,
 				'default' => [],
 				'show_label' => false,
@@ -99,7 +103,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'more_options',
 			[
-				'label' => __( 'Landscape images behavior', 'the7mk2' ),
+				'label' => esc_html__( 'Landscape images behavior', 'the7mk2' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -107,15 +111,15 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'dk_ls_images_view',
 			[
-				'label' => __( 'Filling mode:', 'the7mk2' ),
+				'label' => esc_html__( 'Filling mode:', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'fit' => [
-						'title' => __( 'Contain', 'plugin-domain' ),
+						'title' => esc_html__( 'Contain', 'plugin-domain' ),
 						'icon' => 'eicon-frame-minimize',
 					],
 					'fill' => [
-						'title' => __( 'Cover', 'plugin-domain' ),
+						'title' => esc_html__( 'Cover', 'plugin-domain' ),
 						'icon' => 'eicon-frame-expand',
 					],
 				],
@@ -135,7 +139,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'ls_max_width',
 			[
-				'label' => __( 'Max width (%)', 'the7mk2' ),
+				'label' => esc_html__( 'Max width (%)', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range' => [
@@ -153,7 +157,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'ls_min_width',
 			[
-				'label' => __( 'Min width (%):', 'the7mk2' ),
+				'label' => esc_html__( 'Min width (%):', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range' => [
@@ -173,7 +177,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'p_title_options',
 			[
-				'label' => __( 'Portrait images behavior', 'the7mk2' ),
+				'label' => esc_html__( 'Portrait images behavior', 'the7mk2' ),
 				'type' => Controls_Manager::HEADING,
 			]
 		);
@@ -181,15 +185,15 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'dk_pt_images_view',
 			[
-				'label' => __( 'Filling mode:', 'the7mk2' ),
+				'label' => esc_html__( 'Filling mode:', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'options' => [
 					'fit' => [
-						'title' => __( 'Contain', 'plugin-domain' ),
+						'title' => esc_html__( 'Contain', 'plugin-domain' ),
 						'icon' => 'eicon-frame-minimize',
 					],
 					'fill' => [
-						'title' => __( 'Cover', 'plugin-domain' ),
+						'title' => esc_html__( 'Cover', 'plugin-domain' ),
 						'icon' => 'eicon-frame-expand',
 					],
 				],
@@ -213,7 +217,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'pt_max_width',
 			[
-				'label' => __( 'Max width  (%)', 'the7mk2' ),
+				'label' => esc_html__( 'Max width  (%)', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range' => [
@@ -231,7 +235,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'pt_min_width',
 			[
-				'label' => __( 'Min width (%):', 'the7mk2' ),
+				'label' => esc_html__( 'Min width (%):', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range' => [
@@ -251,7 +255,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'view',
 			[
-				'label' => __( 'View', 'the7mk2' ),
+				'label' => esc_html__( 'View', 'the7mk2' ),
 				'type' => Controls_Manager::HIDDEN,
 				'default' => 'traditional',
 			]
@@ -261,27 +265,27 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_photo_scroller',
 			[
-				'label' => __( 'Scroller', 'the7mk2' ),
+				'label' => esc_html__( 'Scroller', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_LAYOUT,
 			]
 		);
 		$scroller_height_options            = [
-			'inherit'  => __( 'Full Height', 'the7mk2' ) . ' (100%)',
-			'initial' => __( 'Custom', 'the7mk2' ),
+			'inherit'  => esc_html__( 'Full Height', 'the7mk2' ) . ' (100%)',
+			'initial' => esc_html__( 'Custom', 'the7mk2' ),
 		];
-		$scroller_height_options_on_devices = [ '' => __( 'Default', 'the7mk2' ) ] + $scroller_height_options;
+		$scroller_height_options_on_devices = [ '' => esc_html__( 'Default', 'the7mk2' ) ] + $scroller_height_options;
 
 		$this->add_basic_responsive_control(
 			'_element_height',
 			[
-				'label' => __( 'Height', 'the7mk2' ),
+				'label' => esc_html__( 'Height', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => 'initial',
 				'tablet_default' => 'initial',
 				'mobile_default' => 'initial',
 				'options'              => [
-					'inherit'  => __( 'Full Height', 'the7mk2' ) . ' (100%)',
-					'initial' => __( 'Custom', 'the7mk2' ),
+					'inherit'  => esc_html__( 'Full Height', 'the7mk2' ) . ' (100%)',
+					'initial' => esc_html__( 'Custom', 'the7mk2' ),
 				],
 
 				'render_type' => 'template',
@@ -292,7 +296,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'photo_scroller_height',
 			[
-				'label' => __( 'Custom Height', 'the7mk2' ),
+				'label' => esc_html__( 'Custom Height', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'range' => [
 					'px' => [
@@ -336,7 +340,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'arrows_section',
 			[
-				'label' => __( 'Arrows', 'the7mk2' ),
+				'label' => esc_html__( 'Arrows', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_LAYOUT,
 			]
 		);
@@ -344,7 +348,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrows',
 			[
-				'label'        => __( 'Show Arrows On Desktop', 'the7mk2' ),
+				'label'        => esc_html__( 'Show Arrows On Desktop', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -355,7 +359,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrows_tablet',
 			[
-				'label'        => __( 'Show Arrows On Tablet', 'the7mk2' ),
+				'label'        => esc_html__( 'Show Arrows On Tablet', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -366,7 +370,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrows_mobile',
 			[
-				'label'        => __( 'Show Arrows On Mobile', 'the7mk2' ),
+				'label'        => esc_html__( 'Show Arrows On Mobile', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => 'y',
@@ -380,7 +384,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_thumbs_options',
 			[
-				'label' => __( 'Thumbnails', 'the7mk2' ),
+				'label' => esc_html__( 'Thumbnails', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_LAYOUT,
 			]
 		);
@@ -389,10 +393,10 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 			$this->add_control(
 				'thumbnails',
 				[
-					'label' => __( 'Thumbnails visibility', 'the7mk2' ),
+					'label' => esc_html__( 'Thumbnails visibility', 'the7mk2' ),
 					'type' => Controls_Manager::SWITCHER,
-					'label_on' => __( 'Show', 'the7mk2' ),
-					'label_off' => __( 'Hide', 'the7mk2' ),
+					'label_on' => esc_html__( 'Show', 'the7mk2' ),
+					'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 					'return_value' => 'yes',
 					'default' => 'yes',
 				]
@@ -400,14 +404,14 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 			$this->add_control(
 				'thumb_position',
 				[
-					'label' => __( 'Position', 'the7mk2' ),
+					'label' => esc_html__( 'Position', 'the7mk2' ),
 					'type' => Controls_Manager::SELECT,
 					'default' => 'inside-hidden',
 					'options' => [
-						'inside' => __( 'On the scroller, fixed', 'the7mk2' ),
-						'inside-visible' => __( 'On the scroller, visible by default', 'the7mk2' ),
-						'inside-hidden' => __( 'On the scroller, hidden by default', 'the7mk2' ),
-						'outside' => __( 'Below the scroller', 'the7mk2' ),
+						'inside' => esc_html__( 'On the scroller, fixed', 'the7mk2' ),
+						'inside-visible' => esc_html__( 'On the scroller, visible by default', 'the7mk2' ),
+						'inside-hidden' => esc_html__( 'On the scroller, hidden by default', 'the7mk2' ),
+						'outside' => esc_html__( 'Below the scroller', 'the7mk2' ),
 					],
 					'condition' => [
 						'thumbnails' => [ 'yes'],
@@ -448,22 +452,22 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_content_options',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_LAYOUT,
 			]
 		);
 		$this->add_control(
 			'overlay_title',
 			[
-				'label' => __( 'Title', 'the7mk2' ),
+				'label' => esc_html__( 'Title', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '',
 				'options' => [
-					'' => __( 'None', 'the7mk2' ),
-					'title' => __( 'Title', 'the7mk2' ),
-					'caption' => __( 'Caption', 'the7mk2' ),
-					'alt' => __( 'Alt', 'the7mk2' ),
-					'description' => __( 'Description', 'the7mk2' ),
+					'' => esc_html__( 'None', 'the7mk2' ),
+					'title' => esc_html__( 'Title', 'the7mk2' ),
+					'caption' => esc_html__( 'Caption', 'the7mk2' ),
+					'alt' => esc_html__( 'Alt', 'the7mk2' ),
+					'description' => esc_html__( 'Description', 'the7mk2' ),
 				],
 			]
 		);
@@ -471,25 +475,25 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'overlay_description',
 			[
-				'label' => __( 'Description', 'the7mk2' ),
+				'label' => esc_html__( 'Description', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '',
 				'options' => [
-					'' => __( 'None', 'the7mk2' ),
-					'title' => __( 'Title', 'the7mk2' ),
-					'caption' => __( 'Caption', 'the7mk2' ),
-					'alt' => __( 'Alt', 'the7mk2' ),
-					'description' => __( 'Description', 'the7mk2' ),
+					'' => esc_html__( 'None', 'the7mk2' ),
+					'title' => esc_html__( 'Title', 'the7mk2' ),
+					'caption' => esc_html__( 'Caption', 'the7mk2' ),
+					'alt' => esc_html__( 'Alt', 'the7mk2' ),
+					'description' => esc_html__( 'Description', 'the7mk2' ),
 				],
 			]
 		);
 		$this->add_control(
 			'inactive_content',
 			[
-				'label' => __( 'Inactive images content', 'the7mk2' ),
+				'label' => esc_html__( 'Inactive images content', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on' => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default' => 'yes',
 			]
@@ -500,7 +504,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_additional_options',
 			[
-				'label' => __( 'Additional Options', 'the7mk2' ),
+				'label' => esc_html__( 'Additional Options', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_LAYOUT,
 			]
 		);
@@ -508,10 +512,10 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'fullscreen',
 			[
-				'label' => __( 'Fullscreen', 'the7mk2' ),
+				'label' => esc_html__( 'Fullscreen', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Yes', 'the7mk2' ),
-				'label_off' => __( 'No', 'the7mk2' ),
+				'label_on' => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off' => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default' => 'yes',
 			]
@@ -519,10 +523,10 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'autoplay',
 			[
-				'label' => __( 'Autoplay', 'the7mk2' ),
+				'label' => esc_html__( 'Autoplay', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Yes', 'the7mk2' ),
-				'label_off' => __( 'No', 'the7mk2' ),
+				'label_on' => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off' => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default' => 'no',
 			]
@@ -531,7 +535,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'autoplay_speed',
 			[
-				'label' => __( 'Autoplay Speed', 'the7mk2' ),
+				'label' => esc_html__( 'Autoplay Speed', 'the7mk2' ),
 				'type' => Controls_Manager::NUMBER,
 				'default' => '',
 				'condition' => [
@@ -543,10 +547,10 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 				'autoplay_on_hover',
 				[
-					'label' => __( 'Stop on hover', 'the7mk2' ),
+					'label' => esc_html__( 'Stop on hover', 'the7mk2' ),
 					'type' => Controls_Manager::SWITCHER,
-					'label_on' => __( 'Yes', 'the7mk2' ),
-					'label_off' => __( 'No', 'the7mk2' ),
+					'label_on' => esc_html__( 'Yes', 'the7mk2' ),
+					'label_off' => esc_html__( 'No', 'the7mk2' ),
 					'return_value' => 'yes',
 					'default' => 'yes',
 					'condition' => [
@@ -562,7 +566,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_photo_images_style',
 			[
-				'label' => __( 'Images', 'the7mk2' ),
+				'label' => esc_html__( 'Images', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -571,7 +575,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'scroller_padding',
 			[
-				'label'      => __( 'Image paddings', 'the7mk2' ),
+				'label'      => esc_html__( 'Image paddings', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px'],
 				'default'    => [
@@ -588,10 +592,10 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'overlay',
 			[
-				'label' => __( 'Pixel overlay', 'the7mk2' ),
+				'label' => esc_html__( 'Pixel overlay', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_on' => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on' => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'yes',
 				'default' => 'no',
 			]
@@ -599,7 +603,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_opacity',
 			[
-				'label' => __( 'Inactive image opacity (%)', 'the7mk2' ),
+				'label' => esc_html__( 'Inactive image opacity (%)', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range' => [
@@ -618,7 +622,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'navigation_style',
 			[
-				'label' => __( 'Thumbnails', 'the7mk2' ),
+				'label' => esc_html__( 'Thumbnails', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'thumbnails' => [ 'yes'],
@@ -630,7 +634,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 				'thumb_width',
 				[
-					'label' => __( 'Thumbnail width', 'the7mk2' ),
+					'label' => esc_html__( 'Thumbnail width', 'the7mk2' ),
 					'type' => Controls_Manager::SLIDER,
 					'default' => [
 						'size' => '',
@@ -651,7 +655,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 			$this->add_control(
 				'thumb_height',
 				[
-					'label' => __( 'Thumbnail height', 'the7mk2' ),
+					'label' => esc_html__( 'Thumbnail height', 'the7mk2' ),
 					'type' => Controls_Manager::SLIDER,
 					'default' => [
 						'size' => '',
@@ -713,7 +717,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumb_bg_color',
 			[
-				'label'       => __( 'Thumbnails background', 'the7mk2' ),
+				'label'       => esc_html__( 'Thumbnails background', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -727,7 +731,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'controls_style',
 			[
-				'label' => __( 'Controls', 'the7mk2' ),
+				'label' => esc_html__( 'Controls', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'thumbnails' => [ 'yes'],
@@ -848,7 +852,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'contr_bg_color',
 			[
-				'label'       => __( 'Controls background', 'the7mk2' ),
+				'label'       => esc_html__( 'Controls background', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -861,7 +865,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'contrl_icon_color',
 			[
-				'label'       => __( 'Controls icon color', 'the7mk2' ),
+				'label'       => esc_html__( 'Controls icon color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -877,7 +881,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'arrows_style',
 			[
-				'label' => __( 'Arrows', 'the7mk2' ),
+				'label' => esc_html__( 'Arrows', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'conditions' => [
 					'relation' => 'or',
@@ -902,7 +906,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrows_heading',
 			[
-				'label'     => __( 'Arrow Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrow Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -911,7 +915,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'next_icon',
 			[
-				'label'     => __( 'Choose next arrow icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Choose next arrow icon', 'the7mk2' ),
 				'type'      => Controls_Manager::ICONS,
 				'default'   => [
 					'value'   => 'fas fa-chevron-right',
@@ -924,7 +928,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'prev_icon',
 			[
-				'label'     => __( 'Choose previous arrow icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Choose previous arrow icon', 'the7mk2' ),
 				'type'      => Controls_Manager::ICONS,
 				'default'   => [
 					'value'   => 'fas fa-chevron-left',
@@ -937,7 +941,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_icon_size',
 			[
-				'label'      => __( 'Arrow icon size', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow icon size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -960,7 +964,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrows_background_heading',
 			[
-				'label'     => __( 'Arrow Background', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrow Background', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -969,7 +973,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_bg_width',
 			[
-				'label'      => __( 'Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -992,7 +996,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_bg_height',
 			[
-				'label'      => __( 'Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1016,7 +1020,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_border_radius',
 			[
-				'label'      => __( 'Arrow border radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow border radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1040,7 +1044,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_border_width',
 			[
-				'label'      => __( 'Arrow border width', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow border width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1065,13 +1069,13 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 		$this->add_control(
 			'arrow_icon_color',
 			[
-				'label'       => __( 'Arrow icon color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow icon color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -1086,7 +1090,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_border_color',
 			[
-				'label'       => __( 'Arrow border color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow border color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -1101,7 +1105,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_bg_color',
 			[
-				'label'       => __( 'Arrow background color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow background color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -1117,14 +1121,14 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'tab_button_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'arrow_icon_color_hover',
 			[
-				'label'       => __( 'Arrow icon color hover', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow icon color hover', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -1140,7 +1144,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_border_color_hover',
 			[
-				'label'       => __( 'Arrow border color hover', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow border color hover', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -1154,7 +1158,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'arrow_bg_color_hover',
 			[
-				'label'       => __( 'Arrow background hover color', 'the7mk2' ),
+				'label'       => esc_html__( 'Arrow background hover color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -1172,7 +1176,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 		    'left_arrow_position_heading',
 		    [
-		        'label' => __( 'Left Arrow Position', 'the7mk2' ),
+		        'label' => esc_html__( 'Left Arrow Position', 'the7mk2' ),
 		        'type' => Controls_Manager::HEADING,
 		        'separator' => 'before',
 		    ]
@@ -1181,20 +1185,20 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'l_arrow_v_position',
 			[
-				'label' => __( 'Vertical Position', 'the7mk2' ),
+				'label' => esc_html__( 'Vertical Position', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options' => [
 					'top' => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon' => 'eicon-v-align-top',
 					],
 					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon' => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon' => 'eicon-v-align-bottom',
 					],
 				],
@@ -1204,20 +1208,20 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'l_arrow_h_position',
 			[
-				'label' => __( 'Horizontal Position', 'the7mk2' ),
+				'label' => esc_html__( 'Horizontal Position', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon' => 'eicon-v-align-middle',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-h-align-right',
 					],
 				],
@@ -1228,7 +1232,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'l_arrow_v_offset',
 			[
-				'label' => __( 'Vertical Offset', 'the7mk2' ),
+				'label' => esc_html__( 'Vertical Offset', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1253,7 +1257,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'l_arrow_h_offset',
 			[
-				'label' => __( 'Horizontal Offset', 'the7mk2' ),
+				'label' => esc_html__( 'Horizontal Offset', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1278,7 +1282,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 		    'right_arrow_position_heading',
 		    [
-		        'label' => __( 'Right Arrow Position', 'the7mk2' ),
+		        'label' => esc_html__( 'Right Arrow Position', 'the7mk2' ),
 		        'type' => Controls_Manager::HEADING,
 		        'separator' => 'before',
 		    ]
@@ -1288,20 +1292,20 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'r_arrow_v_position',
 			[
-				'label' => __( 'Vertical Position', 'the7mk2' ),
+				'label' => esc_html__( 'Vertical Position', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options' => [
 					'top' => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon' => 'eicon-v-align-top',
 					],
 					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon' => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon' => 'eicon-v-align-bottom',
 					],
 				],
@@ -1311,20 +1315,20 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'r_arrow_h_position',
 			[
-				'label' => __( 'Horizontal Position', 'the7mk2' ),
+				'label' => esc_html__( 'Horizontal Position', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon' => 'eicon-v-align-middle',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-h-align-right',
 					],
 				],
@@ -1335,7 +1339,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 		    'r_arrow_v_offset',
 		    [
-		        'label' => __( 'Vertical Offset', 'the7mk2' ),
+		        'label' => esc_html__( 'Vertical Offset', 'the7mk2' ),
 		        'type' => Controls_Manager::SLIDER,
 		        'default'    => [
 		            'unit' => 'px',
@@ -1360,7 +1364,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 		    'r_arrow_h_offset',
 		    [
-		        'label' => __( 'Horizontal Offset', 'the7mk2' ),
+		        'label' => esc_html__( 'Horizontal Offset', 'the7mk2' ),
 		        'type' => Controls_Manager::SLIDER,
 		        'default'    => [
 		            'unit' => 'px',
@@ -1389,7 +1393,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'overlay_content_style',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 				'tab' => Controls_Manager::TAB_STYLE,
 				'conditions'   => [
 					'relation' => 'or',
@@ -1414,20 +1418,20 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'content_alignment',
 			[
-				'label' => __( 'Alignment', 'the7mk2' ),
+				'label' => esc_html__( 'Alignment', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon' => 'eicon-text-align-center',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-text-align-right',
 					],
 				],
@@ -1443,20 +1447,20 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'content_vertical_position',
 			[
-				'label' => __( 'Vertical Position', 'the7mk2' ),
+				'label' => esc_html__( 'Vertical Position', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options' => [
 					'top' => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon' => 'eicon-v-align-top',
 					],
 					'middle' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon' => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon' => 'eicon-v-align-bottom',
 					],
 				],
@@ -1475,20 +1479,20 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'content_horizontal_position',
 			[
-				'label' => __( 'Horizontal Position', 'the7mk2' ),
+				'label' => esc_html__( 'Horizontal Position', 'the7mk2' ),
 				'type' => Controls_Manager::CHOOSE,
 				'label_block' => false,
 				'options' => [
 					'left' => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon' => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon' => 'eicon-v-align-middle',
 					],
 					'right' => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon' => 'eicon-h-align-right',
 					],
 				],
@@ -1507,7 +1511,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'content_bg_color',
 			[
-				'label'       => __( 'Background color', 'the7mk2' ),
+				'label'       => esc_html__( 'Background color', 'the7mk2' ),
 				'type'        => Controls_Manager::COLOR,
 				'alpha'       => true,
 				'default'     => '',
@@ -1520,7 +1524,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'_content_width',
 			[
-				'label' => __( 'Content width', 'the7mk2' ),
+				'label' => esc_html__( 'Content width', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', '%' ],
 				'range' => [
@@ -1543,7 +1547,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 		    'content_padding',
 		    [
-		        'label'      => __( 'Content paddings', 'the7mk2' ),
+		        'label'      => esc_html__( 'Content paddings', 'the7mk2' ),
 		        'type'       => Controls_Manager::DIMENSIONS,
 		        'size_units' => [ 'px', '%' ],
 		        'default'    => [
@@ -1578,7 +1582,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'scroller_heading_title',
 			[
-				'label' => __( 'Title', 'the7mk2' ),
+				'label' => esc_html__( 'Title', 'the7mk2' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -1590,7 +1594,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'scroller_title_color',
 			[
-				'label' => __( 'Color', 'the7mk2' ),
+				'label' => esc_html__( 'Color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .album-content-description .entry-title' => 'color: {{VALUE}}; margin: 0',
@@ -1617,7 +1621,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_spacing',
 			[
-				'label' => __( 'Spacing', 'the7mk2' ),
+				'label' => esc_html__( 'Spacing', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'size_units' => [ 'px', 'em', '%' ],
 				'selectors' => [
@@ -1633,7 +1637,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'heading_description',
 			[
-				'label' => __( 'Description', 'the7mk2' ),
+				'label' => esc_html__( 'Description', 'the7mk2' ),
 				'type' => Controls_Manager::HEADING,
 				'separator' => 'before',
 				'condition' => [
@@ -1645,7 +1649,7 @@ class Photo_Scroller extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'description_color',
 			[
-				'label' => __( 'Color', 'the7mk2' ),
+				'label' => esc_html__( 'Color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .album-content-description p' => 'color: {{VALUE}}',

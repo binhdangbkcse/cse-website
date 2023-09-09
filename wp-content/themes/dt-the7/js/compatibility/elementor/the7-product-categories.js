@@ -1,7 +1,7 @@
 jQuery(function ($) {
     $.productCat = function (el) {
         var $widget = $(el);
-        var $ulMenu = $widget.find('.dt-product-categories');
+        var $ulMenu = $widget.find('.the7-vertical-list');
         var methods;
         var menuTimeoutHide;
 
@@ -23,8 +23,9 @@ jQuery(function ($) {
                 if($ulMenu.find(".children").length <= 0){
                     $ulMenu.parent().addClass('indicator-off');
                 }
-
-                $widget.find('.the7-product-categories.collapsible').on("click", ".filter-header", function (e) {
+                $widget.find('.collapsible').on("click", ".filter-header", function (e) {
+                    var $this = $(this),
+                        $parent = $this.parent('.the7-product-categories');
                     if ($widget.hasClass('closed')) {
                         $ulMenu.css($widget.vars.fadeOut).slideDown($widget.vars.toogleSpeed).animate(
                             $widget.vars.fadeIn,
@@ -94,7 +95,7 @@ jQuery(function ($) {
                             e.stopPropagation();
                             e.preventDefault();
                             methods.displaySubCategory($this);
-                            
+
                         })
                     }
                    // $widget.find(".dt-sub-menu-display-on_click").css('visibility', 'visible');
@@ -158,6 +159,11 @@ jQuery(function ($) {
     // Make sure you run this code under Elementor.
     $(window).on("elementor/frontend/init", function () {
         elementorFrontend.hooks.addAction("frontend/element_ready/the7_product-categories.default", function ($widget, $) {
+            $(document).ready(function () {
+                $widget.productCat();
+            })
+        });
+        elementorFrontend.hooks.addAction("frontend/element_ready/the7-categories-list.default", function ($widget, $) {
             $(document).ready(function () {
                 $widget.productCat();
             })

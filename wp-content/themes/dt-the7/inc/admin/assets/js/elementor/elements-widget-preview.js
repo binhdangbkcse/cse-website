@@ -24,14 +24,7 @@
         // the7-wc-products widget.
         elementorFrontend.hooks.addAction("frontend/element_ready/the7-wc-products.default", the7ElementsWidgetHandler);
         elementorFrontend.hooks.addAction("frontend/element_ready/the7-wc-products.default", handleMasonryLayout);
-        elementorEditorAddOnChangeHandler("the7-wc-products:item_preserve_ratio", function(controlView, widgetView) {
-            window.jQuery(widgetView.$el).the7WidgetImageRatio("refresh");
-            relayoutIsotope(widgetView, widgetView.model.getSetting("mode"));
-        });
-        elementorEditorAddOnChangeHandler("the7-wc-products:item_ratio", function (controlView, widgetView) {
-            relayoutIsotope(widgetView, widgetView.model.getSetting("mode"));
-        });
-
+       
         function relayoutIsotope(widgetView, layout) {
             if (layout === "masonry") {
                 clearTimeout(onEditSettingsTimeout);
@@ -110,10 +103,10 @@
                 }
             });
 
-            $isoContainer.on("columnsReady.The7Elements.IsoLayout", function () {
-                $(".preload-me", $isoContainer).heightHack();
-                $isoContainer.isotope("layout");
-            });
+            // $isoContainer.on("columnsReady.The7Elements.IsoLayout", function () {
+            //     $(".preload-me", $isoContainer).heightHack();
+            //     $isoContainer.isotope("layout");
+            // });
         } else if ($dataAttrContainer.hasClass("jquery-filter")) {
             if ($dataAttrContainer.hasClass("dt-css-grid-wrap")) {
                 // Filter active item class handling since it's not included in filtrade.

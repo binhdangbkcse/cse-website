@@ -7,22 +7,18 @@
 
 defined( 'ABSPATH' ) || exit;
 
-$rollover_class = '';
-if ( ! empty( $icons_html ) ) {
-	$rollover_class = 'rollover-active';
-}
 ?>
 
 <?php if ( ! empty( $post_media ) ) : ?>
 
-	<div class="post-thumbnail-wrap <?php echo $rollover_class; ?>">
+	<div class="post-thumbnail-wrap">
 		<div class="post-thumbnail">
 
 			<?php
 			echo $post_media;
 
 			if ( ! empty( $icons_html ) ) {
-				echo '<div class="project-links-container">' . $icons_html . '</div>';
+				echo $icons_html;
 			}
 			?>
 

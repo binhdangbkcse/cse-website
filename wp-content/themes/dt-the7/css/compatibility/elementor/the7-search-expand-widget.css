@@ -133,6 +133,7 @@
 }
 .elementor-widget-the7-search-expand-widget .the7-search-form__submit svg {
   fill: var(--e-search-form-submit-text-color, #fff);
+  color: var(--e-search-form-submit-text-color, #fff);
   width: var(--e-search-form-submit-icon-size, 16px);
   height: var(--e-search-form-submit-icon-size, 16px);
 }
@@ -157,6 +158,7 @@
 }
 .elementor-widget-the7-search-expand-widget .the7-search-form__submit svg {
   fill: var(--e-search-form-submit-text-color, var(--the7-secondary-text-color));
+  color: var(--e-search-form-submit-text-color, var(--the7-secondary-text-color));
   transition: all 0.3s;
 }
 .elementor-widget-the7-search-expand-widget .the7-search-form__submit:hover {
@@ -164,6 +166,7 @@
 }
 .elementor-widget-the7-search-expand-widget .the7-search-form__submit:hover svg {
   fill: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
+  color: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
 }
 .the7-search-form-toggle {
   position: absolute;
@@ -183,6 +186,7 @@
 .the7-search-form-toggle svg {
   width: var(--toggle-icon-size, 16px);
   fill: var(--the7-secondary-text-color);
+  color: var(--the7-secondary-text-color);
   transition: all 0.3s;
 }
 .the7-search-form-toggle:hover {
@@ -190,6 +194,7 @@
 }
 .the7-search-form-toggle:hover svg {
   fill: var(--the7-accent-color);
+  color: var(--the7-accent-color);
 }
 .the7-search-form-toggle > :nth-child(1) {
   opacity: 1;

@@ -1,6 +1,7 @@
 .the7-box-wrapper {
   display: flex;
   flex-flow: row nowrap;
+  overflow: hidden;
 }
 .box-content-wrapper {
   display: flex;
@@ -21,15 +22,21 @@
   margin: 0 0 var(--icon-spacing) 0;
 }
 .the7-box-wrapper .elementor-icon {
+  display: inline-flex;
+  justify-content: center;
+  align-items: center;
   height: fit-content;
   font-size: 32px;
 }
 .elementor-icon-div i {
   color: var(--the7-accent-color);
+  transition: color 0.3s ease;
 }
 .elementor-icon-div svg {
   fill: var(--the7-accent-color);
+  color: var(--the7-accent-color);
   height: auto;
+  transition: all 0.3s ease;
 }
 .box-content-wrapper .elementor-icon {
   border-color: var(--the7-accent-color);
@@ -37,13 +44,13 @@
 .icon-position-top .the7-box-wrapper {
   flex-wrap: wrap;
 }
-.the7-box-wrapper .box-content {
+[class*='elementor-widget-the7_icon_box'] .the7-box-wrapper .box-content {
   display: flex;
   flex-flow: column wrap;
   flex-grow: 1;
   flex-wrap: unset;
 }
-.the7-box-wrapper .box-content {
+[class*='elementor-widget-the7_icon_box'] .the7-box-wrapper .box-content {
   justify-content: center;
 }
 .the7-box-wrapper .box-heading {
@@ -53,6 +60,10 @@
   display: inline-block;
   text-decoration: none;
   margin-bottom: 0 !important;
+  transition: color 0.3s ease;
+}
+.the7-box-wrapper .box-heading a {
+  transition: color 0.3s ease;
 }
 .the7-box-wrapper .box-button,
 .the7-box-wrapper {
@@ -69,6 +80,7 @@ a.the7-box-wrapper:hover .box-heading a {
   margin-bottom: 0;
   margin-top: 10px;
   color: var(--the7-base-color);
+  transition: color 0.3s ease;
 }
 .the7-box-wrapper .box-description p {
   margin-bottom: 0;

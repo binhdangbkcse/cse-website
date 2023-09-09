@@ -234,7 +234,7 @@ class Button extends Abstract_Template {
 								'default'   => '',
 								'selectors' => [
 									'{{WRAPPER}} ' . $selector_prefix . '.box-button, {{WRAPPER}} ' . $selector_prefix . '.box-button *'       => 'color: {{VALUE}};',
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button svg' => 'fill: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button svg' => 'fill: {{VALUE}};  color: {{VALUE}};',
 								],
 							],
 							$prefix . 'button_icon_color'   => [
@@ -243,8 +243,8 @@ class Button extends Abstract_Template {
 								'default'   => '',
 								'selectors' => [
 									'{{WRAPPER}} ' . $selector_prefix    => '--box-button-icon-color: {{VALUE}};',
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button i, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover i, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button i'       => 'color: {{VALUE}};',
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button svg, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover svg, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button svg' => 'fill: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button i, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover i, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus i, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button i'       => 'color: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button svg, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover svg, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus svg, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 								],
 							],
 							$prefix . 'button_background'   => [
@@ -254,7 +254,7 @@ class Button extends Abstract_Template {
 								'types'          => [ 'classic', 'gradient' ],
 								'exclude'        => [ 'image' ],
 								// Be careful, magic transition selector here.
-								'selector'       => ' {{WRAPPER}} ' . $selector_prefix . '.box-button, {{WRAPPER}} ' . $selector_prefix . '.box-button .popup-icon,  {{WRAPPER}} ' . $selector_prefix . '.box-button:hover, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button',
+								'selector'       => ' {{WRAPPER}} ' . $selector_prefix . '.box-button, {{WRAPPER}} ' . $selector_prefix . '.box-button .popup-icon,  {{WRAPPER}} ' . $selector_prefix . '.box-button:hover,  {{WRAPPER}} ' . $selector_prefix . '.box-button:focus, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button',
 								'fields_options' => [
 									'background' => [
 										'default' => 'classic',
@@ -271,7 +271,7 @@ class Button extends Abstract_Template {
 								'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 								'type'      => Controls_Manager::COLOR,
 								'selectors' => [
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button,  {{WRAPPER}} ' . $selector_prefix . '.box-button:hover, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button' => 'border-color: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button,  {{WRAPPER}} ' . $selector_prefix . '.box-button:hover,  {{WRAPPER}} ' . $selector_prefix . '.box-button:focus, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button' => 'border-color: {{VALUE}};',
 								],
 								'condition' => [
 									$prefix . 'button_border_border!' => '',
@@ -280,7 +280,7 @@ class Button extends Abstract_Template {
 							$prefix . 'button_shadow'       => [
 								'type'         => Group_Control_Box_Shadow::get_type(),
 								'name'         => $prefix . 'button_shadow',
-								'selector'     => '{{WRAPPER}} ' . $selector_prefix . '.box-button,  {{WRAPPER}} ' . $selector_prefix . '.box-button:hover, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button',
+								'selector'     => '{{WRAPPER}} ' . $selector_prefix . '.box-button,  {{WRAPPER}} ' . $selector_prefix . '.box-button:hover, {{WRAPPER}} ' . $selector_prefix . '.box-button:focus, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button',
 								'control_type' => self::CONTROL_TYPE_GROUP,
 							],
 						],
@@ -292,16 +292,16 @@ class Button extends Abstract_Template {
 								'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 								'type'      => Controls_Manager::COLOR,
 								'selectors' => [
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover *, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button *'             => 'color: {{VALUE}};',
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover svg, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button svg' => 'fill: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover *, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus *, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button *'             => 'color: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover svg, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus svg, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 								],
 							],
 							$prefix . 'button_hover_icon_color'        => [
 								'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 								'type'      => Controls_Manager::COLOR,
 								'selectors' => [
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover i, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button i'             => 'color: {{VALUE}};',
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover svg, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button svg' => 'fill: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover i, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus i, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button i'             => 'color: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover svg, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus svg, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 								],
 							],
 							$prefix . 'button_background_hover'   => [
@@ -310,7 +310,7 @@ class Button extends Abstract_Template {
 								'label'          => esc_html__( 'Background', 'the7mk2' ),
 								'types'          => [ 'classic', 'gradient' ],
 								'exclude'        => [ 'image' ],
-								'selector'       => '{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover .popup-icon, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button .popup-icon',
+								'selector'       => '{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover .popup-icon, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus .popup-icon,  {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button .popup-icon',
 								'fields_options' => [
 									'background' => [
 										'default' => 'classic',
@@ -327,7 +327,7 @@ class Button extends Abstract_Template {
 								'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 								'type'      => Controls_Manager::COLOR,
 								'selectors' => [
-									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button' => 'border-color: {{VALUE}};',
+									'{{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:hover, {{WRAPPER}} ' . $selector_prefix . '.box-button.elementor-button:focus, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button.elementor-button' => 'border-color: {{VALUE}};',
 								],
 								'condition' => [
 									$prefix . 'button_border_border!' => '',
@@ -336,7 +336,7 @@ class Button extends Abstract_Template {
 							$prefix . 'button_hover_shadow'       => [
 								'type'         => Group_Control_Box_Shadow::get_type(),
 								'name'         => $prefix . 'button_hover_shadow',
-								'selector'     => '{{WRAPPER}} ' . $selector_prefix . '.box-button:hover, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button',
+								'selector'     => '{{WRAPPER}} ' . $selector_prefix . '.box-button:hover, {{WRAPPER}} ' . $selector_prefix . '.box-button:focus, {{WRAPPER}} .box-hover:hover ' . $selector_prefix . '.box-button',
 								'control_type' => self::CONTROL_TYPE_GROUP,
 							],
 						],

@@ -32,7 +32,14 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 	 * @return string
 	 */
 	protected function the7_title() {
-		return __( 'Taxonomy Filter', 'the7mk2' );
+		return esc_html__( 'Taxonomy Filter', 'the7mk2' );
+	}
+
+	/**
+	 * @return string[]
+	 */
+	protected function the7_keywords() {
+		return [ 'taxonomy', 'filter', 'categories', 'terms' ];
 	}
 
 	/**
@@ -153,7 +160,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'query_section',
 			[
-				'label' => __( 'Query', 'the7mk2' ),
+				'label' => esc_html__( 'Query', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -165,7 +172,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_type',
 			[
-				'label'   => __( 'Source', 'the7mk2' ),
+				'label'   => esc_html__( 'Source', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT2,
 				'default' => 'post',
 				'options' => $post_type_options,
@@ -176,7 +183,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'taxonomy',
 			[
-				'label'     => __( 'Select Taxonomy', 'the7mk2' ),
+				'label'     => esc_html__( 'Select Taxonomy', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'category',
 				'options'   => [],
@@ -190,7 +197,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'terms',
 			[
-				'label'     => __( 'Select Terms', 'the7mk2' ),
+				'label'     => esc_html__( 'Select Terms', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT2,
 				'default'   => '',
 				'multiple'  => true,
@@ -212,7 +219,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'filter_bar_style_section',
 			[
-				'label' => __( 'Style', 'the7mk2' ),
+				'label' => esc_html__( 'Style', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -220,10 +227,10 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_show_all',
 			[
-				'label'        => __( '"All" Filter', 'the7mk2' ),
+				'label'        => esc_html__( '"All" Filter', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 			]
@@ -232,9 +239,9 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_all_text',
 			[
-				'label'       => __( '"All" Filter Label', 'the7mk2' ),
+				'label'       => esc_html__( '"All" Filter Label', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => __( 'View all', 'the7mk2' ),
+				'default'     => esc_html__( 'View all', 'the7mk2' ),
 				'placeholder' => '',
 				'condition'   => [
 					'filter_show_all' => 'y',
@@ -245,21 +252,21 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'filter_position',
 			[
-				'label'                => __( 'Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'toggle'               => false,
 				'default'              => 'center',
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -279,17 +286,17 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_style',
 			[
-				'label'          => __( 'Pointer', 'the7mk2' ),
+				'label'          => esc_html__( 'Pointer', 'the7mk2' ),
 				'type'           => Controls_Manager::SELECT,
 				'default'        => 'underline',
 				'options'        => [
-					'none'        => __( 'None', 'the7mk2' ),
-					'underline'   => __( 'Underline', 'the7mk2' ),
-					'overline'    => __( 'Overline', 'the7mk2' ),
-					'double-line' => __( 'Double Line', 'the7mk2' ),
-					'framed'      => __( 'Framed', 'the7mk2' ),
-					'background'  => __( 'Background', 'the7mk2' ),
-					'text'        => __( 'Text', 'the7mk2' ),
+					'none'        => esc_html__( 'None', 'the7mk2' ),
+					'underline'   => esc_html__( 'Underline', 'the7mk2' ),
+					'overline'    => esc_html__( 'Overline', 'the7mk2' ),
+					'double-line' => esc_html__( 'Double Line', 'the7mk2' ),
+					'framed'      => esc_html__( 'Framed', 'the7mk2' ),
+					'background'  => esc_html__( 'Background', 'the7mk2' ),
+					'text'        => esc_html__( 'Text', 'the7mk2' ),
 				],
 				'style_transfer' => true,
 			]
@@ -298,7 +305,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_line',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'fade',
 				'options'   => [
@@ -318,7 +325,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_framed',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'fade',
 				'options'   => [
@@ -338,7 +345,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_background',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'fade',
 				'options'   => [
@@ -364,7 +371,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_text',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'grow',
 				'options'   => [
@@ -386,7 +393,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'filter_typography',
-				'label'    => __( 'Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .filter a',
 			]
 		);
@@ -394,7 +401,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_underline_height',
 			[
-				'label'      => __( 'Pointer Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Pointer Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -422,14 +429,14 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'filter_normal_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'navigation_font_color',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -444,14 +451,14 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'filter_hover_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'filter_hover_text_color',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -464,7 +471,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_hover_pointer_color',
 			[
-				'label'     => __( 'Pointer Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Pointer Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -479,14 +486,14 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'filter_active_style',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'filter_active_text_color',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -499,7 +506,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_active_pointer_color',
 			[
-				'label'     => __( 'Pointer Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Pointer Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -516,7 +523,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_bg_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -539,7 +546,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'filter_element_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -561,7 +568,7 @@ class Taxonomy_Filter extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'filter_element_margin',
 			[
-				'label'      => __( 'Margin', 'the7mk2' ),
+				'label'      => esc_html__( 'Margin', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [

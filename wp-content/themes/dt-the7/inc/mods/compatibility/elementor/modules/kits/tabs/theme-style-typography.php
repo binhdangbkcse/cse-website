@@ -201,6 +201,8 @@ class Theme_Style_Typography extends The7_Tab_Base {
 		] );
 
 		$this->end_controls_tab();
+
+		$this->end_controls_tabs();
 	}
 
 

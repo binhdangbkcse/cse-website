@@ -333,7 +333,7 @@ if ( ! function_exists( 'presscore_tpl_masonry_item_wrap_class' ) ) :
 
 endif;
 
-if ( ! function_exists( 'presscore_tpl_masonry_item_wrap_data_attr' ) ):
+if ( ! function_exists( 'presscore_tpl_masonry_item_wrap_data_attr_arr' ) ):
 
 	/**
 	 * Return data attributes tags for masonry item wrap. By default contain data-post-id, data-date and data-name.
@@ -342,7 +342,7 @@ if ( ! function_exists( 'presscore_tpl_masonry_item_wrap_data_attr' ) ):
 	 *
 	 * @return string
 	 */
-	function presscore_tpl_masonry_item_wrap_data_attr( $data_attr = array() ) {
+	function presscore_tpl_masonry_item_wrap_data_attr_arr( $data_attr = array() ) {
 		global $post;
 
 		// data attributes for filtering
@@ -352,9 +352,26 @@ if ( ! function_exists( 'presscore_tpl_masonry_item_wrap_data_attr' ) ):
 			'name'		=> esc_attr( $post->post_title )
 		) );
 
-		$data_attr = apply_filters( 'presscore_before_post_masonry-wrap_data_attr', $data_attr );
+		return apply_filters( 'presscore_before_post_masonry-wrap_data_attr', $data_attr );
+	}
+
+endif;
+
+if ( ! function_exists( 'presscore_tpl_masonry_item_wrap_data_attr' ) ):
+
+	/**
+	 * Return data attributes tags for masonry item wrap as array. By default contain data-post-id, data-date and data-name.
+	 *
+	 * @param array $data_attr
+	 *
+	 * @return string
+	 */
+	function presscore_tpl_masonry_item_wrap_data_attr( $data_attr = array() ) {
+
+		$data_attr = presscore_tpl_masonry_item_wrap_data_attr_arr($data_attr);
 
 		return presscore_get_inlide_data_attr( $data_attr );
 	}
 
 endif;
+

@@ -9,12 +9,17 @@ use Elementor\Repeater;
 use Elementor\TemplateLibrary\Source_Local;
 use The7\Mods\Compatibility\Elementor\Modules\Slider\Module as Slider_Module;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
+use The7\Mods\Compatibility\Elementor\Widgets\Skins\Slider\Skin_Normal;
 use The7_Elementor_Compatibility;
 
 /**
- * Menu cart widget class.
+ * Slider widget class.
  */
 class Slider extends The7_Elementor_Widget_Base {
+
+	const WIDGET_NAME = 'the7-slider';
+	const AUTOPLAY_DEFAULT = 'yes';
+	const SLIDES_PER_VIEW_DEFAULT = '1';
 
 	public function get_categories() {
 		return [ 'theme-elements', 'woocommerce-elements' ];
@@ -24,21 +29,14 @@ class Slider extends The7_Elementor_Widget_Base {
 	 * @return string[]
 	 */
 	public function get_style_depends() {
-		return [ $this->get_name() ];
-	}
-
-	/**
-	 * @return string
-	 */
-	public function get_name() {
-		return 'the7-slider';
+		return [ 'the7-slider' ];
 	}
 
 	/**
 	 * @return string[]
 	 */
 	public function get_script_depends() {
-		return [ $this->get_name() ];
+		return [ 'the7-slider' ];
 	}
 
 	/**
@@ -52,14 +50,14 @@ class Slider extends The7_Elementor_Widget_Base {
 	 * @return string
 	 */
 	protected function the7_icon() {
-		return 'eicon-slides';
+		return 'eicon-carousel-loop';
 	}
 
 	/**
 	 * @return string[]
 	 */
 	protected function the7_keywords() {
-		return [ 'slides', 'carousel', 'image', 'slider' ];
+		return [ 'slides', 'carousel', 'image', 'slider', 'carousel' ];
 	}
 
 	protected function register_assets() {
@@ -67,9 +65,20 @@ class Slider extends The7_Elementor_Widget_Base {
 		the7_register_script_in_footer( $this->get_name(), THE7_ELEMENTOR_JS_URI . '/the7-slider.js', [ 'the7-elementor-frontend-common' ] );
 	}
 
+	/**
+	 * @return string
+	 */
+	public function get_name() {
+		return self::WIDGET_NAME;
+	}
+
 	protected function register_controls() {
 		// Content Tab.
 		$this->add_content_controls();
+		$this->add_query_content_controls();
+		$this->add_scrolling_content_controls();
+		$this->add_layout_content_controls();
+
 		$this->add_arrows_content_controls();
 		$this->add_bullets_content_controls();
 
@@ -79,16 +88,24 @@ class Slider extends The7_Elementor_Widget_Base {
 	}
 
 	protected function add_content_controls() {
-		$this->start_controls_section( 'content_section', [
+		//'section_layout' name is important for createTemplate js function
+		$this->start_controls_section( 'section_layout', [
 			'label' => esc_html__( 'Content', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 		$this->add_control( 'slider_wrap_helper', [
 			'type'         => Controls_Manager::HIDDEN,
-			'default'      => 'owl-carousel',
+			'default'      => 'elementor-widget-the7-slider-common owl-carousel elementor-widget-loop-the7-slider',
 			'prefix_class' => '',
 		] );
 
+		$this->add_slide_content_controls();
+		$this->add_slider_height_controls();
+
+		$this->end_controls_section();
+	}
+
+	protected function add_slide_content_controls() {
 		$slider_module = The7_Elementor_Compatibility::instance()->modules->get_modules( 'slider' );
 		$library_ids = $slider_module->get_posts();
 		$repeater = new Repeater();
@@ -129,7 +146,9 @@ class Slider extends The7_Elementor_Widget_Base {
 				'remove'    => true,
 			],
 		] );
+	}
 
+	protected function add_slider_height_controls() {
 		$this->add_control( 'slides_height_heading', [
 			'label'     => esc_html__( 'Height', 'the7mk2' ),
 			'type'      => Controls_Manager::HEADING,
@@ -138,7 +157,7 @@ class Slider extends The7_Elementor_Widget_Base {
 
 		$this->add_control( 'slides_height_heading_description', [
 			'type'            => Controls_Manager::RAW_HTML,
-			'raw'             => esc_html__( 'Leave both fields empty for automatic height' ),
+			'raw'             => esc_html__( 'Leave both fields empty for automatic height', 'the7mk2' ),
 			'separator'       => 'none',
 			'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
 		] );
@@ -158,7 +177,7 @@ class Slider extends The7_Elementor_Widget_Base {
 			],
 			'size_units' => [ 'px', 'vh', 'em' ],
 			'selectors'  => [
-				'{{WRAPPER}} .swiper-slide .the7-slide-content > .elementor-section-wrap' => 'min-height: {{SIZE}}{{UNIT}};',
+				'{{WRAPPER}} .the7-swiper-slide .the7-slide-content > .elementor-section-wrap' => 'min-height: {{SIZE}}{{UNIT}};',
 			],
 		] );
 
@@ -180,11 +199,15 @@ class Slider extends The7_Elementor_Widget_Base {
 				'{{WRAPPER}}' => '--slide-height: {{SIZE}}{{UNIT}};',
 			],
 		] );
+	}
 
-		$this->add_control( 'scrolling_heading', [
-			'label'     => esc_html__( 'Scrolling', 'the7mk2' ),
-			'type'      => Controls_Manager::HEADING,
-			'separator' => 'before',
+	protected function add_query_content_controls() {
+	}
+
+	protected function add_scrolling_content_controls() {
+		$this->start_controls_section( 'scrolling_section', [
+			'label' => esc_html__( 'Scrolling', 'the7mk2' ),
+			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 
 		$this->add_control( 'infinite', [
@@ -205,6 +228,21 @@ class Slider extends The7_Elementor_Widget_Base {
 			'frontend_available' => true,
 		] );
 
+		$this->add_control( 'slides_to_scroll', [
+			'label'              => esc_html__( 'Scroll Mode', 'the7mk2' ),
+			'type'               => Controls_Manager::SELECT,
+			'default'            => 'single',
+			'options'            => [
+				'single' => esc_html__( 'One slide at a time', 'the7mk2' ),
+				'all'    => esc_html__( 'All slides', 'the7mk2' ),
+			],
+			'frontend_available' => true,
+			'render_type'        => 'none',
+			'condition'          => [
+				'transition' => 'slide',
+			],
+		] );
+
 		$this->add_control( 'transition_speed', [
 			'label'              => esc_html__( 'Transition Speed', 'the7mk2' ) . '(ms)',
 			'type'               => Controls_Manager::NUMBER,
@@ -218,21 +256,21 @@ class Slider extends The7_Elementor_Widget_Base {
 		$this->add_control( 'autoplay', [
 			'label'              => esc_html__( 'Autoplay', 'the7mk2' ),
 			'type'               => Controls_Manager::SWITCHER,
-			'default'            => 'yes',
+			'default'            => static::AUTOPLAY_DEFAULT,
 			'render_type'        => 'none',
 			'frontend_available' => true,
 		] );
 
 		$this->add_control( 'pause_on_hover', [
-				'label'              => esc_html__( 'Pause on Hover', 'the7mk2' ),
-				'type'               => Controls_Manager::SWITCHER,
-				'default'            => 'yes',
-				'render_type'        => 'none',
-				'frontend_available' => true,
-				'condition'          => [
-					'autoplay' => 'yes',
-				],
-			] );
+			'label'              => esc_html__( 'Pause on Hover', 'the7mk2' ),
+			'type'               => Controls_Manager::SWITCHER,
+			'default'            => 'yes',
+			'render_type'        => 'none',
+			'frontend_available' => true,
+			'condition'          => [
+				'autoplay' => 'yes',
+			],
+		] );
 
 		$this->add_control( 'autoplay_speed', [
 			'label'              => esc_html__( 'Autoplay Speed (ms)', 'the7mk2' ),
@@ -243,9 +281,73 @@ class Slider extends The7_Elementor_Widget_Base {
 			],
 			'render_type'        => 'none',
 			'selectors'          => [
-				'{{WRAPPER}} .swiper-slide' => 'transition-duration: calc({{VALUE}}ms*1.2)',
+				'{{WRAPPER}} .the7-swiper-slide' => 'transition-duration: calc({{VALUE}}ms*1.2)',
 			],
 			'frontend_available' => true,
+		] );
+		$this->end_controls_section();
+	}
+
+	protected function add_layout_content_controls() {
+		$this->start_controls_section( 'layout_section', [
+			'label'     => esc_html__( 'Columns Layout', 'the7mk2' ),
+			'tab'       => Controls_Manager::TAB_CONTENT,
+			'condition' => [
+				'transition' => 'slide',
+			],
+		] );
+
+		$slides_per_view = range( 1, 12 );
+		$slides_per_view = array_combine( $slides_per_view, $slides_per_view );
+
+		$this->add_control( 'wide_desk_columns', [
+			'label'              => esc_html__( 'Columns On A Wide Desktop', 'the7mk2' ),
+			'type'               => Controls_Manager::SELECT,
+			'options'            => [ '' => esc_html__( 'Default', 'the7mk2' ) ] + $slides_per_view,
+			'default'            => '',
+			'frontend_available' => true,
+		] );
+
+		$this->add_control( 'widget_columns_wide_desktop_breakpoint', [
+			'label'              => esc_html__( 'Wide Desktop Breakpoint (px)', 'the7mk2' ),
+			'description'        => the7_elementor_get_wide_columns_control_description(),
+			'type'               => Controls_Manager::NUMBER,
+			'default'            => '',
+			'min'                => 0,
+			'frontend_available' => true,
+		] );
+
+		$this->add_basic_responsive_control( 'slides_per_view', [
+			'type'                 => Controls_Manager::SELECT,
+			'label'                => esc_html__( 'Columns', 'the7mk2' ),
+			'options'              => [ '' => esc_html__( 'Default', 'the7mk2' ) ] + $slides_per_view,
+			'default'              => static::SLIDES_PER_VIEW_DEFAULT,
+			'inherit_placeholders' => false,
+			'frontend_available'   => true,
+			'render_type'          => 'none',
+		] );
+
+		$this->add_basic_responsive_control( 'slides_gap', [
+			'label'              => esc_html__( 'Gap Between Columns (px)', 'the7mk2' ),
+			'type'               => Controls_Manager::SLIDER,
+			'size_units'         => [ 'px' ],
+			'range'              => [
+				'px' => [
+					'min'  => 0,
+					'max'  => 100,
+					'step' => 1,
+				],
+			],
+			'default'            => [
+				'unit' => 'px',
+				'size' => 0,
+			],
+			'frontend_available' => true,
+			'render_type'        => 'none',
+			'selectors'          => [
+				'{{WRAPPER}}' => '--slides-gap: {{SIZE}}{{UNIT}}',
+			],
+			'separator'          => 'before',
 		] );
 
 		$this->end_controls_section();
@@ -294,6 +396,10 @@ class Slider extends The7_Elementor_Widget_Base {
 
 		$this->end_controls_section();
 	}
+
+	protected function get_swiper_container_class(){
+		return Elementor::$instance->experiments->is_feature_active( 'e_swiper_latest' ) ? 'swiper' : 'swiper-container';
+    }
 
 	protected function add_bullets_content_controls() {
 		$this->start_controls_section( 'bullets_section', [
@@ -366,18 +472,18 @@ class Slider extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'arrow_next', [
-			'label'       => esc_html__( 'Next Arrow', 'the7mk2' ),
-			'type'        => Controls_Manager::ICONS,
-			'default'     => [
+			'label'   => esc_html__( 'Next Arrow', 'the7mk2' ),
+			'type'    => Controls_Manager::ICONS,
+			'default' => [
 				'value'   => 'fas fa-chevron-right',
 				'library' => 'fa-solid',
 			],
 		] );
 
 		$this->add_control( 'arrow_prev', [
-			'label'       => esc_html__( 'Previous Arrow', 'the7mk2' ),
-			'type'        => Controls_Manager::ICONS,
-			'default'     => [
+			'label'   => esc_html__( 'Previous Arrow', 'the7mk2' ),
+			'type'    => Controls_Manager::ICONS,
+			'default' => [
 				'value'   => 'fas fa-chevron-left',
 				'library' => 'fa-solid',
 			],
@@ -409,7 +515,7 @@ class Slider extends The7_Elementor_Widget_Base {
 			'separator' => 'before',
 		] );
 
-		$arrow_selector = '{{WRAPPER}} .swiper-container > .the7-swiper-button';
+		$arrow_selector = '{{WRAPPER}} .' . $this->get_swiper_container_class() . ' > .the7-swiper-button';
 
 		$this->add_responsive_control( 'arrow_bg_width', [
 			'label'      => esc_html__( 'Background Width', 'the7mk2' ),
@@ -516,7 +622,7 @@ class Slider extends The7_Elementor_Widget_Base {
 			$is_hover = ':hover';
 		}
 
-		$selector = '{{WRAPPER}} .swiper-container > .the7-swiper-button' . $is_hover;
+		$selector = '{{WRAPPER}} .' . $this->get_swiper_container_class() . ' > .the7-swiper-button' . $is_hover;
 
 		$this->start_controls_tab( $prefix_name . 'arrow_colors_tab_style', [
 			'label' => $box_name,
@@ -528,7 +634,7 @@ class Slider extends The7_Elementor_Widget_Base {
 			'alpha'     => true,
 			'default'   => '',
 			'selectors' => [
-				$selector . '> i'        => 'color: {{VALUE}};',
+				$selector . '> i'   => 'color: {{VALUE}};',
 				$selector . '> svg' => 'fill: {{VALUE}};color: {{VALUE}};',
 			],
 		] );
@@ -562,11 +668,11 @@ class Slider extends The7_Elementor_Widget_Base {
 		if ( $prefix === 'next_' ) {
 			$button_class = '.the7-swiper-button-next';
 			$default_h_pos = 'right';
-		} else if ( $prefix === 'prev_' ) {
+		} elseif ( $prefix === 'prev_' ) {
 			$button_class = '.the7-swiper-button-prev';
 		}
 
-		$selector = '{{WRAPPER}} .swiper-container > .the7-swiper-button' . $button_class;
+		$selector = '{{WRAPPER}} .' . $this->get_swiper_container_class() . ' > .the7-swiper-button' . $button_class;
 
 		$this->add_control( $prefix . 'arrow_position_heading', [
 			'label'     => $heading_name,
@@ -675,306 +781,355 @@ class Slider extends The7_Elementor_Widget_Base {
 
 	public function add_bullets_style_controls() {
 		$this->start_controls_section( 'bullets_style_section', [
-				'label'      => esc_html__( 'Bullets', 'the7mk2' ),
-				'tab'        => Controls_Manager::TAB_STYLE,
-				'conditions' => [
-					'relation' => 'or',
-					'terms'    => [
-						[
-							'name'  => 'bullets',
-							'value' => 'show',
-						],
-						[
-							'name'  => 'bullets_tablet',
-							'value' => 'show',
-						],
-						[
-							'name'  => 'bullets_mobile',
-							'value' => 'show',
-						],
+			'label'      => esc_html__( 'Bullets', 'the7mk2' ),
+			'tab'        => Controls_Manager::TAB_STYLE,
+			'conditions' => [
+				'relation' => 'or',
+				'terms'    => [
+					[
+						'name'  => 'bullets',
+						'value' => 'show',
+					],
+					[
+						'name'  => 'bullets_tablet',
+						'value' => 'show',
+					],
+					[
+						'name'  => 'bullets_mobile',
+						'value' => 'show',
 					],
 				],
-			] );
+			],
+		] );
 
 		$this->add_control( 'bullets_style_heading', [
-				'label'     => esc_html__( 'Bullets Style', 'the7mk2' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			] );
+			'label'     => esc_html__( 'Bullets Style', 'the7mk2' ),
+			'type'      => Controls_Manager::HEADING,
+			'separator' => 'before',
+		] );
 
 		$this->add_control( 'bullets_style', [
-				'label'        => esc_html__( 'Choose Bullets Style', 'the7mk2' ),
-				'type'         => Controls_Manager::SELECT,
-				'default'      => 'small-dot-stroke',
-				'options'      => [
-					'small-dot-stroke' => 'Small dot stroke',
-					'scale-up'         => 'Scale up',
-					'stroke'           => 'Stroke',
-					'fill-in'          => 'Fill in',
-					'ubax'             => 'Square',
-					'etefu'            => 'Rectangular',
-				],
-				'prefix_class' => 'bullets-',
-			] );
+			'label'        => esc_html__( 'Choose Bullets Style', 'the7mk2' ),
+			'type'         => Controls_Manager::SELECT,
+			'default'      => 'small-dot-stroke',
+			'options'      => [
+				'small-dot-stroke' => 'Small dot stroke',
+				'scale-up'         => 'Scale up',
+				'stroke'           => 'Stroke',
+				'fill-in'          => 'Fill in',
+				'ubax'             => 'Square',
+				'etefu'            => 'Rectangular',
+			],
+			'prefix_class' => 'bullets-',
+		] );
 
 		$selector = "{{WRAPPER}} .swiper-pagination";
 
-		$this->add_control( 'bullet_size', [
-				'label'      => esc_html__( 'Bullets Size', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => 10,
+		$this->add_responsive_control( 'bullet_size', [
+			'label'      => esc_html__( 'Bullets Size', 'the7mk2' ),
+			'type'       => Controls_Manager::SLIDER,
+			'default'    => [
+				'unit' => 'px',
+				'size' => 10,
+			],
+			'size_units' => [ 'px' ],
+			'range'      => [
+				'px' => [
+					'min'  => 0,
+					'max'  => 200,
+					'step' => 1,
 				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => 0,
-						'max'  => 200,
-						'step' => 1,
-					],
-				],
-				'selectors'  => [
-					$selector => '--bullet-size: {{SIZE}}{{UNIT}}',
-				],
-			] );
+			],
+			'selectors'  => [
+				$selector => '--bullet-size: {{SIZE}}{{UNIT}}',
+			],
+		] );
 
-		$this->add_control( 'bullet_border_size', [
-				'label'      => esc_html__( 'Border Size', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => 1,
-						'max'  => 100,
-						'step' => 1,
-					],
+		$this->add_responsive_control( 'bullet_border_size', [
+			'label'      => esc_html__( 'Border Size', 'the7mk2' ),
+			'type'       => Controls_Manager::SLIDER,
+			'size_units' => [ 'px' ],
+			'range'      => [
+				'px' => [
+					'min'  => 1,
+					'max'  => 100,
+					'step' => 1,
 				],
-				'condition'  => [
-					'bullets_style!' => 'scale-up',
-				],
-				'selectors'  => [
-					$selector => '--bullet-border-width: {{SIZE}}{{UNIT}}',
-				],
-			] );
+			],
+			'condition'  => [
+				'bullets_style!' => 'scale-up',
+			],
+			'selectors'  => [
+				$selector => '--bullet-border-width: {{SIZE}}{{UNIT}}',
+			],
+		] );
 
-		$this->add_control( 'bullet_gap', [
-				'label'      => esc_html__( 'Gap Between Bullets', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => 16,
+		$this->add_responsive_control( 'bullet_gap', [
+			'label'      => esc_html__( 'Gap Between Bullets', 'the7mk2' ),
+			'type'       => Controls_Manager::SLIDER,
+			'default'    => [
+				'unit' => 'px',
+				'size' => 16,
+			],
+			'size_units' => [ 'px' ],
+			'range'      => [
+				'px' => [
+					'min'  => 1,
+					'max'  => 200,
+					'step' => 1,
 				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => 1,
-						'max'  => 200,
-						'step' => 1,
-					],
-				],
-				'selectors'  => [
-					$selector => '--bullet-gap: {{SIZE}}{{UNIT}}',
-				],
-			] );
+			],
+			'selectors'  => [
+				$selector => '--bullet-gap: {{SIZE}}{{UNIT}}',
+			],
+		] );
 
 		$this->start_controls_tabs( 'bullet_style_tabs' );
 
 		$this->start_controls_tab( 'bullet_colors', [
-				'label' => esc_html__( 'Normal', 'the7mk2' ),
-			] );
+			'label' => esc_html__( 'Normal', 'the7mk2' ),
+		] );
 
 		$this->add_control( 'bullet_color', [
-				'label'     => esc_html__( 'Color', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					$selector => '--bullet-color: {{VALUE}}',
-				],
-			] );
+			'label'     => esc_html__( 'Color', 'the7mk2' ),
+			'type'      => Controls_Manager::COLOR,
+			'alpha'     => true,
+			'default'   => '',
+			'selectors' => [
+				$selector => '--bullet-color: {{VALUE}}',
+			],
+		] );
 
 		$this->end_controls_tab();
 
 		$this->start_controls_tab( 'bullet_hover_colors', [
-				'label' => esc_html__( 'Hover', 'the7mk2' ),
-			] );
+			'label' => esc_html__( 'Hover', 'the7mk2' ),
+		] );
 
 		$this->add_control( 'bullet_color_hover', [
-				'label'     => esc_html__( 'Hover Color', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					$selector => '--bullet-hover-color: {{VALUE}}',
-				],
-			] );
+			'label'     => esc_html__( 'Hover Color', 'the7mk2' ),
+			'type'      => Controls_Manager::COLOR,
+			'alpha'     => true,
+			'default'   => '',
+			'selectors' => [
+				$selector => '--bullet-hover-color: {{VALUE}}',
+			],
+		] );
 
 		$this->end_controls_tab();
 
 		$this->start_controls_tab( 'bullet_active_colors', [
-				'label' => esc_html__( 'Active', 'the7mk2' ),
-			] );
+			'label' => esc_html__( 'Active', 'the7mk2' ),
+		] );
 
 		$this->add_control( 'bullet_color_active', [
-				'label'     => esc_html__( 'Active Color', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					$selector => '--bullet-active-color: {{VALUE}}',
-				],
-			] );
+			'label'     => esc_html__( 'Active Color', 'the7mk2' ),
+			'type'      => Controls_Manager::COLOR,
+			'alpha'     => true,
+			'default'   => '',
+			'selectors' => [
+				$selector => '--bullet-active-color: {{VALUE}}',
+			],
+		] );
 
 		$this->end_controls_tab();
 
 		$this->end_controls_tabs();
 
 		$this->add_control( 'bullets_position_heading', [
-				'label'     => esc_html__( 'Bullets Position', 'the7mk2' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			] );
+			'label'     => esc_html__( 'Bullets Position', 'the7mk2' ),
+			'type'      => Controls_Manager::HEADING,
+			'separator' => 'before',
+		] );
 
-		$this->add_control( 'bullets_v_position', [
-				'label'                => esc_html__( 'Vertical Position', 'the7mk2' ),
-				'type'                 => Controls_Manager::CHOOSE,
-				'label_block'          => false,
-				'options'              => [
-					'top'    => [
-						'title' => esc_html__( 'Top', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-top',
-					],
-					'center' => [
-						'title' => esc_html__( 'Middle', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-middle',
-					],
-					'bottom' => [
-						'title' => esc_html__( 'Bottom', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-bottom',
-					],
+		$this->add_responsive_control( 'bullets_v_position', [
+			'label'                => esc_html__( 'Vertical Position', 'the7mk2' ),
+			'type'                 => Controls_Manager::CHOOSE,
+			'label_block'          => false,
+			'options'              => [
+				'top'    => [
+					'title' => esc_html__( 'Top', 'the7mk2' ),
+					'icon'  => 'eicon-v-align-top',
 				],
-				'selectors_dictionary' => [
-					'top'    => 'top: var(--bullet-v-offset); --bullet-translate-y:0;',
-					'center' => 'top: calc(50% + var(--bullet-v-offset)); --bullet-translate-y:-50%;',
-					'bottom' => 'top: calc(100% + var(--bullet-v-offset)); --bullet-translate-y:-100%;',
+				'center' => [
+					'title' => esc_html__( 'Middle', 'the7mk2' ),
+					'icon'  => 'eicon-v-align-middle',
 				],
-				'toggle'               => false,
-				'selectors'            => [
-					$selector => '{{VALUE}};',
+				'bottom' => [
+					'title' => esc_html__( 'Bottom', 'the7mk2' ),
+					'icon'  => 'eicon-v-align-bottom',
 				],
-				'default'              => 'bottom',
-			] );
+			],
+			'selectors_dictionary' => [
+				'top'    => 'top: var(--bullet-v-offset); --bullet-translate-y:0;',
+				'center' => 'top: calc(50% + var(--bullet-v-offset)); --bullet-translate-y:-50%;',
+				'bottom' => 'top: calc(100% + var(--bullet-v-offset)); --bullet-translate-y:-100%;',
+			],
+			'toggle'               => false,
+			'selectors'            => [
+				$selector => '{{VALUE}};',
+			],
+			'default'              => 'bottom',
+		] );
 
-		$this->add_control( 'bullets_h_position', [
-				'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
-				'type'                 => Controls_Manager::CHOOSE,
-				'label_block'          => false,
-				'options'              => [
-					'left'   => [
-						'title' => esc_html__( 'Left', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-left',
-					],
-					'center' => [
-						'title' => esc_html__( 'Center', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-center',
-					],
-					'right'  => [
-						'title' => esc_html__( 'Right', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-right',
-					],
+		$this->add_responsive_control( 'bullets_h_position', [
+			'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
+			'type'                 => Controls_Manager::CHOOSE,
+			'label_block'          => false,
+			'options'              => [
+				'left'   => [
+					'title' => esc_html__( 'Left', 'the7mk2' ),
+					'icon'  => 'eicon-h-align-left',
 				],
-				'toggle'               => false,
-				'default'              => 'center',
-				'selectors_dictionary' => [
-					'left'   => 'left: var(--bullet-h-offset); --bullet-translate-x:0;',
-					'center' => 'left: calc(50% + var(--bullet-h-offset)); --bullet-translate-x:-50%;',
-					'right'  => 'left: calc(100% - var(--bullet-h-offset)); --bullet-translate-x:-100%;',
+				'center' => [
+					'title' => esc_html__( 'Center', 'the7mk2' ),
+					'icon'  => 'eicon-h-align-center',
 				],
-				'selectors'            => [
-					$selector => '{{VALUE}};',
+				'right'  => [
+					'title' => esc_html__( 'Right', 'the7mk2' ),
+					'icon'  => 'eicon-h-align-right',
 				],
-			] );
+			],
+			'toggle'               => false,
+			'default'              => 'center',
+			'selectors_dictionary' => [
+				'left'   => 'left: var(--bullet-h-offset); --bullet-translate-x:0;',
+				'center' => 'left: calc(50% + var(--bullet-h-offset)); --bullet-translate-x:-50%;',
+				'right'  => 'left: calc(100% - var(--bullet-h-offset)); --bullet-translate-x:-100%;',
+			],
+			'selectors'            => [
+				$selector => '{{VALUE}};',
+			],
+		] );
 
-		$this->add_control( 'bullets_v_offset', [
-				'label'      => esc_html__( 'Vertical Offset', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => 0,
+		$this->add_responsive_control( 'bullets_v_offset', [
+			'label'      => esc_html__( 'Vertical Offset', 'the7mk2' ),
+			'type'       => Controls_Manager::SLIDER,
+			'default'    => [
+				'unit' => 'px',
+				'size' => 0,
+			],
+			'size_units' => [ 'px' ],
+			'range'      => [
+				'px' => [
+					'min'  => - 1000,
+					'max'  => 1000,
+					'step' => 1,
 				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => - 1000,
-						'max'  => 1000,
-						'step' => 1,
-					],
-				],
-				'selectors'  => [
-					$selector => '--bullet-v-offset: {{SIZE}}{{UNIT}};',
-				],
-			] );
+			],
+			'selectors'  => [
+				$selector => '--bullet-v-offset: {{SIZE}}{{UNIT}};',
+			],
+		] );
 
-		$this->add_control( 'bullets_h_offset', [
-				'label'      => esc_html__( 'Horizontal Offset', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => 0,
+		$this->add_responsive_control( 'bullets_h_offset', [
+			'label'      => esc_html__( 'Horizontal Offset', 'the7mk2' ),
+			'type'       => Controls_Manager::SLIDER,
+			'default'    => [
+				'unit' => 'px',
+				'size' => 0,
+			],
+			'size_units' => [ 'px' ],
+			'range'      => [
+				'px' => [
+					'min'  => - 1000,
+					'max'  => 1000,
+					'step' => 1,
 				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => - 1000,
-						'max'  => 1000,
-						'step' => 1,
-					],
-				],
-				'selectors'  => [
-					$selector => '--bullet-h-offset: {{SIZE}}{{UNIT}};',
-				],
-			] );
+			],
+			'selectors'  => [
+				$selector => '--bullet-h-offset: {{SIZE}}{{UNIT}};',
+			],
+		] );
 
 		$this->end_controls_section();
 	}
 
-	protected function render() {
-		$settings = $this->get_settings();
 
-		if ( empty( $settings['slides'] ) ) {
+	/**
+	 * Slides content to display
+	 */
+	protected function render() {
+		$slides_count = $this->get_slides_count();
+		if ( ! $slides_count ) {
+			$this->render_empty_view();
 			return;
 		}
-		$slides = [];
 
-		foreach ( $settings['slides'] as $slide ) {
-			$slide_html = '';
-			$slide_element = 'div';
-			$slide_attributes = '';
-			$slide_html .= '<' . $slide_element . ' class="the7-swiper-slide-inner" ' . $slide_attributes . '>';
-			$slide_html .= $this->render_template( $slide );
-			$slide_html .= '</' . $slide_element . '>';
-			$slides[] = '<div class="elementor-repeater-item-' . $slide['_id'] . ' swiper-slide">' . $slide_html . '</div>';
-		}
+		$settings = $this->get_settings();
 
 		$show_dots = true;
-		$slides_count = count( $settings['slides'] );
+		$this->add_render_attribute( 'elementor_swiper_wrapper', 'class', 'elementor-swiper' );
 
+		$this->add_render_attribute( 'elementor_swiper_container', 'class', [
+			'elementor-slides-wrapper',
+			'elementor-main-swiper',
+			$this->get_swiper_container_class(),
+		] );
 		?>
-        <div class="elementor-swiper">
-            <div class="elementor-slides-wrapper elementor-main-swiper swiper-container">
+        <div <?php echo $this->get_render_attribute_string( 'elementor_swiper_wrapper' ); ?>>
+            <div <?php echo $this->get_render_attribute_string( 'elementor_swiper_container' ); ?>>
                 <div class="swiper-wrapper the7-elementor-slides">
-					<?php echo implode( '', $slides ); ?>
+					<?php $this->render_slides() ?>
                 </div>
-				<?php if ( 1 < $slides_count ) : ?>
 					<?php if ( $show_dots ) : ?>
                         <div class="swiper-pagination owl-dots"></div>
 					<?php endif; ?>
 					<?php $this->render_arrows( $settings ); ?>
-				<?php endif; ?>
             </div>
         </div>
 		<?php
+	}
+
+	protected function get_slides_count() {
+		$settings = $this->get_settings();
+
+		if ( empty( $settings['slides'] ) ) {
+			return 0;
+		}
+
+		return count( $settings['slides'] );
+	}
+
+	/**
+	 * Render Empty View
+	 * Renders the widget's view if there is no posts to display
+	 */
+	protected function render_empty_view() {
+		if ( Elementor::$instance->editor->is_edit_mode() ) {
+			if ( the7_elementor_pro_is_active() && version_compare( ELEMENTOR_PRO_VERSION, '3.11.0', '>' ) ) {
+				//Will be filled with JS
+				?>
+                <div class="e-loop-empty-view__wrapper"></div>
+				<?php
+			} else {
+				?>
+                <div class="e-loop-empty-view__wrapper_old the7-slider-error-template">
+					<?php echo esc_html__( 'Either choose an existing template or create a new one and use it as the template in the slide.', 'the7mk2' ) ?>
+                </div>
+				<?php
+			}
+		}
+	}
+
+	protected function render_slides() {
+		$settings = $this->get_settings();
+		$this->add_render_attribute( 'swiper_slide_inner_wrapper', 'class', 'the7-swiper-slide-inner' );
+
+		foreach ( $settings['slides'] as $slide ) {
+			$this->remove_render_attribute( 'swiper_slide_wrapper' );
+			$this->add_render_attribute( 'swiper_slide_wrapper', 'class', [
+				'elementor-repeater-item-' . $slide['_id'],
+				'the7-swiper-slide',
+			] );
+			?>
+            <div <?php echo $this->get_render_attribute_string( 'swiper_slide_wrapper' ); ?>>
+                <div <?php echo $this->get_render_attribute_string( 'swiper_slide_inner_wrapper' ); ?>>
+					<?php echo $this->render_template( $slide ); ?>
+                </div>
+            </div>
+			<?php
+		}
 	}
 
 	private function render_template( $slide ) {
@@ -987,11 +1142,7 @@ class Slider extends The7_Elementor_Widget_Base {
 			return '<div class="the7-slider-error-template">' . esc_html__( 'Slide template not exist in', 'the7mk2' ) . '"' . $slide['slide_name'] . '"' . '</div>';
 		}
 
-		?>
-		<?php
-		return Elementor::$instance->frontend->get_builder_content_for_display( $slide_id, false );
-		?>
-		<?php
+		return The7_Elementor_Compatibility::get_builder_content_for_display( $slide_id, false );
 	}
 
 	protected function render_arrows( $settings ) {

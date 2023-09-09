@@ -85,6 +85,9 @@ class The7_Elementor_Compatibility {
 		require_once __DIR__ . '/class-the7-elementor-schemes-manager-control.php';
 		require_once __DIR__ . '/class-the7-elementor-template-manager.php';
 
+		// Should be on top because of The7_Elementor_Widgets::load_dependencies().
+		add_action( 'elementor/init', [ $this, 'on_elementor_init' ] );
+
 		$this->page_settings = new The7_Elementor_Page_Settings();
 		$this->page_settings->bootstrap();
 
@@ -138,7 +141,6 @@ class The7_Elementor_Compatibility {
 		if ( defined( 'ELEMENTOR_PRO_VERSION' ) ) {
 			$this->bootstrap_pro();
 		}
-		add_action( 'elementor/init', [ $this, 'on_elementor_init' ] );
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_elementor_global_style_css' ], 30 );
 		add_action( 'elementor/theme/before_do_popup', [ $this, 'enqueue_elementor_popup' ] );
 		add_filter( 'presscore_localized_script', [ $this, 'extract_elementor_settings_to_js' ] );
@@ -171,11 +173,22 @@ class The7_Elementor_Compatibility {
 				'adjust_default_experiments',
 			]
 		);
+
+		// Enqueue the7 common editor js when elementor editor is loaded.
+		add_action(
+			'elementor/preview/enqueue_scripts',
+			function () {
+				the7_register_script( 'the7-elementor-editor-common', THE7_ELEMENTOR_ADMIN_JS_URI . '/editor-common.js' );
+				wp_enqueue_script( 'the7-elementor-editor-common' );
+			}
+		);
 	}
 
-	public function on_elementor_init(){
+	public function on_elementor_init() {
 		require_once __DIR__ . '/pro/modules/dynamic-tags/the7/module.php';
 		new DynamicTagsModule();
+
+		$this->modules->bootstrap();
 	}
 
 	/**
@@ -292,6 +305,22 @@ class The7_Elementor_Compatibility {
 		}
 
 		return $document;
+	}
+
+	/**
+	 * Retrieve builder content for display.
+	 *
+	 * Used to render and return the post content with all the Elementor elements.
+	 *
+	 * @see \Elementor\Frontend::get_builder_content_for_display()
+	 *
+	 * @param int  $post_id Post ID.
+	 * @param bool $with_css Optional. Whether to include CSS files. Default is false.
+	 *
+	 * @return string The post content.
+	 */
+	public static function get_builder_content_for_display( $post_id, $with_css = false ) {
+		return Elementor::instance()->frontend->get_builder_content_for_display( $post_id, $with_css );
 	}
 
 	public static function is_assets_loader_exist() {

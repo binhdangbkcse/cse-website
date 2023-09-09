@@ -1776,7 +1776,7 @@ if ( ! function_exists( 'presscore_get_images_gallery_1' ) ) :
 				$medium_image_args = array(
 					'img_meta' 	=> array( $data['full'], $data['width'], $data['height'] ),
 					'img_id'	=> empty( $data['ID'] ) ? 0 : $data['ID'],
-					'options'	=> array( 'w' => 300, 'h' => 300, 'z' => true ),
+					'options'	=> array( 'w' => 600, 'h' => 600, 'z' => true ),
 					'alt'		=> $data['alt'],
 					'title'		=> $data['title'],
 					'echo'		=> false,
@@ -2163,7 +2163,7 @@ function the7_get_share_buttons_list( $place, $post_id = null ) {
 								'url'         => rawurlencode( $u ),
 								'media'       => rawurlencode( $image[0] ),
 								'description' => rawurlencode(
-									apply_filters( 'get_the_excerpt', $_post->post_content )
+									apply_filters( 'get_the_excerpt', $_post->post_content, $_post )
 								),
 							),
 							$url

@@ -501,6 +501,7 @@
 }
 .filter.filter-decorations:not(.class-1):not(.class-2):not(.class-3):not(.class-4) .filter-extras a svg {
   fill: var(--filter-title-color-normal);
+  color: var(--filter-title-color-normal);
 }
 #the7-body .filter.filter-decorations:not(.class-1):not(.class-2):not(.class-3):not(.class-4) .filter-switch {
   background-color: var(--filter-pointer-bg-color-active);
@@ -525,9 +526,11 @@
 }
 .paginator.filter-decorations:not(.class-1) a.button-load-more:hover svg {
   fill: var(--filter-title-color-hover);
+  color: var(--filter-title-color-hover);
 }
 .paginator.filter-decorations:not(.class-1) a.button-load-more svg {
   fill: var(--filter-title-color-normal);
+  color: var(--filter-title-color-normal);
   width: var(--the7-base-font-size);
   height: var(--the7-base-font-size);
 }

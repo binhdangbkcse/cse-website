@@ -445,7 +445,7 @@ class Theme_Style_General extends The7_Tab_Base {
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				$selectors     => 'color: {{VALUE}};',
-				$svg_selectors => 'fill: {{VALUE}};',
+				$svg_selectors => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 			'condition'             => [
 				'the7_scroll_to_top_button_enable' => 'enabled',

@@ -112,9 +112,11 @@ a.rsswidget,
 		.sidebar-content &,
 		.sidebar-content:not(.solid-bg) .widget:not(.widget_icl_lang_sel_widget) & {
 			fill: var(--the7-accent-color);
+			color: var(--the7-accent-color);
 		}
 		.footer & {
 			fill: var(--the7-accent-color);
+			color: var(--the7-accent-color);
 			.custom-mixin-footer-color (@widget-footer-accent-color);
 		}
 	}
@@ -266,6 +268,7 @@ a.rsswidget:hover {
 #page .widget .searchform .submit svg,
 #page .content .searchform .submit svg {
 	fill: var(--the7-input-color);
+	color: var(--the7-input-color);
 }
 .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper {
 	padding: 0;
@@ -303,17 +306,22 @@ a.rsswidget:hover {
 
 .custom-menu a svg {
 	fill: var(--the7-secondary-text-color);
+	color: var(--the7-secondary-text-color);
 	.sidebar-content & {
 		fill: fade(@widget-sidebar-color, 50%);
+		color: fade(@widget-sidebar-color, 50%);
 	}
 	.footer & {
 		fill: fade(@widget-footer-color, 50%);
+		color: fade(@widget-footer-color, 50%);
 	}
 }
 .custom-nav a svg {
 	fill: @widget-sidebar-color;
+	color: @widget-sidebar-color;
 	.footer & {
 		fill: @widget-footer-color;
+		color: @widget-footer-color;
 	}
 }
 .standard-arrow-ico-footer-mixin(@customColor, @opacity:100%) when (iscolor(@customColor)){
@@ -323,11 +331,14 @@ a.rsswidget:hover {
 .custom-menu a:hover svg,
 .custom-menu .act > a svg {
 	fill: var(--the7-secondary-text-color);
+	color: var(--the7-secondary-text-color);
 	.sidebar-content & {
 		fill: fade(@accent-bg-color, 99.9%);
+		color: fade(@accent-bg-color, 99.9%);
 	}
 	.footer & {
 		fill: fade(@accent-bg-color, 99.9%);
+		color: fade(@accent-bg-color, 99.9%);
 		.standard-arrow-ico-footer-mixin(@widget-footer-accent-color, @opacity:100%);
 	}
 }

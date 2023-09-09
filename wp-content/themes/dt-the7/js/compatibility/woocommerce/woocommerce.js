@@ -108,12 +108,12 @@ jQuery(function($) {
     /* #Header elements
         ================================================== */
     $(".woocommerce-billing-fields").find("input[autofocus='autofocus']").blur();
-    $(".woocom-project").each(function(){
-        var $this = $(this);
-        if($this.find("img.show-on-hover").length > 0){
-            $this.find("img").first().addClass("hide-on-hover");
-        }
-    });
+    // $(".woocom-project").each(function(){
+    //     var $this = $(this);
+    //     if($this.find("img.show-on-hover").length > 0){
+    //         $this.find("img").first().addClass("hide-on-hover");
+    //     }
+    // });
 
 
 

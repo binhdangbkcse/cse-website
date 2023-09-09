@@ -12,6 +12,8 @@ defined( 'ABSPATH' ) || exit;
  */
 class The7_Avatar {
 
+	const CACHE_KEY = 'the7_avatar_cache';
+
 	/**
 	 * Wrapper for get_avatar() with some filters.
 	 *
@@ -24,9 +26,9 @@ class The7_Avatar {
 	 * @return false|string
 	 */
 	public static function get_avatar( $id_or_email, $size = 96, $default = '', $alt = '', $args = null ) {
-		add_filter( 'get_avatar', array( __CLASS__, 'check_gravatar_existence_filter' ), 10, 6 );
+		add_filter( 'get_avatar', [ __CLASS__, 'check_gravatar_existence_filter' ], 10, 6 );
 		$avatar = get_avatar( $id_or_email, $size, $default, $alt, $args );
-		remove_filter( 'get_avatar', array( __CLASS__, 'check_gravatar_existence_filter' ) );
+		remove_filter( 'get_avatar', [ __CLASS__, 'check_gravatar_existence_filter' ] );
 
 		return $avatar;
 	}
@@ -43,10 +45,13 @@ class The7_Avatar {
 	 *
 	 * @return bool
 	 */
-	public static function check_gravatar_existence_filter( $avatar, $id_or_email, $args_size, $args_default, $args_alt, $args = array() ) {
-		$args = wp_parse_args( $args, array(
-			'url' => '',
-		) );
+	public static function check_gravatar_existence_filter( $avatar, $id_or_email, $args_size, $args_default, $args_alt, $args = [] ) {
+		$args = wp_parse_args(
+			$args,
+			[
+				'url' => '',
+			]
+		);
 
 		if ( ! preg_match( '/.*\.gravatar\.com.*/', $avatar ) || self::is_gravatar_exists( $args['url'] ) ) {
 			// non gravatar or gravatar exists.
@@ -59,7 +64,7 @@ class The7_Avatar {
 	/**
 	 * Check if provided gravatar url response with 200.
 	 *
-	 * Cache result for $url in wp_cache for 24 hours.
+	 * Cache result for $url in wp_cache for one week.
 	 *
 	 * @param string $url Gravatar url.
 	 *
@@ -70,20 +75,57 @@ class The7_Avatar {
 			return false;
 		}
 
-		$_uri     = remove_query_arg( array( 's', 'd', 'f', 'r' ), $url );
-		$hash_key = md5( strtolower( trim( $_uri ) ) );
-		$data     = (string) wp_cache_get( $hash_key );
-		if ( empty( $data ) ) {
-			$_uri     = add_query_arg( 'd', '404', $_uri );
-			$response = wp_remote_head( $_uri );
+		$test_url = remove_query_arg( [ 's', 'd', 'f', 'r' ], $url );
+		$code     = self::cache_get( $test_url );
+		if ( empty( $code ) ) {
+			$response = wp_remote_head( add_query_arg( 'd', '404', $test_url ) );
 			if ( is_wp_error( $response ) ) {
-				$data = 'not200';
+				$code = 'not200';
 			} else {
-				$data = (string) $response['response']['code'];
+				$code = (string) $response['response']['code'];
 			}
-			wp_cache_set( $hash_key, $data, $group = '', $expire = DAY_IN_SECONDS );
+
+			self::cache_add( $test_url, $code );
 		}
 
-		return $data === '200';
+		return $code === '200';
+	}
+
+	/**
+	 * @param string $url Gravatar url.
+	 * @param string $code Response code.
+	 *
+	 * @return void
+	 */
+	protected static function cache_add( $url, $code ) {
+		$hash  = self::hash_url( $url );
+		$cache = get_transient( self::CACHE_KEY );
+		if ( ! is_array( $cache ) ) {
+			$cache = [];
+		}
+		$cache[ $hash ] = $code;
+
+		set_transient( self::CACHE_KEY, $cache, WEEK_IN_SECONDS );
+	}
+
+	/**
+	 * @param string $url Gravatar url.
+	 *
+	 * @return string|null
+	 */
+	protected static function cache_get( $url ) {
+		$hash  = self::hash_url( $url );
+		$cache = get_transient( self::CACHE_KEY );
+
+		return isset( $cache[ $hash ] ) ? (string) $cache[ $hash ] : null;
+	}
+
+	/**
+	 * @param string $url Gravatar url.
+	 *
+	 * @return string
+	 */
+	protected static function hash_url( $url ) {
+		return md5( strtolower( trim( $url ) ) );
 	}
 }

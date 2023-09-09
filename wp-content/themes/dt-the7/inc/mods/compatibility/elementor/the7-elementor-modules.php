@@ -12,12 +12,9 @@ class The7_Elementor_Modules {
 	private $modules = [];
 
 	/**
-	 * Hold the module list.
-	 * @since  1.0.0
-	 * @access public
-	 * @static
+	 * Load modules.
 	 */
-	public function __construct() {
+	public function bootstrap() {
 		$modules_namespace_prefix = $this->get_modules_namespace();
 
 		foreach ( $this->get_modules_names() as $module_name ) {
@@ -65,6 +62,8 @@ class The7_Elementor_Modules {
 			'woocommerce-cart',
 			'tinymce',
 			'slider',
+			'loop',
+			'overlay',
 		];
 	}
 }

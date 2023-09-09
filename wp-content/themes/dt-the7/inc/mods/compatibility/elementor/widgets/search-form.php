@@ -46,7 +46,7 @@ class Search_Form extends The7_Elementor_Widget_Base {
 	/**
 	 * @return string[]
 	 */
-	public function the7_keywords() {
+	protected function the7_keywords() {
 		return [ 'search', 'form' ];
 	}
 
@@ -154,15 +154,15 @@ class Search_Form extends The7_Elementor_Widget_Base {
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -322,11 +322,11 @@ class Search_Form extends The7_Elementor_Widget_Base {
 				'selectors' => [
 					'{{WRAPPER}}' => '--input-color: {{VALUE}};',
 					'{{WRAPPER}} .the7-search-form__input,
-					{{WRAPPER}} .the7-search-form__icon' => 'color: {{VALUE}}; fill: {{VALUE}}',
+					{{WRAPPER}} .the7-search-form__icon' => 'color: {{VALUE}}; fill: {{VALUE}};',
 				],
 			]
 		);
-		
+
 
 		$this->add_control(
 			'input_background_color',
@@ -424,11 +424,11 @@ class Search_Form extends The7_Elementor_Widget_Base {
 					'{{WRAPPER}}' => '--input-color-focus: {{VALUE}};',
 					'{{WRAPPER}}.the7-search-form-icon-position-inside .the7-search-form:focus-within .the7-search-form__input,
 					{{WRAPPER}}.the7-search-form-icon-position-inside .the7-search-form:focus-within .the7-search-form__icon, {{WRAPPER}}:not(.the7-search-form-icon-position-inside) .the7-search-form__input:focus
-					' => 'color: {{VALUE}}; fill: {{VALUE}}',
+					' => 'color: {{VALUE}}; fill: {{VALUE}};',
 				],
 			]
 		);
-		
+
 
 		$this->add_control(
 			'input_background_color_focus',
@@ -684,7 +684,7 @@ class Search_Form extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .the7-search-form .the7-clear-search:hover' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .the7-search-form .the7-clear-search:hover svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .the7-search-form .the7-clear-search:hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'clear_icon[value]!' => '',
@@ -742,7 +742,7 @@ class Search_Form extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}}.the7-search-form-icon-position-inside .the7-search-form:focus-within .the7-clear-search:not(:hover), {{WRAPPER}}:not(.the7-search-form-icon-position-inside) .the7-search-input__container:focus-within .the7-clear-search:not(:hover)' => 'color: {{VALUE}}',
-					'{{WRAPPER}}.the7-search-form-icon-position-inside .the7-search-form:focus-within .the7-clear-search:not(:hover) svg, {{WRAPPER}}:not(.the7-search-form-icon-position-inside) .the7-search-input__container:focus-within .the7-clear-search:not(:hover) svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}}.the7-search-form-icon-position-inside .the7-search-form:focus-within .the7-clear-search:not(:hover) svg, {{WRAPPER}}:not(.the7-search-form-icon-position-inside) .the7-search-input__container:focus-within .the7-clear-search:not(:hover) svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 				'condition' => [
 					'clear_icon[value]!' => '',
@@ -867,7 +867,7 @@ class Search_Form extends The7_Elementor_Widget_Base {
 				],
 			]
 		);
-		
+
 		$this->add_responsive_control(
 			'icon_size',
 			[

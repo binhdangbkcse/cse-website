@@ -29,21 +29,21 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 	/**
 	 * @return string
 	 */
-	public function the7_title() {
+	protected function the7_title() {
 		return esc_html__( 'Add To Cart', 'the7mk2' );
 	}
 
 	/**
 	 * @return string
 	 */
-	public function the7_icon() {
+	protected function the7_icon() {
 		return 'eicon-product-add-to-cart';
 	}
 
 	/**
 	 * @return string[]
 	 */
-	public function the7_keywords() {
+	protected function the7_keywords() {
 		return [ 'woocommerce', 'shop', 'store', 'cart', 'product', 'button', 'add to cart' ];
 	}
 
@@ -125,7 +125,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$id                    = $args['id'] ? $args['id'] : $attribute;
 		$class                 = $args['class'];
 		$show_option_none      = $args['show_option_none'] ? true : false;
-		$show_option_none_text = $args['show_option_none'] ? $args['show_option_none'] : __( 'Choose an option', 'woocommerce' );
+		$show_option_none_text = $args['show_option_none'] ? $args['show_option_none'] : esc_html__( 'Choose an option', 'woocommerce' );
 		$icon                  = '';
 		if ( $settings['icon'] !== '' && $settings['layout'] === 'dropdown' ) {
 			$icon = $this->get_elementor_icon_html( $settings['icon'] );
@@ -145,7 +145,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			if ( ! empty( $options ) ) {
 				if ( $product && taxonomy_exists( $attribute ) ) {
 					// Get terms if this is a taxonomy - ordered. We need the names too.
-					$terms = wc_get_product_terms( $product->get_id(), $attribute, array( 'fields' => 'all' ) );
+					$terms = wc_get_product_terms( $product->get_id(), $attribute, [ 'fields' => 'all' ] );
 
 					foreach ( $terms as $term ) {
 						if ( in_array( $term->slug, $options, true ) ) {
@@ -174,7 +174,20 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 
 				if ( $product && taxonomy_exists( $attribute ) ) {
 					// Get terms if this is a taxonomy - ordered. We need the names too.
-					$terms = wc_get_product_terms( $product->get_id(), $attribute, array( 'fields' => 'all' ) );
+					$terms             = wc_get_product_terms(
+						$product->get_id(),
+						$attribute,
+						[
+							'fields' => 'all',
+							'slug'   => $variations ? array_keys( $variations ) : '',
+						]
+					);
+					$attribute_objects = $product->get_attributes();
+					$attribute_type    = null;
+					if ( isset( $attribute_objects[ $attribute ] ) ) {
+						$attribute_taxonomy = $attribute_objects[ $attribute ]->get_taxonomy_object();
+						$attribute_type     = $attribute_taxonomy->attribute_type;
+					}
 
 					foreach ( $terms as $term ) {
 						if ( ! in_array( $term->slug, $options, true ) ) {
@@ -183,21 +196,58 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 
 						$class = '';
 						if ( isset( $variations[ $term->slug ] ) && ! $variations[ $term->slug ]->is_in_stock() ) {
-							$class = 'class="out-of-stock"';
+							$class = 'out-of-stock';
 						}
-						$href = add_query_arg( $attribute, $term->slug, $product->get_permalink() );
+						$href           = add_query_arg( $attribute, $term->slug, $product->get_permalink() );
+						$swatch_html    = '';
+						$swatch_tooltip = '';
+						$swatch_bg      = '';
+						// Get attribute style by type.
+						if ( $attribute_type === 'the7_echanced' && isset( $term->term_id ) && $settings['variation_type'] === 'swatch' ) {
+							$the7_attr_type = get_term_meta( $term->term_id, 'the7_attribute_type', true );
+							$the7_attr_type = $the7_attr_type ? $the7_attr_type : 'color';
+							if ( $the7_attr_type === 'color' ) {
+								$color = get_term_meta( $term->term_id, 'the7_attribute_type_color', true );
+								if ( ! empty( $color ) ) {
+									$swatch_bg = 'style="background-color:' . $color . '"';
+								}
+								if ( empty( $color ) ) {
+									$class .= ' empty-swatch';
+								}
+							} elseif ( $the7_attr_type === 'image' ) {
+								$image = get_term_meta( $term->term_id, 'the7_attribute_type_image', true );
+								if ( ! isset( $image['id'] ) ) {
+									$class .= ' empty-swatch';
+								}
+								if ( isset( $image['id'] ) ) {
+									$swatch_bg = 'style="background-image:url(' . $image['url'] . ')"';
+								}
+							}
+							$swatch_html = '<span class="the7-variable-span the7-variable-span-color" ' . $swatch_bg . '></span>';
 
-						$html .= '<li><a href="' . esc_url( $href ) . '" data-id="' . esc_attr( $term->slug ) . '" ' . $class . '>' . esc_html( apply_filters( 'woocommerce_variation_option_name', $term->name ) ) . '</a></li>';
+							$class         .= ' isset-swatch';
+							$swatch_tooltip = '<span class="filter-popup">' . esc_attr( $term->slug ) . '</span>';
+						}
+						$html .= '<li><a href="' . esc_url( $href ) . '" aria-label="' . esc_attr( $term->slug ) . '" data-id="' . esc_attr( $term->slug ) . '"class="' . $class . '">' . esc_html( apply_filters( 'woocommerce_variation_option_name', $term->name ) ) . $swatch_html . $swatch_tooltip . '</a></li>';
+
 					}
 				} else {
 					foreach ( $options as $option ) {
 						$class = '';
-						if ( isset( $variations[ $option ] ) && ! $variations[ $option ]->is_in_stock() ) {
-							$class = 'class="out-of-stock"';
+
+						if ( $variations ) {
+							if ( ! isset( $variations[ $option ] ) ) {
+								continue;
+							}
+
+							if ( ! $variations[ $option ]->is_in_stock() ) {
+								$class = 'class="out-of-stock"';
+							}
 						}
+
 						$href = $product ? add_query_arg( $attribute, $option, $product->get_permalink() ) : '#';
 
-						$html .= '<li><a href="' . esc_url( $href ) . '" data-id="' . esc_attr( $option ) . '" ' . $class . '>' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option ) ) . '</a></li>';
+						$html .= '<li><a href="' . esc_url( $href ) . '" aria-label="' . esc_attr( $option ) . '" data-id="' . esc_attr( $option ) . '" ' . $class . '>' . esc_html( apply_filters( 'woocommerce_variation_option_name', $option ) ) . '</a></li>';
 					}
 				}
 			}
@@ -219,12 +269,11 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		if ( ! $text ) {
 			$text = $product->single_add_to_cart_text();
 		}
-
 		$this->add_render_attribute(
 			'button',
 			[
 				'type'  => 'submit',
-				'class' => [ 'single_add_to_cart_button', 'button', 'alt' ],
+				'class' => [ 'single_add_to_cart_button', 'button', 'alt', $product->supports( 'ajax_add_to_cart' ) && $product->is_purchasable() && $product->is_in_stock() ? 'ajax_add_to_cart' : '' ],
 			]
 		);
 
@@ -239,15 +288,6 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		}
 
 		$this->template( Button::class )->render_button( 'button', $text, 'button' );
-	}
-
-	/**
-	 * @param string $var Product add to cart text.
-	 *
-	 * @return string
-	 */
-	public function filter_woocommerce_product_single_add_to_cart_text( $var ) {
-		return $this->get_settings_for_display( 'button_text' );
 	}
 
 	/**
@@ -269,7 +309,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 
 		foreach ( $available_variations as $variation ) {
 			$attributes = $variation->get_variation_attributes( false );
-			if ( ! isset( $attributes[ $attribute ] ) ) {
+			if ( empty( $attributes[ $attribute ] ) ) {
 				continue;
 			}
 
@@ -292,6 +332,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		// Style.
 		$this->add_variation_grid_styles_controls();
 		$this->add_variation_dropdown_styles_controls();
+		$this->add_variation_swatch_styles_controls();
 		$this->add_variation_style_controls();
 		$this->add_variation_label_style_controls();
 		$this->add_quantity_style_controls();
@@ -314,7 +355,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'item_count_section',
 			[
-				'label'     => __( 'Grid & Inline Variations', 'the7mk2' ),
+				'label'     => esc_html__( 'Grid & Inline Variations', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'layout!' => 'dropdown',
@@ -335,7 +376,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variations_min_width',
 			[
-				'label'      => __( 'Min Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -356,7 +397,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variations_min_height',
 			[
-				'label'      => __( 'Min Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -374,7 +415,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variations_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -394,7 +435,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variations_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -412,7 +453,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'variations_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -432,10 +473,147 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		);
 
 		$this->start_controls_tabs( 'variations_tabs_style' );
-		$this->add_variations_tab_controls( 'normal_', __( 'Normal', 'the7mk2' ) );
-		$this->add_variations_tab_controls( 'hover_', __( 'Hover', 'the7mk2' ) );
-		$this->add_variations_tab_controls( 'active_', __( 'Selected', 'the7mk2' ) );
-		$this->add_variations_tab_controls( 'of_stock_', __( 'Out Of Stock', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'normal_', esc_html__( 'Normal', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'hover_', esc_html__( 'Hover', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'active_', esc_html__( 'Selected', 'the7mk2' ) );
+		$this->add_variations_tab_controls( 'of_stock_', esc_html__( 'Out', 'the7mk2' ) );
+		$this->end_controls_tabs();
+
+		$this->end_controls_section();
+	}
+
+	/**
+	 * @return void
+	 */
+	protected function add_variation_swatch_styles_controls() {
+		$this->start_controls_section(
+			'swatch_section',
+			[
+				'label'     => esc_html__( 'Swatch Variations', 'the7mk2' ),
+				'tab'       => Controls_Manager::TAB_STYLE,
+				'condition' => [
+					'variation_type' => 'swatch',
+					'layout!'        => 'dropdown',
+				],
+			]
+		);
+
+		$this->add_control(
+			'swatches_description',
+			[
+				'raw'             => sprintf(
+					// translators: %s: link to attributes page.
+					esc_html__( 'Enable %s styling for an attribute under Edit Attribute → Type → The7 swatches', 'the7mk2' ),
+					'<a href="' . esc_url( admin_url( 'edit.php?post_type=product&page=product_attributes' ) ) . '" target="_blank">swatch</a>'
+				),
+				'type'            => Controls_Manager::RAW_HTML,
+				'content_classes' => 'elementor-panel-alert elementor-panel-alert-info',
+			]
+		);
+
+		$selector = '{{WRAPPER}} .the7-vr-options a.isset-swatch';
+
+		$this->add_control(
+			'swatch_width',
+			[
+				'label'      => esc_html__( 'Width', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min' => 0,
+						'max' => 200,
+					],
+				],
+				'selectors'  => [
+					$selector => 'min-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'swatch_height',
+			[
+				'label'      => esc_html__( 'Height', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min' => 0,
+						'max' => 200,
+					],
+				],
+				'selectors'  => [
+					$selector => ' min-height: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'swatch_border_width',
+			[
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min' => 0,
+						'max' => 25,
+					],
+				],
+				'separator'  => 'before',
+				'selectors'  => [
+					'{{WRAPPER}}' => '--variations-border-width: {{SIZE}}{{UNIT}};',
+					$selector     => 'border-style: solid; border-width: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->add_control(
+			'swatch_border_radius',
+			[
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'selectors'  => [
+					$selector => 'border-radius: {{SIZE}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->add_responsive_control(
+			'swatch_padding',
+			[
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
+				'type'       => Controls_Manager::DIMENSIONS,
+				'size_units' => [ 'px', '%' ],
+				'range'      => [
+					'px' => [
+						'min' => 0,
+						'max' => 50,
+					],
+					'%'  => [
+						'min' => 0,
+						'max' => 100,
+					],
+				],
+				'selectors'  => [
+					$selector => 'padding: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->start_controls_tabs( 'swatch_tabs_style' );
+		$this->add_swatches_tab_controls( 'normal_', esc_html__( 'Normal', 'the7mk2' ) );
+		$this->add_swatches_tab_controls( 'hover_', esc_html__( 'Hover', 'the7mk2' ) );
+		$this->add_swatches_tab_controls( 'active_', esc_html__( 'Selected', 'the7mk2' ) );
+		$this->add_swatches_tab_controls( 'of_stock_', esc_html__( 'Out', 'the7mk2' ) );
 		$this->end_controls_tabs();
 
 		$this->end_controls_section();
@@ -448,7 +626,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'item_dropdown_section',
 			[
-				'label'     => __( 'Dropdown variations', 'the7mk2' ),
+				'label'     => esc_html__( 'Dropdown variations', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'layout' => 'dropdown',
@@ -469,7 +647,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'icon',
 			[
-				'label'       => __( 'Icon', 'the7mk2' ),
+				'label'       => esc_html__( 'Icon', 'the7mk2' ),
 				'type'        => Controls_Manager::ICONS,
 				'default'     => [
 					'value'   => 'fas fa-caret-down',
@@ -486,7 +664,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'dropdown_variations_icon_size',
 			[
-				'label'     => __( 'Icon Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Size', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -510,7 +688,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'dropdown_variations_min_width',
 			[
-				'label'      => __( 'Min Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -528,7 +706,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'dropdown_variations_min_height',
 			[
-				'label'      => __( 'Min Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -546,7 +724,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'dropdown_variations_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -565,7 +743,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'dropdown_variations_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -583,7 +761,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'dropdown_variations_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -611,17 +789,14 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		);
 
 		$this->start_controls_tabs( 'dropdown_variations_tabs_style' );
-		$this->add_dropdown_variations_tab_controls( 'normal_', __( 'Normal', 'the7mk2' ) );
-		$this->add_dropdown_variations_tab_controls( 'hover_', __( 'Hover', 'the7mk2' ) );
+		$this->add_dropdown_variations_tab_controls( 'normal_', esc_html__( 'Normal', 'the7mk2' ) );
+		$this->add_dropdown_variations_tab_controls( 'hover_', esc_html__( 'Hover', 'the7mk2' ) );
 		$this->end_controls_tabs();
 
 		$this->end_controls_section();
 	}
 
 	/**
-	 * @param string $prefix_name Prefix.
-	 * @param string $box_name Tab label.
-	 *
 	 * @return void
 	 */
 	protected function add_variations_tab_controls( $prefix_name, $box_name ) {
@@ -651,7 +826,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_color',
 			[
-				'label'     => __( 'Text  Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text  Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -664,7 +839,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -683,7 +858,67 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'item_count_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => $item_count_border_color_selectors,
+			]
+		);
+
+		$this->end_controls_tab();
+	}
+	/**
+	 * @param string $prefix_name Prefix.
+	 * @param string $box_name Tab label.
+	 *
+	 * @return void
+	 */
+	protected function add_swatches_tab_controls( $prefix_name, $box_name ) {
+		$extra_class = '';
+		if ( $prefix_name === 'active_' ) {
+			$extra_class .= '.active';
+		}
+
+		$extra_link_class = '.isset-swatch';
+		if ( $prefix_name === 'of_stock_' ) {
+			$extra_link_class .= '.isset-swatch.out-of-stock';
+		}
+
+		$is_hover = '';
+		if ( $prefix_name === 'hover_' ) {
+			$is_hover = ':hover';
+		}
+		$selector = '{{WRAPPER}} .the7-vr-options li' . $extra_class . ' a' . $extra_link_class . $is_hover;
+
+		$this->start_controls_tab(
+			$prefix_name . 'item_swatch_style',
+			[
+				'label' => $box_name,
+			]
+		);
+
+		$this->add_control(
+			$prefix_name . 'swatch_background_color',
+			[
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
+				'type'      => Controls_Manager::COLOR,
+				'selectors' => [
+					$selector => 'background-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$item_count_border_color_selectors = [
+			$selector => 'border-color: {{VALUE}};',
+		];
+
+		if ( ! in_array( $prefix_name, [ 'hover_', 'active_' ], true ) ) {
+			$item_count_border_color_selectors['{{WRAPPER}} .the7-vr-options'] = '--variations-border-color: {{VALUE}};';
+		}
+
+		$this->add_control(
+			$prefix_name . 'swatch_border_color',
+			[
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => $item_count_border_color_selectors,
 			]
@@ -717,7 +952,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'dropdown_item_count_color',
 			[
-				'label'     => __( 'Text  Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text  Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -730,11 +965,11 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'dropdown_variations_icon_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector_icon => 'color: {{VALUE}};',
-					$selector_svg  => 'fill: {{VALUE}};',
+					$selector_svg  => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -742,7 +977,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'dropdown_item_count_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'background-color: {{VALUE}};',
@@ -753,7 +988,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			$prefix_name . 'dropdown_item_count_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					$selector => 'border-color: {{VALUE}};',
@@ -771,7 +1006,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'variation_content_style',
 			[
-				'label' => __( 'Variation Content', 'the7mk2' ),
+				'label' => esc_html__( 'Variation Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -780,7 +1015,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			'desc_heading',
 			[
 				'type'  => Controls_Manager::HEADING,
-				'label' => __( 'Description', 'the7mk2' ),
+				'label' => esc_html__( 'Description', 'the7mk2' ),
 			]
 		);
 
@@ -788,7 +1023,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'desc_typography',
-				'label'    => __( 'Description Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Description Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .woocommerce-variation-description',
 			]
 		);
@@ -796,7 +1031,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'desc_text_color',
 			[
-				'label'     => __( 'Description Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Description Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .woocommerce-variation-description' => 'color: {{VALUE}};',
@@ -808,7 +1043,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			'normal_price_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'Normal Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Normal Price', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -817,7 +1052,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'price_typography',
-				'label'    => __( 'Normal Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Normal Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price',
 			]
 		);
@@ -825,7 +1060,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'normal_price_text_color',
 			[
-				'label'     => __( 'Normal Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Normal Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price > span.woocommerce-Price-amount.amount, {{WRAPPER}} .price > span.woocommerce-Price-amount span, {{WRAPPER}} .price, {{WRAPPER}} .price ins span' => 'color: {{VALUE}};',
@@ -837,7 +1072,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			'sale_price_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'Sale Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Sale Price', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -846,7 +1081,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_price_typography',
-				'label'    => __( 'Old Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Old Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price del, {{WRAPPER}} .price del span',
 			]
 		);
@@ -854,7 +1089,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sale_price_text_color',
 			[
-				'label'     => __( 'Old Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price del span' => 'color: {{VALUE}};',
@@ -865,7 +1100,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'old_price_line_color',
 			[
-				'label'     => __( 'Old Price Line Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Line Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price del' => 'color: {{VALUE}};',
@@ -877,7 +1112,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_new_price_typography',
-				'label'    => __( 'New Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'New Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price ins span',
 			]
 		);
@@ -885,7 +1120,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'sale_new_price_text_color',
 			[
-				'label'     => __( 'New Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'New Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price ins span' => 'color: {{VALUE}};',
@@ -897,7 +1132,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			'outofstock_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'Out Of Stock', 'the7mk2' ),
+				'label'     => esc_html__( 'Out Of Stock', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -906,7 +1141,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'outofstock_typography',
-				'label'    => __( 'Out Of Stock Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Out Of Stock Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .stock.out-of-stock',
 			]
 		);
@@ -914,7 +1149,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'outofstock_text_color',
 			[
-				'label'     => __( 'Out Of Stock Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Out Of Stock Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .stock.out-of-stock' => 'color: {{VALUE}};',
@@ -926,7 +1161,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			'instock_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'In Stock', 'the7mk2' ),
+				'label'     => esc_html__( 'In Stock', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -935,7 +1170,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'instock_typography',
-				'label'    => __( 'In Stock Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'In Stock Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .stock.in-stock',
 			]
 		);
@@ -943,7 +1178,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'instock_text_color',
 			[
-				'label'     => __( 'In Stock Color', 'the7mk2' ),
+				'label'     => esc_html__( 'In Stock Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .stock.in-stock' => 'color: {{VALUE}};',
@@ -990,7 +1225,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'label_min_width',
 			[
-				'label'      => __( 'Min Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1026,23 +1261,23 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_layout',
 			[
-				'label' => __( 'General', 'the7mk2' ),
+				'label' => esc_html__( 'General', 'the7mk2' ),
 			]
 		);
 
 		$this->add_responsive_control(
 			'alignment',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'default'              => 'left',
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 				],
@@ -1068,7 +1303,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'variation_gap',
 			[
-				'label'      => __( 'Vertical Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Vertical Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1086,7 +1321,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'button_title',
 			[
-				'label'     => __( 'Button', 'the7mk2' ),
+				'label'     => esc_html__( 'Button', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -1095,23 +1330,23 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'button_text',
 			[
-				'label'       => __( 'Text', 'the7mk2' ),
+				'label'       => esc_html__( 'Text', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => __( 'Add to cart', 'the7mk2' ),
-				'placeholder' => __( 'Add to cart', 'the7mk2' ),
+				'default'     => esc_html__( 'Add to cart', 'the7mk2' ),
+				'placeholder' => esc_html__( 'Add to cart', 'the7mk2' ),
 			]
 		);
 
 		$button_width_options            = [
-			'inline'  => __( 'Default', 'the7mk2' ),
-			'stretch' => __( 'Stretch', 'the7mk2' ),
+			'inline'  => esc_html__( 'Default', 'the7mk2' ),
+			'stretch' => esc_html__( 'Stretch', 'the7mk2' ),
 		];
-		$button_width_options_on_devices = [ '' => __( 'No change', 'the7mk2' ) ] + $button_width_options;
+		$button_width_options_on_devices = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $button_width_options;
 
 		$this->add_responsive_control(
 			'button_width',
 			[
-				'label'                => __( 'Width', 'the7mk2' ),
+				'label'                => esc_html__( 'Width', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'options'              => $button_width_options,
 				'device_args'          => [
@@ -1138,7 +1373,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'quantity_title',
 			[
-				'label'     => __( 'Quantity', 'the7mk2' ),
+				'label'     => esc_html__( 'Quantity', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -1147,10 +1382,10 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_quantity',
 			[
-				'label'                => __( 'Visibility', 'the7mk2' ),
+				'label'                => esc_html__( 'Visibility', 'the7mk2' ),
 				'type'                 => Controls_Manager::SWITCHER,
-				'label_on'             => __( 'Show', 'the7mk2' ),
-				'label_off'            => __( 'Hide', 'the7mk2' ),
+				'label_on'             => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'            => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value'         => 'yes',
 				'default'              => 'yes',
 				'selectors_dictionary' => [
@@ -1166,15 +1401,15 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_position',
 			[
-				'label'                => __( 'Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'inline'  => [
-						'title' => __( 'Inline', 'the7mk2' ),
+						'title' => esc_html__( 'Inline', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'stacked' => [
-						'title' => __( 'Stacked', 'the7mk2' ),
+						'title' => esc_html__( 'Stacked', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 				],
@@ -1193,15 +1428,15 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		);
 
 		$quantity_width_options            = [
-			'inline'  => __( 'Default', 'the7mk2' ),
-			'stretch' => __( 'Stretch', 'the7mk2' ),
+			'inline'  => esc_html__( 'Default', 'the7mk2' ),
+			'stretch' => esc_html__( 'Stretch', 'the7mk2' ),
 		];
-		$quantity_width_options_on_devices = [ '' => __( 'No change', 'the7mk2' ) ] + $quantity_width_options;
+		$quantity_width_options_on_devices = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $quantity_width_options;
 
 		$this->add_responsive_control(
 			'quantity_width',
 			[
-				'label'                => __( 'Width', 'the7mk2' ),
+				'label'                => esc_html__( 'Width', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'options'              => $quantity_width_options,
 				'device_args'          => [
@@ -1232,19 +1467,38 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'variation_title',
 			[
-				'label'     => __( 'Variations', 'the7mk2' ),
+				'label'     => esc_html__( 'Variations', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
 		);
 
 		$this->add_control(
+			'show_variation_desc',
+			[
+				'label'                => esc_html__( 'Description', 'the7mk2' ),
+				'type'                 => Controls_Manager::SWITCHER,
+				'label_on'             => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'            => esc_html__( 'Hide', 'the7mk2' ),
+				'return_value'         => 'yes',
+				'default'              => 'yes',
+				'selectors_dictionary' => [
+					'yes' => '',
+					''    => 'display: none;',
+				],
+				'selectors'            => [
+					'{{WRAPPER}} .woocommerce-variation.single_variation' => '{{VALUE}}',
+				],
+			]
+		);
+
+		$this->add_control(
 			'show_labels',
 			[
-				'label'                => __( 'Label', 'the7mk2' ),
+				'label'                => esc_html__( 'Label', 'the7mk2' ),
 				'type'                 => Controls_Manager::SWITCHER,
-				'label_on'             => __( 'Show', 'the7mk2' ),
-				'label_off'            => __( 'Hide', 'the7mk2' ),
+				'label_on'             => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'            => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value'         => 'yes',
 				'default'              => 'yes',
 				'selectors_dictionary' => [
@@ -1260,15 +1514,15 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'label_position',
 			[
-				'label'                => __( 'Label Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Label Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'start' => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'top'   => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 				],
@@ -1289,13 +1543,13 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'layout',
 			[
-				'label'                => __( 'Layout', 'the7mk2' ),
+				'label'                => esc_html__( 'Layout', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'default'              => 'dropdown',
 				'options'              => [
-					'dropdown' => __( 'Dropdown', 'the7mk2' ),
-					'columns'  => __( 'Columns', 'the7mk2' ),
-					'inline'   => __( 'Inline', 'the7mk2' ),
+					'dropdown' => esc_html__( 'Dropdown', 'the7mk2' ),
+					'columns'  => esc_html__( 'Columns', 'the7mk2' ),
+					'inline'   => esc_html__( 'Inline', 'the7mk2' ),
 				],
 				'selectors_dictionary' => [
 					'dropdown' => $this->combine_to_css_vars_definition_string(
@@ -1324,13 +1578,32 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 				],
 				'render_type'          => 'template',
 				'prefix_class'         => 'variations-layout-',
+
+			]
+		);
+
+		$this->add_control(
+			'variation_type',
+			[
+				'label'        => esc_html__( 'Type', 'the7mk2' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'default',
+				'options'      => [
+					'default' => esc_html__( 'Default', 'the7mk2' ),
+					'swatch'  => esc_html__( 'Swatch', 'the7mk2' ),
+				],
+				'render_type'  => 'template',
+				'prefix_class' => 'variations-type-',
+				'condition'    => [
+					'layout!' => 'dropdown',
+				],
 			]
 		);
 
 		$this->add_responsive_control(
 			'columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 1,
 				'tablet_default' => 1,
@@ -1351,7 +1624,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'columns_gap',
 			[
-				'label'      => __( 'Columns Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Columns Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1374,7 +1647,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'rows_gap',
 			[
-				'label'      => __( 'Rows Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1395,15 +1668,15 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		);
 
 		$variation_width_options            = [
-			'inline'  => __( 'Default', 'the7mk2' ),
-			'stretch' => __( 'Stretch', 'the7mk2' ),
+			'inline'  => esc_html__( 'Default', 'the7mk2' ),
+			'stretch' => esc_html__( 'Stretch', 'the7mk2' ),
 		];
-		$variation_width_options_on_devices = [ '' => __( 'No change', 'the7mk2' ) ] + $variation_width_options;
+		$variation_width_options_on_devices = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $variation_width_options;
 
 		$this->add_responsive_control(
 			'variation_width',
 			[
-				'label'                => __( 'Width', 'the7mk2' ),
+				'label'                => esc_html__( 'Width', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'options'              => $variation_width_options,
 				'device_args'          => [
@@ -1445,12 +1718,11 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			]
 		);
 
-
 		$this->add_control(
 			'quantity_heading',
 			[
 				'type'  => Controls_Manager::HEADING,
-				'label' => __( 'Box & Number', 'the7mk2' ),
+				'label' => esc_html__( 'Box & Number', 'the7mk2' ),
 			]
 		);
 
@@ -1465,7 +1737,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_min_width',
 			[
-				'label'      => __( 'Min Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1512,7 +1784,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_min_height',
 			[
-				'label'      => __( 'Min Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Min Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1557,7 +1829,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1609,7 +1881,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'     => 'quantity_box_shadow',
-				'label'    => __( 'Box Shadow', 'the7mk2' ),
+				'label'    => esc_html__( 'Box Shadow', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .quantity',
 			]
 		);
@@ -1618,7 +1890,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			'quantity_button_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( '+/- Settings', 'the7mk2' ),
+				'label'     => esc_html__( '+/- Settings', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -1626,7 +1898,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_button_icon_width',
 			[
-				'label'      => __( 'Icon Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Icon Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1636,7 +1908,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .quantity .button' => 'font-size: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .quantity button' => 'font-size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1644,7 +1916,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_button_width',
 			[
-				'label'      => __( 'Background Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Background Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1655,7 +1927,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 				],
 				'selectors'  => [
 					'{{WRAPPER}}'                   => '--quantity-btn-width: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .quantity .button' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .quantity button' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1663,7 +1935,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_button_height',
 			[
-				'label'      => __( 'Background Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Background Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1674,7 +1946,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 				],
 				'selectors'  => [
 					'{{WRAPPER}}'                   => '--quantity-btn-height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .quantity .button' => 'height: {{SIZE}}{{UNIT}} !important;',
+					'{{WRAPPER}} .quantity button' => 'height: {{SIZE}}{{UNIT}} !important;',
 				],
 			]
 		);
@@ -1682,7 +1954,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_button_border',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1700,7 +1972,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'quantity_button_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1710,7 +1982,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .quantity .button' => 'border-radius: {{SIZE}}{{UNIT}} !important;',
+					'{{WRAPPER}} .quantity button' => 'border-radius: {{SIZE}}{{UNIT}} !important;',
 				],
 			]
 		);
@@ -1730,7 +2002,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 				'label'     => esc_html__( '+/- Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .quantity .button' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .quantity button' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -1741,7 +2013,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 				'label'     => esc_html__( '+/- Background', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'#the7-body {{WRAPPER}} .woocommerce-variation-add-to-cart .quantity input[type="button"].is-form, #the7-body {{WRAPPER}} .the7-add-to-cart .quantity input[type="button"].is-form' => 'background: {{VALUE}}',
+					'#the7-body {{WRAPPER}} .woocommerce-variation-add-to-cart .quantity button.is-form, #the7-body {{WRAPPER}} .the7-add-to-cart .quantity button.is-form' => 'background: {{VALUE}}',
 				],
 			]
 		);
@@ -1761,8 +2033,8 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'           => 'quantity_btn_box_shadow',
-				'label'          => __( '+/- Box Shadow', 'the7mk2' ),
-				'selector'       => '{{WRAPPER}} .quantity .button',
+				'label'          => esc_html__( '+/- Box Shadow', 'the7mk2' ),
+				'selector'       => '{{WRAPPER}} .quantity button',
 				'fields_options' => [
 					'box_shadow' => [
 						'selectors' => [
@@ -1788,7 +2060,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 				'label'     => esc_html__( '+/- Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'{{WRAPPER}} .quantity .button:hover' => 'color: {{VALUE}}',
+					'{{WRAPPER}} .quantity button:hover' => 'color: {{VALUE}}',
 				],
 			]
 		);
@@ -1799,7 +2071,7 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 				'label'     => esc_html__( '+/- Background', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
-					'#the7-body {{WRAPPER}} .woocommerce-variation-add-to-cart .quantity input[type="button"].is-form:hover, #the7-body {{WRAPPER}} .the7-add-to-cart .quantity input[type="button"].is-form:hover' => 'background: {{VALUE}}',
+					'#the7-body {{WRAPPER}} .woocommerce-variation-add-to-cart .quantity button.is-form:hover, #the7-body {{WRAPPER}} .the7-add-to-cart .quantity button.is-form:hover' => 'background: {{VALUE}}',
 				],
 			]
 		);
@@ -1819,8 +2091,8 @@ class Product_Add_To_Cart_V2 extends The7_Elementor_Widget_Base {
 			Group_Control_Box_Shadow::get_type(),
 			[
 				'name'           => 'quantity_box_shadow_focus',
-				'label'          => __( '+/- Box Shadow', 'the7mk2' ),
-				'selector'       => '{{WRAPPER}} .quantity .button:hover',
+				'label'          => esc_html__( '+/- Box Shadow', 'the7mk2' ),
+				'selector'       => '{{WRAPPER}} .quantity button:hover',
 				'fields_options' => [
 					'box_shadow' => [
 						'selectors' => [

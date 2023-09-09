@@ -29,6 +29,10 @@ class Breadcrumbs extends The7_Elementor_Widget_Base {
 		return 'eicon-navigation-horizontal';
 	}
 
+	protected function the7_keywords() {
+		return [ 'breadcrumbs' ];
+	}
+
 	public function get_style_depends() {
 		the7_register_style( 'the7-widget', PRESSCORE_THEME_URI . '/css/compatibility/elementor/the7-widget' );
 
@@ -292,7 +296,7 @@ class Breadcrumbs extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .breadcrumbs li:not(:first-child):before, {{WRAPPER}} .breadcrumbs li:not(:first-child) i' => 'color: {{VALUE}}',
-					'{{WRAPPER}} .breadcrumbs li:not(:first-child) svg' => 'fill: {{VALUE}}',
+					'{{WRAPPER}} .breadcrumbs li:not(:first-child) svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);

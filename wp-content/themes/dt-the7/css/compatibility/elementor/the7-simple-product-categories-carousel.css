@@ -1,6 +1,3 @@
-.the7-simple-widget-product-categories-carousel .the7-product-thumb {
-  width: 100%;
-}
 .the7-simple-widget-product-categories-carousel .post-entry-content {
   display: flex;
   flex-flow: column wrap;
@@ -45,17 +42,6 @@
 .the7-simple-widget-product-categories-carousel .post-entry-content ul {
   margin-left: 0;
   margin-right: 0;
-}
-.elementor-widget.preserve-img-ratio-y .the7-simple-widget-product-categories-carousel .img-ratio-wrapper.compat-object-fit {
-  background-size: contain;
-  background-repeat: no-repeat;
-}
-.elementor-widget .the7-simple-widget-product-categories-carousel .img-ratio-wrapper.compat-object-fit img {
-  display: none;
-}
-.elementor-widget .the7-simple-widget-product-categories-carousel .img-ratio-wrapper.compat-object-fit {
-  background-size: cover;
-  background-position: center center;
 }
 .the7-simple-widget-product-categories-carousel .entry-meta {
   font-family: var(--the7-base-font-family);

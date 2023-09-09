@@ -2,21 +2,11 @@
     "use strict";
     elementor.on("document:loaded", function () {
         var The7ElementorMigrator = function () {
-            const sectionMap = ({isInner}) => ({
+            const sectionMap = (model, parentModel) => ({
                 ...this.responsive('custom_height_inner', 'min_height'),
-                ...this.responsive('content_position', ({deviceValue, breakpoint}) => {
-                    const optionsMap = {
-                        top: 'flex-start',
-                        bottom: 'flex-end',
-                        'space-between': 'stretch',
-                    };
-
-                    const deviceKey = this.getDeviceKey('flex_align_items', breakpoint);
-                    return [[deviceKey, optionsMap[deviceValue] || deviceValue]];
-                }),
             });
 
-            const columnMap = () => ({
+            const columnMap = (model, parentModel) => ({
                 ...this.responsive('the7_auto_width', ({deviceValue, breakpoint, settings}) => {
                     var array = [];
                     switch (deviceValue) {
@@ -26,7 +16,11 @@
                             array.push([this.getDeviceKey('_flex_shrink', breakpoint), 1]);
                             break;
                         case 'fit-content':
-                            array.push([this.getDeviceKey('the7_size_fit_content', breakpoint),  'yes']);
+                            array.push([this.getDeviceKey('width', breakpoint),  {
+                                size: 'fit-content',
+                                unit: 'custom'
+                            }]);
+                            array.push([this.getDeviceKey('_flex_size', breakpoint), 'none']);
                             break;
                         case 'minimize':
                             const targetWidthKey = this.getDeviceKey('the7_target_width', breakpoint);
@@ -37,55 +31,76 @@
                                 array.push([this.getDeviceKey('_flex_size', breakpoint), 'none']);
                             }
                             else{
-                                array.push([this.getDeviceKey('the7_size_fit_content', breakpoint), 'yes']);
+                                array.push([this.getDeviceKey('width', breakpoint),  {
+                                    size: 'fit-content',
+                                    unit: 'custom'
+                                }]);
+                                array.push([this.getDeviceKey('_flex_size', breakpoint), 'none']);
                             }
                             break;
                     }
                     return array;
                 }),
-                /*...this.responsive('the7_target_width', ({deviceValue, breakpoint}) => {
-                    const deviceKey = this.getDeviceKey('width', breakpoint);
-                    const newValue = {
-                        size: deviceValue,
-                        unit: '%',
-                    };
-
-                    return [deviceKey, newValue];
-                }),*/
-                ...this.responsive('content_position', ({deviceValue, breakpoint}) => {
-                    const optionsMap = {
-                        top: 'flex-start',
-                        bottom: 'flex-end',
-                        'space-between': 'stretch',
-                    };
-
-                    const deviceKey = this.getDeviceKey('flex_align_items', breakpoint);
-                    return [[deviceKey, optionsMap[deviceValue] || deviceValue]];
-                }),
-
-                ...this.responsive('flex_justify_content', ({deviceValue, breakpoint}) => {
-                    const optionsMap = {
-                        'space-between': 'stretch',
-                    };
-
-                    const deviceKey = this.getDeviceKey('flex_align_items', breakpoint);
-                    return [[deviceKey, optionsMap[deviceValue] || deviceValue]];
-                }),
-
-                ...this.responsive('align', 'flex_justify_content'),
             });
+
+
+            const sectionNormalizeMap = (settings, model, parentModel) => ({
+                ...this.responsive('padding', ({deviceKey, deviceValue, settings}) => {
+                    let val = {
+                        unit: 'px',
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        isLinked: true
+                    };
+                    if (deviceValue){
+                        val = {
+                            unit: 'px',
+                            top: deviceValue.top === '' ? 0 : deviceValue.top,
+                            right: deviceValue.right === '' ? 0 : deviceValue.right,
+                            bottom: deviceValue.bottom === '' ? 0 : deviceValue.bottom,
+                            left: deviceValue.left === '' ? 0 : deviceValue.left,
+                            isLinked: true
+                        };
+                    }
+                    return [[deviceKey, val]];
+                }),
+                flex_align_items: settings.column_position ? settings.flex_align_items : 'center',
+            })
+
+            const columnNormalizeMap = (settings, model, parentModel) => ({
+                ...this.responsive('padding', ({deviceKey, deviceValue, settings}) => {
+                    let val = {
+                        unit: 'px',
+                        top: 0,
+                        right: 0,
+                        bottom: 0,
+                        left: 0,
+                        isLinked: true
+                    };
+                    if (deviceValue){
+                        val = {
+                            unit: 'px',
+                            top: deviceValue.top === '' ? 0 : deviceValue.top,
+                            right: deviceValue.right === '' ? 0 : deviceValue.right,
+                            bottom: deviceValue.bottom === '' ? 0 : deviceValue.bottom,
+                            left: deviceValue.left === '' ? 0 : deviceValue.left,
+                            isLinked: false
+                        };
+                    }
+                    return [[deviceKey, val]];
+                }),
+            })
 
             const config = {
                 section: {
                     legacyControlsMapping: sectionMap,
+                    normalizeMapping: sectionNormalizeMap
                 },
                 column: {
                     legacyControlsMapping: columnMap,
-                    normalizeSettings: (settings) => ({
-                        ...settings,
-                        flex_direction: 'row', // Force it to be column.
-                        flex_wrap: 'wrap',
-                    }),
+                    normalizeMapping: columnNormalizeMap
                 },
             };
             // Private methods
@@ -97,32 +112,29 @@
                  *
                  * @return {Object}
                  */
-                getControlsMapping: function (model) {
+                getLegacyControlsMapping: function (model, parentModel) {
                     const conf = config[model.elType];
                     if (!conf) {
                         return {};
                     }
                     const {legacyControlsMapping: mapping} = conf;
-                    return ('function' === typeof mapping) ? mapping(model) : mapping;
+                    return ('function' === typeof mapping) ? mapping(model, parentModel) : mapping;
                 },
-
                 /**
-                 * Normalize element settings (adding defaults, etc.) by elType,
+                 * Get a mapping object of Legacy-to-Container controls mapping.
                  *
-                 * @param {Object} model - Element model.
-                 * @param {Object} settings - Settings object after migration.
+                 * @param {Object} model - Mapping object.
                  *
-                 * @return {Object} - normalized settings.
+                 * @return {Object}
                  */
-                normalizeSettings: function (model, settings) {
+                getNormalizeMapping: function (settings, model, parentModel) {
                     const conf = config[model.elType];
-
-                    if (!conf.normalizeSettings) {
-                        return settings;
+                    if (!conf) {
+                        return {};
                     }
-
-                    return conf.normalizeSettings(settings, model);
-                }
+                    const {normalizeMapping: mapping} = conf;
+                    return ('function' === typeof mapping) ? mapping(settings, model, parentModel) : mapping;
+                },
             };
 
             /*
@@ -184,9 +196,37 @@
                 return [key, breakpoint].filter((v) => !!v).join('_');
             };
 
+            /**
+             * Normalize element settings (adding defaults, etc.) by elType,
+             *
+             * @param {Object} model - Element model.
+             * @param {Object} settings - Settings object after migration.
+             *
+             * @return {Object} - normalized settings.
+             */
+            The7ElementorMigrator.prototype.normalizeSettings = function (model, settings, parentModel) {
+                const map = methods.getNormalizeMapping(settings, model, parentModel);
+                if (map === undefined) {
+                    return settings;
+                }
+                let copy = [];
+                Object.entries(map).forEach(([key, mapped]) => {
 
-            The7ElementorMigrator.prototype.normalizeSettings = function (model, settings) {
-                return methods.normalizeSettings(model, settings);
+                    // Simple key:
+                    // { old_setting: 'new_setting' }
+                    if ('string' === typeof mapped) {
+                        copy.push([key, mapped])
+                        return;
+                    }
+
+                    // Advanced conversion using a callback:
+                    // { old_setting: ( { key, value, settings } ) => [ 'new_setting', value ] }
+                    if ('function' === typeof mapped) {
+                        copy = copy.concat(mapped({key, settings}));
+                        return;
+                    }
+                });
+                return { ...settings, ...Object.fromEntries(copy)}
             };
 
             /**
@@ -198,8 +238,8 @@
              *
              * @return {Object}
              */
-            The7ElementorMigrator.prototype.migrate = function (settings, model) {
-                const map = methods.getControlsMapping(model);
+            The7ElementorMigrator.prototype.migrate = function (settings, model, parentModel) {
+                const map = methods.getLegacyControlsMapping(model, parentModel);
                 if (map === undefined) {
                     return settings;
                 }
@@ -249,12 +289,15 @@
             if (convertType !== null && commandName === 'document/elements/create') {
                 const migrator = new The7ElementorMigrator();
                 if (migrator.canConvertToContainer(convertType)) {
+                    const parentContainer = args.container;
+                    let parentModel = parentContainer.model.toJSON();
+
                     let newSettings;
                     const modelOrig = args.model;
                     const modelCopy = Object.assign({}, modelOrig);
                     modelCopy.elType = convertType;
-                    newSettings = migrator.migrate(modelCopy.settings, modelCopy);
-                    newSettings = migrator.normalizeSettings(modelCopy, newSettings);
+                    newSettings = migrator.migrate(modelCopy.settings, modelCopy, parentModel);
+                    newSettings = migrator.normalizeSettings(modelCopy, newSettings, parentModel);
                     modelOrig.settings = newSettings;
                 }
                 convertType = null;

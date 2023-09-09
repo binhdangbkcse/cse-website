@@ -8,6 +8,7 @@
 namespace The7\Mods\Compatibility\Elementor\Style;
 
 use Elementor\Icons_Manager;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
 use The7\Mods\Compatibility\Elementor\Widgets\Posts;
 
 defined( 'ABSPATH' ) || exit;
@@ -20,13 +21,21 @@ trait Posts_Masonry_Style {
 	 * @return mixed
 	 */
 	protected function get_post_meta_html( $required_meta = [] ) {
+		static $post_type_taxonomy_cache = [];
+
 		$parts = [];
 		foreach ( $required_meta as $meta ) {
 			$with_link = ! empty( $meta['link'] );
 			switch ( $meta['type'] ) {
 				case 'terms':
-					$taxonomy = isset( $meta['taxonomy'] ) ? $meta['taxonomy'] : null;
-					$terms    = the7_get_post_terms( null, $taxonomy, ', ', $with_link );
+					$current_post_type = get_post_type();
+					if ( array_key_exists( $current_post_type, $post_type_taxonomy_cache ) ) {
+						$terms_taxonomy = $post_type_taxonomy_cache[ $current_post_type ];
+					} else {
+						$terms_taxonomy = $this->guess_the_right_post_type_taxonomy( $current_post_type );
+						$post_type_taxonomy_cache[ $current_post_type ] = $terms_taxonomy;
+					}
+					$terms    = the7_get_post_terms( null, $terms_taxonomy, ', ', $with_link );
 					$parts[]  = $terms ? '<span class="meta-item category-link">' . $terms . '</span>' : '';
 					break;
 				case 'author':
@@ -49,6 +58,43 @@ trait Posts_Masonry_Style {
 		return apply_filters( 'presscore_posted_on_html', $html, [] );
 	}
 
+	protected function guess_the_right_post_type_taxonomy( $post_type ) {
+		$post_taxonomies = get_object_taxonomies( $post_type, 'objects' );
+
+		$maybe_category = wp_filter_object_list(
+			$post_taxonomies,
+			[
+				'name'               => "{$post_type}_category",
+				'hierarchical'       => true,
+				'public'             => true,
+				'publicly_queryable' => true,
+			],
+			'and'
+		);
+
+		$maybe_category_names = array_keys( $maybe_category );
+		if ( isset( $maybe_category_names[0] ) ) {
+			return $maybe_category_names[0];
+		}
+
+		$hierarchical_public_taxonomies = wp_filter_object_list(
+			$post_taxonomies,
+			[
+				'hierarchical'       => true,
+				'public'             => true,
+				'publicly_queryable' => true,
+			],
+			'and'
+		);
+
+		$hierarchical_public_taxonomy_names = array_keys( $hierarchical_public_taxonomies );
+		if ( isset( $hierarchical_public_taxonomy_names[0] ) ) {
+			return $hierarchical_public_taxonomy_names[0];
+		}
+
+		return 'category';
+	}
+
 	protected function get_post_meta_html_based_on_settings( $settings ) {
 		$post_meta_types    = [
 			'terms',
@@ -68,27 +114,6 @@ trait Posts_Masonry_Style {
 					'type' => $post_meta_type,
 					'link' => $link,
 				];
-
-				if ( $post_meta_type === 'terms' && isset( $settings['taxonomy'] ) ) {
-					$meta['taxonomy'] = $settings['taxonomy'];
-
-					// Check if it is a bundled post type, then nullify taxonomy arg.
-					if ( isset( $settings['post_type'] ) && post_type_exists( $settings['post_type'] ) ) {
-						$nullify_taxonomy = $settings['post_type'] === 'post';
-
-						$class_name = '\The7_Core\Mods\Post_Type_Builder\Models\Post_Types';
-						if ( class_exists( $class_name, false ) && method_exists( $class_name, 'get_bundle_definition' ) ) {
-							$bundled_post_types = \The7_Core\Mods\Post_Type_Builder\Models\Post_Types::get_bundle_definition();
-							if ( in_array( $settings['post_type'], array_keys( $bundled_post_types ), true ) ) {
-								$nullify_taxonomy = true;
-							}
-						}
-
-						if ( $nullify_taxonomy ) {
-							$meta['taxonomy'] = null;
-						}
-					}
-				}
 
 				$required_post_meta[] = $meta;
 			}
@@ -117,14 +142,15 @@ trait Posts_Masonry_Style {
 		$link_attridutes        = $this->get_link_attributes( $settings );
 		$post_media             = '';
 
+		$img_wrap_class = 'post-thumbnail-rollover ' . $this->template( Image_Aspect_Ratio::class )->get_wrapper_class();
 		if ( $show_image && has_post_thumbnail() ) {
 			$thumb_args = [
 				'img_id' => get_post_thumbnail_id(),
-				'class'  => 'post-thumbnail-rollover',
+				'class'  => $img_wrap_class,
 				'echo'   => false,
 			];
 
-			if ( $link_attridutes['href'] ) {
+		if ( $link_attridutes['href'] ) {
 				$thumb_args['href']   = $link_attridutes['href'];
 				$thumb_args['custom'] = the7_get_html_attributes_string(
 					[
@@ -133,36 +159,12 @@ trait Posts_Masonry_Style {
 					]
 				);
 				$thumb_args['wrap']   = '<a %HREF% %CLASS% %CUSTOM%><img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% /></a>';
-			} else {
+		} else {
 				$thumb_args['class'] .= ' not-clickable-item';
 				$thumb_args['wrap']  = '<div %CLASS% %CUSTOM%><img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% /></div>';
-			}
+		}
 
 			$thumb_args['img_class'] = 'preload-me';
-
-			if ( ! empty( $settings['item_ratio']['size'] ) ) {
-				$thumb_args['prop'] = $settings['item_ratio']['size'];
-			}
-
-			if ( 'browser_width_based' === $settings['responsiveness'] ) {
-				$thumb_args['options'] = the7_calculate_bwb_image_resize_options(
-					[
-						'desktop'  => $settings['widget_columns'],
-						'v_tablet' => $settings['widget_columns_tablet'],
-						'h_tablet' => $settings['widget_columns_tablet'],
-						'phone'    => $settings['widget_columns_mobile'],
-					],
-					$settings['gap_between_posts'],
-					$this->current_post_is_wide( $settings )
-				);
-			} else {
-				$thumb_args['options'] = the7_calculate_columns_based_image_resize_options(
-					$settings['pwb_column_min_width']['size'],
-					of_get_option( 'general-content_width' ),
-					$settings['pwb_columns'],
-					$this->current_post_is_wide( $settings )
-				);
-			}
 
 			if ( presscore_lazy_loading_enabled() ) {
 				$thumb_args['lazy_loading'] = true;
@@ -182,7 +184,7 @@ trait Posts_Masonry_Style {
 			);
 
 			$link_atts               = $link_attridutes;
-			$link_atts['class']      = 'post-thumbnail-rollover';
+			$link_atts['class']      = $img_wrap_class;
 			$link_atts['aria-label'] = __( 'Post image', 'the7mk2' );
 
 			$post_media = sprintf( '<a %s>%s</a>', the7_get_html_attributes_string( $link_atts ), $image );

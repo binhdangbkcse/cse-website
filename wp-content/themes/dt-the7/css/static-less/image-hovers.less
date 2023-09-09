@@ -219,7 +219,6 @@
 	-ms-filter: grayscale(0%);
 	filter: grayscale(0%);
 	filter: none;
-	filter: transparent;
 }
 
 
@@ -311,6 +310,7 @@
 		backface-visibility: hidden;
 	}
 	&.lazy-load,
+	&.lazy-scroll,
 	&.blog-thumb-lazy-load {
         transition:  transform 0.25s ease-out, opacity 0.25s;
     }
@@ -325,7 +325,7 @@
 		backface-visibility: hidden;
 	}
 	&.lazy-load,
-	&.so-lazy-load,
+	&.lazy-scroll,
 	&.blog-thumb-lazy-load {
         transition:  transform 0.3s ease-out, opacity 0.35s;
     }

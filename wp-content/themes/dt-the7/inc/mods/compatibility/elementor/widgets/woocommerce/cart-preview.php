@@ -12,6 +12,7 @@ use The7\Mods\Compatibility\Elementor\Modules\Woocommerce_Cart\Module as Woocomm
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Abstract_Template;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Button;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
 
 /**
  * Menu cart widget class.
@@ -30,7 +31,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 	}
 
 	public function get_script_depends() {
-		return [ 'the7-woocommerce-e-cart' ];
+		return [ 'the7-woocommerce-e-cart', 'wc-cart-fragments' ];
 	}
 
 	public function get_style_depends() {
@@ -765,7 +766,10 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			],
 		] );
 
-		$image_selector = $selector . ' > .img-ratio-wrapper';
+		/**
+		 * @see \The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio::get_wrapper_class()
+		 */
+		$image_selector = $selector . ' > .img-css-resize-wrapper';
 
 		$this->add_responsive_control( 'image_size', [
 			'label'      => esc_html__( 'Size', 'the7mk2' ),
@@ -790,40 +794,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			],
 		] );
 
-		$this->add_control( 'item_preserve_ratio', [
-			'label'        => esc_html__( 'Preserve Image Proportions', 'the7mk2' ),
-			'type'         => Controls_Manager::SWITCHER,
-			'default'      => 'n',
-			'return_value' => 'y',
-			'prefix_class' => 'preserve-img-ratio-',
-		] );
-
-		$this->add_responsive_control( 'item_ratio', [
-			'label'      => esc_html__( 'Image Ratio', 'the7mk2' ),
-			'type'       => Controls_Manager::SLIDER,
-			'default'    => [
-				'size' => 1,
-			],
-			'range'      => [
-				'px' => [
-					'min'  => 0.1,
-					'max'  => 2,
-					'step' => 0.01,
-				],
-			],
-			'conditions' => [
-				'terms' => [
-					[
-						'name'     => 'item_preserve_ratio',
-						'operator' => '!=',
-						'value'    => 'y',
-					],
-				],
-			],
-			'selectors'  => [
-				$image_selector => 'padding-bottom:  calc( {{SIZE}} * 100% )',
-			],
-		] );
+		$this->template( Image_Aspect_Ratio::class )->add_style_controls();
 
 		$this->add_responsive_control( 'thumbnail_border_width', [
 			'label'      => esc_html__( 'Border Width', 'the7mk2' ),
@@ -1195,7 +1166,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 				'size' => '14',
 			],
 			'selectors'  => [
-				$selector . ' .button' => 'font-size: {{SIZE}}{{UNIT}};',
+				$selector . ' button' => 'font-size: {{SIZE}}{{UNIT}};',
 			],
 		] );
 
@@ -1215,7 +1186,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			],
 			'selectors'  => [
 				$selector              => '--quantity-btn-width: {{SIZE}}{{UNIT}};',
-				$selector . ' .button' => 'width: {{SIZE}}{{UNIT}};',
+				$selector . ' button' => 'width: {{SIZE}}{{UNIT}};',
 			],
 		] );
 
@@ -1235,7 +1206,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			],
 			'selectors'  => [
 				$selector              => '--quantity-btn-height: {{SIZE}}{{UNIT}};',
-				$selector . ' .button' => 'height: {{SIZE}}{{UNIT}} !important;',
+				$selector . ' button' => 'height: {{SIZE}}{{UNIT}} !important;',
 			],
 		] );
 
@@ -1259,7 +1230,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', '%' ],
 			'selectors'  => [
-				$selector . ' .button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
+				$selector . ' button' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}} !important;',
 			],
 		] );
 
@@ -1273,7 +1244,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'label'     => esc_html__( '+/- Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
-				$selector . ' .button' => 'color: {{VALUE}}',
+				$selector . ' button' => 'color: {{VALUE}}',
 			],
 		] );
 
@@ -1281,7 +1252,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'label'     => esc_html__( '+/- Background', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
-				'#the7-body ' . $selector . ' input[type="button"].is-form' => 'background: {{VALUE}}',
+				'#the7-body ' . $selector . ' button.is-form' => 'background: {{VALUE}}',
 			],
 		] );
 
@@ -1296,7 +1267,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 		$this->add_group_control( Group_Control_Box_Shadow::get_type(), [
 			'name'           => 'quantity_change_btn_box_shadow',
 			'label'          => esc_html__( '+/- Box Shadow', 'the7mk2' ),
-			'selector'       => $selector . ' .button',
+			'selector'       => $selector . ' button',
 			'fields_options' => [
 				'box_shadow' => [
 					'selectors' => [
@@ -1316,7 +1287,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'label'     => esc_html__( '+/- Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
-				$selector . ' .button:hover' => 'color: {{VALUE}}',
+				$selector . ' button:hover' => 'color: {{VALUE}}',
 			],
 		] );
 
@@ -1324,7 +1295,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'label'     => esc_html__( '+/- Background', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
-				'#the7-body ' . $selector . ' input[type="button"].is-form:hover' => 'background: {{VALUE}}',
+				'#the7-body ' . $selector . ' button.is-form:hover' => 'background: {{VALUE}}',
 			],
 		] );
 
@@ -1339,7 +1310,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 		$this->add_group_control( Group_Control_Box_Shadow::get_type(), [
 			'name'           => 'quantity_change_box_shadow_focus',
 			'label'          => esc_html__( '+/- Box Shadow', 'the7mk2' ),
-			'selector'       => $selector . ' .button:hover',
+			'selector'       => $selector . ' button:hover',
 			'fields_options' => [
 				'box_shadow' => [
 					'selectors' => [
@@ -1536,7 +1507,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				$selector . ' i'   => 'color: {{VALUE}};',
-				$selector . ' svg' => 'fill: {{VALUE}};',
+				$selector . ' svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 
@@ -1567,7 +1538,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				$selector . ':hover i'   => 'color: {{VALUE}};',
-				$selector . ':hover svg' => 'fill: {{VALUE}};',
+				$selector . ':hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 
@@ -2205,7 +2176,7 @@ class Cart_Preview extends The7_Elementor_Widget_Base {
 			'alpha'     => true,
 			'selectors' => [
 				$selector          => 'color: {{VALUE}};',
-				$selector . ' svg' => 'fill: {{VALUE}};',
+				$selector . ' svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 			'condition' => [
 				'empty_cart_icon[value]!' => '',

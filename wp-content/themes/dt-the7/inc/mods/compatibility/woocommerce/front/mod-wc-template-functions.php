@@ -361,10 +361,11 @@ endif;
  * Return the first image in the product gallery.
  *
  * @param WC_Product $product Product.
+ * @param string     $size    Image size.
  *
  * @return string
  */
-function the7_wc_get_the_first_product_gallery_image_html( $product ) {
+function the7_wc_get_the_first_product_gallery_image_html( $product, $size = 'woocommerce_thumbnail' ) {
 	if ( method_exists( 'WC_Product', 'get_gallery_image_ids' ) ) {
 		$attachment_ids = $product->get_gallery_image_ids();
 	} else {
@@ -375,8 +376,8 @@ function the7_wc_get_the_first_product_gallery_image_html( $product ) {
 		return '';
 	}
 
-	$class      = 'show-on-hover back-image';
-	$image_size = apply_filters( 'single_product_archive_thumbnail_size', 'woocommerce_thumbnail' );
+	$class = 'show-on-hover back-image';
+	$size  = apply_filters( 'single_product_archive_thumbnail_size', $size );
 
 	foreach ( $attachment_ids as $attachment_id ) {
 		if ( ! wp_get_attachment_url( $attachment_id ) ) {
@@ -385,7 +386,7 @@ function the7_wc_get_the_first_product_gallery_image_html( $product ) {
 
 		return apply_filters(
 			'dt_woocommerce_get_alt_product_thumbnail',
-			wp_get_attachment_image( $attachment_id, $image_size, false, [ 'class' => $class ] )
+			wp_get_attachment_image( $attachment_id, $size, false, [ 'class' => $class ] )
 		);
 	}
 

@@ -24,7 +24,7 @@ if ( ! class_exists( 'The7_DevToolMainModule', false ) ) :
 			$this->plugin_name = 'the7-dev-tools';
 			$this->version = '1.0.0';
 			$this->plugin_dir = trailingslashit( dirname( __FILE__ ) );
-			$this->options = get_option( self::DEV_TOOL_OPTION, array() );
+			$this->options = (array) get_option( self::DEV_TOOL_OPTION, array() );
 		}
 
 		public function execute() {

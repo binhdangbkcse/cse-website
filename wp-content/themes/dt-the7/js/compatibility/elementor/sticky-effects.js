@@ -54,7 +54,7 @@
                 methods.toggle = elementorFrontend.debounce(methods.toggle, 300);
             },
             bindEvents: function () {
-                elementorFrontend.elements.$window.on('resize', methods.toggle);
+                elementorFrontend.elements.$window.on('the7-resize-width', methods.toggle);
                 //elementorFrontend.elements.$window.on("scroll", methods.toggle);
                 $widget.on('the7-sticky:effect-active', methods.onEffectActive);
                 $widget.on('the7-sticky:effect-not-active', methods.onEffectNotActive);
@@ -62,7 +62,7 @@
                 $widget.on('the7-sticky:unstick', methods.deactivateHideOnscroll);
             },
             unBindEvents: function () {
-                elementorFrontend.elements.$window.off('resize', methods.toggle);
+                elementorFrontend.elements.$window.off('the7-resize-width', methods.toggle);
                 //elementorFrontend.elements.$window.off('scroll', methods.toggle);
                 $widget.off('the7-sticky:effect-active', methods.onEffectActive);
                 $widget.off('the7-sticky:effect-not-active', methods.onEffectNotActive);
@@ -89,8 +89,6 @@
                     methods.deactivateSticky();
                 }
                 methods.updateHeight();
-
-
             },
             isEffectActive: function () {
                 if (typeof settings === 'undefined') {
@@ -355,12 +353,12 @@
                 methods.toggle = elementorFrontend.debounce(methods.toggle, 300);
             },
             bindEvents: function () {
-                elementorFrontend.elements.$window.on('resize', methods.toggle);
+                elementorFrontend.elements.$window.on('the7-resize-width', methods.toggle);
                 $widget.on('effect-active', methods.onEffectActive);
                 $widget.on('effect-not-active', methods.onEffectNotActive);
             },
             unBindEvents: function () {
-                elementorFrontend.elements.$window.off('resize', methods.toggle);
+                elementorFrontend.elements.$window.off('the7-resize-width', methods.toggle);
                 $widget.off('effect-active', methods.onEffectActive);
                 $widget.off('effect-not-active', methods.onEffectNotActive);
             },
@@ -506,11 +504,11 @@
         }
 
         elementorFrontend.elements.$document.on('elementor/popup/show', function (event, id, popupElementorObject) {
-            initSections(popupElementorObject.$element.find('.elementor-section, .e-container'));
+            initSections(popupElementorObject.$element.find('.elementor-section, .e-container, .e-con'));
         });
 
         elementorFrontend.elements.$document.on('elementor/popup/hide', function (event, id, popupElementorObject) {
-            destroySections(popupElementorObject.$element.find('.elementor-section, .e-container'));
+            destroySections(popupElementorObject.$element.find('.elementor-section, .e-container, .e-con'));
         });
 
         if (elementorFrontend.isEditMode()) {
@@ -521,10 +519,16 @@
                     handleSection($widget);
                 })
             });
+
+            elementorFrontend.hooks.addAction("frontend/element_ready/container", function ($widget, $) {
+                $(document).ready(function () {
+                    handleSection($widget);
+                })
+            });
         } else {
             elementorFrontend.on("components:init", function () {
                 $(document).ready(function () {
-                    initSections($('.elementor-section, .e-container'));
+                    initSections($('.elementor-section, .e-container, .e-con'));
                 })
             });
         }

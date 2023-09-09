@@ -83,7 +83,7 @@ class Products_Query extends Abstract_Template {
 	/**
 	 * @return void
 	 */
-	protected function add_query_group_control() {
+	public function add_query_group_control() {
 		$this->widget->add_control(
 			'current_query_info',
 			[

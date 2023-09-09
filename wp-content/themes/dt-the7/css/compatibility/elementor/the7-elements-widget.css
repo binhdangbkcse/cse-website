@@ -104,7 +104,7 @@
 .mobile-true .elementor-widget.elementor-widget-the7_elements .content-rollover-layout-list article:hover > .post-thumbnail-wrap .post-thumbnail-rollover:after,
 .mobile-true .elementor-widget.elementor-widget-the7_elements .gradient-overlay-layout-list article:hover > .post-thumbnail-wrap .post-thumbnail-rollover:after,
 .mobile-true .elementor-widget.elementor-widget-the7_elements .content-rollover-layout-list article:hover .post-thumbnail > .post-thumbnail-rollover:after,
-.mobile-true .elementor-widget.elementor-widget-the7_elements .content-rollover-layout-list article:hover .project-links-container a {
+.mobile-true .elementor-widget.elementor-widget-the7_elements .content-rollover-layout-list article:hover .the7-hover-icon {
   opacity: 1;
 }
 .mobile-true .elementor-widget.elementor-widget-the7_elements .classic-layout-list .rollover-active .post-thumbnail-rollover {
@@ -204,6 +204,9 @@
   opacity: 1;
   visibility: visible;
 }
+.elementor-widget.elementor-widget-the7_elements .gradient-overlay-layout-list.hover-fade article:hover .post-thumbnail > .post-thumbnail-rollover:after {
+  opacity: 1;
+}
 .mobile-false .elementor-widget.elementor-widget-the7_elements .hover-scale .post-thumbnail-rollover:after {
   display: none;
 }
@@ -251,6 +254,7 @@
   transition: opacity 0.3s;
 }
 .elementor-widget.elementor-widget-the7_elements .post-thumbnail:hover > .post-thumbnail-rollover:after,
+.elementor-widget.elementor-widget-the7_elements .content-rollover-layout-list article:hover .post-thumbnail > .post-thumbnail-rollover:after,
 .elementor-widget.elementor-widget-the7_elements .gradient-overlap-layout-list article:hover .post-thumbnail-rollover:after {
   opacity: 1;
 }
@@ -258,91 +262,41 @@
   text-align: center;
   line-height: 0;
 }
-.elementor-widget.elementor-widget-the7_elements .project-links-container a {
-  display: flex;
+.elementor-widget.elementor-widget-the7_elements .the7-hover-icon {
+  position: static;
+  display: inline-flex;
   justify-content: center;
-  position: relative;
-  font-size: 0;
-  line-height: 0;
+  align-items: center;
+  transition: all 0.3s ease;
+  transform: none;
+  pointer-events: initial;
   opacity: 0;
-  text-align: center;
-  -webkit-backface-visibility: hidden;
-  transition: opacity 0.3s;
-  border-radius: var(--the7-border-radius-size);
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:before,
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:after {
-  position: absolute;
-  background: none;
-  border-style: solid;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  content: "";
-  box-sizing: border-box;
-  border-radius: inherit;
-  transition: none;
-  -webkit-backface-visibility: hidden;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:before,
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:hover:after {
-  opacity: 1;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:after,
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:hover:before {
-  opacity: 0;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:hover:before,
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:not(:hover):after {
-  transition-delay: unset;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a > span {
-  position: relative;
   z-index: 2;
-  transition: color 0.3s;
-  vertical-align: middle;
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
 }
-.elementor-widget.elementor-widget-the7_elements .project-links-container a > svg {
+.elementor-widget.elementor-widget-the7_elements .the7-hover-icon i {
+  transition: color 0.3s ease;
+}
+.elementor-widget.elementor-widget-the7_elements .the7-hover-icon svg {
   position: relative;
   z-index: 2;
   align-self: center;
-  transition: fill 0.3s;
+  transition: fill 0.3s ease, color 0.3s ease;
   width: 16px;
 }
-.elementor-widget.elementor-widget-the7_elements .gradient-overlay-layout-list .project-links-container a {
-  opacity: 1;
-}
-.elementor-widget.elementor-widget-the7_elements .post-entry-content .project-links-container {
-  display: inline-block;
-}
-.elementor-widget.elementor-widget-the7_elements .post-entry-content:hover .project-links-container a,
-.elementor-widget.elementor-widget-the7_elements .content-rollover-layout-list article:hover .project-links-container a,
-.elementor-widget.elementor-widget-the7_elements .post-thumbnail:hover .project-links-container a,
-.elementor-widget.elementor-widget-the7_elements .gradient-overlap-layout-list article:hover .project-links-container a {
-  opacity: 1;
-}
-.elementor-widget.elementor-widget-the7_elements .post-thumbnail-wrap .project-links-container {
-  display: -ms-flexbox;
-  display: -ms-flex;
-  display: flex;
-  -ms-align-items: center;
-  -ms-flex-align: center;
-  align-items: center;
-  -ms-flex-pack: center;
-  -ms-justify-content: center;
-  justify-content: center;
+.elementor-widget.elementor-widget-the7_elements .post-thumbnail-rollover .the7-hover-icon {
   position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
-.elementor-widget.elementor-widget-the7_elements .gradient-overlap-layout-list .project-links-container {
-  height: calc(100% - 125px);
+.elementor-widget.elementor-widget-the7_elements .gradient-overlay-layout-list .the7-hover-icon {
+  opacity: 1;
+}
+.elementor-widget.elementor-widget-the7_elements .post-entry-content:hover .the7-hover-icon,
+.elementor-widget.elementor-widget-the7_elements .content-rollover-layout-list article:hover .the7-hover-icon,
+.elementor-widget.elementor-widget-the7_elements .post-thumbnail:hover .the7-hover-icon,
+.elementor-widget.elementor-widget-the7_elements .gradient-overlap-layout-list article:hover .the7-hover-icon {
+  opacity: 1;
 }
 .elementor-widget.elementor-widget-the7_elements .entry-meta .meta-item {
   padding: 0;
@@ -386,9 +340,6 @@
   display: none;
   opacity: 0;
 }
-.elementor-widget.elementor-widget-the7_elements .bottom-overlap-layout-list article:not(.no-img) .project-links-container {
-  height: calc(100% - 100px);
-}
 .elementor-widget.elementor-widget-the7_elements .bottom-overlap-layout-list article:not(.no-img) .post-entry-content {
   margin-top: -100px;
 }
@@ -421,7 +372,7 @@
 .elementor-widget.elementor-widget-the7_elements .entry-excerpt p:last-child {
   margin-bottom: 0;
 }
-.elementor-widget.elementor-widget-the7_elements .project-links-container a {
+.elementor-widget.elementor-widget-the7_elements .the7-hover-icon {
   width: 40px;
   height: 40px;
   line-height: 40px;
@@ -431,31 +382,17 @@
   border-color: var(--the7-accent-color);
   background-color: var(--the7-accent-color);
   box-shadow: none;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:before,
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:after {
-  display: none;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a > span {
-  color: #fff;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a:hover > svg,
-.elementor-widget.elementor-widget-the7_elements .project-links-container a > svg {
-  fill: #fff;
-}
-.elementor-widget.elementor-widget-the7_elements .project-links-container a > span {
   font-size: 16px;
   color: #fff;
 }
-.elementor-widget.elementor-widget-the7_elements .project-links-container a > span:before {
-  line-height: 40px;
+.elementor-widget.elementor-widget-the7_elements .the7-hover-icon:hover > svg,
+.elementor-widget.elementor-widget-the7_elements .the7-hover-icon > svg {
+  fill: #fff;
+  color: #fff;
 }
-.elementor-widget.elementor-widget-the7_elements .project-links-container a > svg {
+.elementor-widget.elementor-widget-the7_elements .the7-hover-icon > svg {
   width: 16px;
   height: auto;
-}
-.elementor-widget.elementor-widget-the7_elements .portfolio-shortcode .project-links-container a:not(:hover) span {
-  color: #fff;
 }
 .elementor-widget.elementor-widget-the7_elements .post-details i:first-child {
   margin-right: 5px;

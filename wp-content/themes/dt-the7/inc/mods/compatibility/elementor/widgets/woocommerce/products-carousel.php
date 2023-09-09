@@ -21,6 +21,7 @@ use The7\Mods\Compatibility\Elementor\Widget_Templates\Arrows;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Bullets;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Button;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\General;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Woocommerce\Products_Query as Query;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Woocommerce\Sale_Flash;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Woocommerce\Price;
@@ -51,7 +52,7 @@ class Products_Carousel extends Products {
 	 * @return string
 	 */
 	protected function the7_title() {
-		return __( 'Products Carousel', 'the7mk2' );
+		return esc_html__( 'Products Carousel', 'the7mk2' );
 	}
 
 	/**
@@ -88,6 +89,16 @@ class Products_Carousel extends Products {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function get_style_depends() {
+		$styles   = parent::get_style_depends();
+		$styles[] = 'the7-carousel-navigation';
+
+		return $styles;
+	}
+
+	/**
 	 * @param strig $element Element name.
 	 *
 	 * @return void
@@ -104,15 +115,12 @@ class Products_Carousel extends Products {
 			'data-v-tablet-columns-num' => $settings['widget_columns_tablet'],
 			'data-phone-columns-num'    => $settings['widget_columns_mobile'],
 			'data-auto-height'          => $settings['adaptive_height'] ? 'true' : 'false',
-			'data-col-gap'              => $settings['gap_between_posts']['size'],
-			'data-col-gap-tablet'       => $settings['gap_between_posts_tablet']['size'],
-			'data-col-gap-mobile'       => $settings['gap_between_posts_mobile']['size'],
+			'data-col-gap'              => $settings['gap_between_posts']['size'] ?? null,
+			'data-col-gap-tablet'       => $settings['gap_between_posts_tablet']['size'] ?? null,
+			'data-col-gap-mobile'       => $settings['gap_between_posts_mobile']['size'] ?? null,
 			'data-speed'                => $settings['speed'],
 			'data-autoplay'             => $settings['autoplay'] ? 'true' : 'false',
 			'data-autoplay_speed'       => $settings['autoplay_speed'],
-			'data-bullet'               => $settings['show_bullets'],
-			'data-bullet_tablet'        => $settings['show_bullets_tablet'],
-			'data-bullet_mobile'        => $settings['show_bullets_mobile'],
 		];
 
 		$this->add_render_attribute( $element, $data_atts );
@@ -246,7 +254,7 @@ class Products_Carousel extends Products {
 		$this->start_controls_section(
 			'scrolling_section',
 			[
-				'label' => __( 'Scrolling', 'the7mk2' ),
+				'label' => esc_html__( 'Scrolling', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -254,7 +262,7 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'slide_to_scroll',
 			[
-				'label'   => __( 'Scroll Mode', 'the7mk2' ),
+				'label'   => esc_html__( 'Scroll Mode', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'single',
 				'options' => [
@@ -267,7 +275,7 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'speed',
 			[
-				'label'   => __( 'Transition Speed (ms)', 'the7mk2' ),
+				'label'   => esc_html__( 'Transition Speed (ms)', 'the7mk2' ),
 				'type'    => Controls_Manager::NUMBER,
 				'default' => '600',
 			]
@@ -276,7 +284,7 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'autoplay',
 			[
-				'label'        => __( 'Autoplay Slides', 'the7mk2' ),
+				'label'        => esc_html__( 'Autoplay Slides', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -286,7 +294,7 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'autoplay_speed',
 			[
-				'label'     => __( 'Autoplay Speed (ms)', 'the7mk2' ),
+				'label'     => esc_html__( 'Autoplay Speed (ms)', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 6000,
 				'min'       => 100,
@@ -308,7 +316,7 @@ class Products_Carousel extends Products {
 		$this->start_controls_section(
 			'layout_content_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -316,10 +324,10 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'show_widget_title',
 			[
-				'label'        => __( 'Widget Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Widget Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 			]
@@ -328,7 +336,7 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'widget_title_text',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => 'Widget title',
 				'condition' => [
@@ -340,7 +348,7 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -384,7 +392,7 @@ class Products_Carousel extends Products {
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 3,
 				'tablet_default' => 2,
@@ -394,10 +402,12 @@ class Products_Carousel extends Products {
 			]
 		);
 
+		$this->template( Image_Size::class )->add_style_controls();
+
 		$this->add_basic_responsive_control(
 			'gap_between_posts',
 			[
-				'label'      => __( 'Columns Gap (px)', 'the7mk2' ),
+				'label'      => esc_html__( 'Columns Gap (px)', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -414,7 +424,7 @@ class Products_Carousel extends Products {
 		$this->add_basic_responsive_control(
 			'carousel_margin',
 			[
-				'label'       => __( 'outer gaps', 'the7mk2' ),
+				'label'       => esc_html__( 'outer gaps', 'the7mk2' ),
 				'type'        => Controls_Manager::DIMENSIONS,
 				'size_units'  => [ 'px' ],
 				'range'       => [
@@ -434,7 +444,7 @@ class Products_Carousel extends Products {
 		$this->add_control(
 			'adaptive_height',
 			[
-				'label'        => __( 'Adaptive Height', 'the7mk2' ),
+				'label'        => esc_html__( 'Adaptive Height', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -509,18 +519,6 @@ class Products_Carousel extends Products {
 			]
 		);
 
-		$class[] = the7_array_match(
-			$settings['bullets_style'],
-			[
-				'scale-up'         => 'bullets-scale-up',
-				'stroke'           => 'bullets-stroke',
-				'fill-in'          => 'bullets-fill-in',
-				'small-dot-stroke' => 'bullets-small-dot-stroke',
-				'ubax'             => 'bullets-ubax',
-				'etefu'            => 'bullets-etefu',
-			]
-		);
-
 		if ( $settings['product_title_width'] === 'crp-to-line' ) {
 			$class[] = 'title-to-line';
 		}
@@ -543,14 +541,5 @@ class Products_Carousel extends Products {
 			$this->get_unique_class() . '.the7-products-carousel',
 			'~"%s"'
 		);
-
-		$this->template( Arrows::class )->add_less_vars( $less_vars );
-
-		$less_vars->add_rgba_color( 'bullet-color', $settings['bullet_color'] );
-		$less_vars->add_rgba_color( 'bullet-color-hover', $settings['bullet_color_hover'] );
-		$less_vars->add_keyword( 'bullets-v-position', $settings['bullets_v_position'] );
-		$less_vars->add_keyword( 'bullets-h-position', $settings['bullets_h_position'] );
-		$less_vars->add_pixel_number( 'bullet-v-position', $settings['bullets_v_offset'] );
-		$less_vars->add_pixel_number( 'bullet-h-position', $settings['bullets_h_offset'] );
 	}
 }

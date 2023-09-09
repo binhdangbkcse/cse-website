@@ -740,7 +740,7 @@ class Tabs extends The7_Elementor_Widget_Base {
 				'alpha'     => true,
 				'selectors' => [
 					$selector          => 'color: {{VALUE}};',
-					$selector . ' svg' => 'fill: {{VALUE}};',
+					$selector . ' svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -943,7 +943,7 @@ class Tabs extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'tab_accordion_content_gap_top',
 			[
-				'label'      => __( 'Content Top spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Content Top spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -960,7 +960,7 @@ class Tabs extends The7_Elementor_Widget_Base {
 		$this->add_responsive_control(
 			'tab_accordion_content_gap_bottom',
 			[
-				'label'      => __( 'Content Bottom Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Content Bottom Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [

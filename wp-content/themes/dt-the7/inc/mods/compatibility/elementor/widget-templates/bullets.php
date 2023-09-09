@@ -11,8 +11,6 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class Bullets.
- *
- * @package The7\Mods\Compatibility\Elementor\Widget_Templates
  */
 class Bullets extends Abstract_Template {
 
@@ -23,31 +21,38 @@ class Bullets extends Abstract_Template {
 		$this->widget->start_controls_section(
 			'bullets_section',
 			[
-				'label' => __( 'Bullets', 'the7mk2' ),
+				'label' => esc_html__( 'Bullets', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$layouts            = [
-			'y' => __( 'Show', 'the7mk2' ),
-			'n' => __( 'Hide', 'the7mk2' ),
+			'show' => esc_html__( 'Show', 'the7mk2' ),
+			'hide' => esc_html__( 'Hide', 'the7mk2' ),
 		];
-		$responsive_layouts = [ '' => __( 'No change', 'the7mk2' ) ] + $layouts;
+		$responsive_layouts = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $layouts;
 
 		$this->widget->add_basic_responsive_control(
 			'show_bullets',
 			[
-				'label'       => __( 'Show Bullets', 'the7mk2' ),
-				'type'        => Controls_Manager::SELECT,
-				'default'     => 'y',
-				'options'     => $layouts,
-				'device_args' => [
+				'label'                => esc_html__( 'Show Bullets', 'the7mk2' ),
+				'type'                 => Controls_Manager::SELECT,
+				'default'              => 'show',
+				'options'              => $layouts,
+				'device_args'          => [
 					'tablet' => [
 						'options' => $responsive_layouts,
 					],
 					'mobile' => [
 						'options' => $responsive_layouts,
 					],
+				],
+				'selectors'            => [
+					'{{WRAPPER}}' => '{{VALUE}}',
+				],
+				'selectors_dictionary' => [
+					'show' => '--bullet-display: inline-flex;',
+					'hide' => '--bullet-display: none',
 				],
 			]
 		);
@@ -59,25 +64,26 @@ class Bullets extends Abstract_Template {
 	 * @return void
 	 */
 	public function add_style_controls() {
+
 		$this->widget->start_controls_section(
-			'bullets_style_block',
+			'bullets_style_section',
 			[
-				'label'      => __( 'Bullets', 'the7mk2' ),
+				'label'      => esc_html__( 'Bullets', 'the7mk2' ),
 				'tab'        => Controls_Manager::TAB_STYLE,
 				'conditions' => [
 					'relation' => 'or',
 					'terms'    => [
 						[
 							'name'  => 'show_bullets',
-							'value' => 'y',
+							'value' => 'show',
 						],
 						[
 							'name'  => 'show_bullets_tablet',
-							'value' => 'y',
+							'value' => 'show',
 						],
 						[
 							'name'  => 'show_bullets_mobile',
-							'value' => 'y',
+							'value' => 'show',
 						],
 					],
 				],
@@ -85,9 +91,9 @@ class Bullets extends Abstract_Template {
 		);
 
 		$this->widget->add_control(
-			'bullets_Style_heading',
+			'bullets_style_heading',
 			[
-				'label'     => __( 'Bullets Style', 'the7mk2' ),
+				'label'     => esc_html__( 'Bullets Style', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -96,10 +102,10 @@ class Bullets extends Abstract_Template {
 		$this->widget->add_control(
 			'bullets_style',
 			[
-				'label'   => __( 'Choose Bullets Style', 'the7mk2' ),
-				'type'    => Controls_Manager::SELECT,
-				'default' => 'small-dot-stroke',
-				'options' => [
+				'label'        => esc_html__( 'Choose Bullets Style', 'the7mk2' ),
+				'type'         => Controls_Manager::SELECT,
+				'default'      => 'small-dot-stroke',
+				'options'      => [
 					'small-dot-stroke' => 'Small dot stroke',
 					'scale-up'         => 'Scale up',
 					'stroke'           => 'Stroke',
@@ -107,13 +113,17 @@ class Bullets extends Abstract_Template {
 					'ubax'             => 'Square',
 					'etefu'            => 'Rectangular',
 				],
+				'prefix_class' => 'bullets-',
+				'render_type'  => 'template',
 			]
 		);
+
+		$selector = '{{WRAPPER}} .owl-dots';
 
 		$this->widget->add_control(
 			'bullet_size',
 			[
-				'label'      => __( 'Bullets Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Bullets Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -128,7 +138,29 @@ class Bullets extends Abstract_Template {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .owl-dot' => '--the7-carousel-bullet-size: {{SIZE}}{{UNIT}}',
+					$selector => '--bullet-size: {{SIZE}}{{UNIT}}',
+				],
+			]
+		);
+
+		$this->widget->add_control(
+			'bullet_border_size',
+			[
+				'label'      => esc_html__( 'Border Size', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min'  => 1,
+						'max'  => 100,
+						'step' => 1,
+					],
+				],
+				'condition'  => [
+					'bullets_style!' => 'scale-up',
+				],
+				'selectors'  => [
+					$selector => '--bullet-border-width: {{SIZE}}{{UNIT}}',
 				],
 			]
 		);
@@ -136,7 +168,7 @@ class Bullets extends Abstract_Template {
 		$this->widget->add_control(
 			'bullet_gap',
 			[
-				'label'      => __( 'Gap Between Bullets', 'the7mk2' ),
+				'label'      => esc_html__( 'Gap Between Bullets', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -145,13 +177,13 @@ class Bullets extends Abstract_Template {
 				'size_units' => [ 'px' ],
 				'range'      => [
 					'px' => [
-						'min'  => 0,
+						'min'  => 1,
 						'max'  => 200,
 						'step' => 1,
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .owl-dot' => '--the7-carousel-bullet-gap: {{SIZE}}{{UNIT}}',
+					$selector => '--bullet-gap: {{SIZE}}{{UNIT}}',
 				],
 			]
 		);
@@ -161,19 +193,19 @@ class Bullets extends Abstract_Template {
 		$this->widget->start_controls_tab(
 			'bullet_colors',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->widget->add_control(
 			'bullet_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .owl-dot' => '--the7-carousel-bullet-color: {{VALUE}}',
+					$selector => '--bullet-color: {{VALUE}}',
 				],
 			]
 		);
@@ -183,19 +215,19 @@ class Bullets extends Abstract_Template {
 		$this->widget->start_controls_tab(
 			'bullet_hover_colors',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->widget->add_control(
 			'bullet_color_hover',
 			[
-				'label'     => __( 'Hover Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Hover Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .owl-dot' => '--the7-carousel-bullet-hover-color: {{VALUE}}',
+					$selector => '--bullet-hover-color: {{VALUE}}',
 				],
 			]
 		);
@@ -205,19 +237,19 @@ class Bullets extends Abstract_Template {
 		$this->widget->start_controls_tab(
 			'bullet_active_colors',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->widget->add_control(
 			'bullet_color_active',
 			[
-				'label'     => __( 'Active Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Active Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .owl-dot' => '--the7-carousel-bullet-active-color: {{VALUE}}',
+					$selector => '--bullet-active-color: {{VALUE}}',
 				],
 			]
 		);
@@ -229,7 +261,7 @@ class Bullets extends Abstract_Template {
 		$this->widget->add_control(
 			'bullets_position_heading',
 			[
-				'label'     => __( 'Bullets Position', 'the7mk2' ),
+				'label'     => esc_html__( 'Bullets Position', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -238,67 +270,88 @@ class Bullets extends Abstract_Template {
 		$this->widget->add_control(
 			'bullets_v_position',
 			[
-				'label'       => __( 'Vertical Position', 'the7mk2' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options'     => [
+				'label'                => esc_html__( 'Vertical Position', 'the7mk2' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'label_block'          => false,
+				'options'              => [
 					'top'    => [
-						'title' => __( 'Top', 'the7mk2' ),
+						'title' => esc_html__( 'Top', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-top',
 					],
 					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-middle',
 					],
 					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
 						'icon'  => 'eicon-v-align-bottom',
 					],
 				],
-				'default'     => 'bottom',
+				'selectors_dictionary' => [
+					'top'    => 'top: var(--bullet-v-offset, 10px); --bullet-translate-y:0;',
+					'center' => 'top: calc(50% + var(--bullet-v-offset, 10px)); --bullet-translate-y:-50%;',
+					'bottom' => 'top: calc(100% + var(--bullet-v-offset, 10px)); --bullet-translate-y:0;',
+				],
+				'toggle'               => false,
+				'selectors'            => [
+					$selector => '{{VALUE}};',
+				],
+				'default'              => 'bottom',
 			]
 		);
 
 		$this->widget->add_control(
 			'bullets_h_position',
 			[
-				'label'       => __( 'Horizontal Position', 'the7mk2' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options'     => [
+				'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'label_block'          => false,
+				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
-				'default'     => 'center',
+				'toggle'               => false,
+				'default'              => 'center',
+				'selectors_dictionary' => [
+					'left'   => 'left: var(--bullet-h-offset); --bullet-translate-x:0;',
+					'center' => 'left: calc(50% + var(--bullet-h-offset)); --bullet-translate-x:-50%;',
+					'right'  => 'left: calc(100% - var(--bullet-h-offset)); --bullet-translate-x:-100%;',
+				],
+				'selectors'            => [
+					$selector => '{{VALUE}};',
+				],
 			]
 		);
 
 		$this->widget->add_control(
 			'bullets_v_offset',
 			[
-				'label'      => __( 'Vertical Offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Vertical Offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
-					'size' => 0,
+					'size' => 10,
 				],
 				'size_units' => [ 'px' ],
 				'range'      => [
 					'px' => [
-						'min'  => -1000,
+						'min'  => - 1000,
 						'max'  => 1000,
 						'step' => 1,
 					],
+				],
+				'selectors'  => [
+					$selector => '--bullet-v-offset: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -306,7 +359,7 @@ class Bullets extends Abstract_Template {
 		$this->widget->add_control(
 			'bullets_h_offset',
 			[
-				'label'      => __( 'Horizontal Offset', 'the7mk2' ),
+				'label'      => esc_html__( 'Horizontal Offset', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -315,10 +368,13 @@ class Bullets extends Abstract_Template {
 				'size_units' => [ 'px' ],
 				'range'      => [
 					'px' => [
-						'min'  => -1000,
+						'min'  => - 1000,
 						'max'  => 1000,
 						'step' => 1,
 					],
+				],
+				'selectors'  => [
+					$selector => '--bullet-h-offset: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);

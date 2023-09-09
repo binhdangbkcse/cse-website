@@ -17,6 +17,7 @@
 	overflow: hidden;
 	-webkit-transform:	translatez(0);
 	transform:		translatez(0);
+	touch-action: pan-y;
 }
 .photo-scroller.full-screen {
 	position: fixed;
@@ -357,6 +358,7 @@
 	  & svg {
 	  	width: 20px;
 	  	fill: #fff;
+	  	color: #fff;
 	  }
 	  &:before {
 	  	display: block;
@@ -367,38 +369,62 @@
 	  }
 	}
 	.btn-cntr .hide-thumb-btn.act:before {
-	  -webkit-mask: url(../images/arrow-bar-show.svg) no-repeat center center;
-	  mask-image: url(../images/arrow-bar-show.svg) no-repeat center center;
+	  -webkit-mask: url(../images/arrow-bar-show.svg);
+	  mask-image: url(../images/arrow-bar-show.svg);
+	  -webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
   	-webkit-mask-size: var(--icon-size, 18px);
   	mask-size: var(--icon-size, 18px);
 	}
 	.btn-cntr .hide-thumb-btn:before {
-	  -webkit-mask: url(../images/arrow-bar-hide.svg) no-repeat center center;
-	  mask-image: url(../images/arrow-bar-hide.svg) no-repeat center center;
+	  -webkit-mask: url(../images/arrow-bar-hide.svg);
+	  mask-image: url(../images/arrow-bar-hide.svg);
+	  -webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
 	  -webkit-mask-size: var(--icon-size, 18px);
   	mask-size: var(--icon-size, 18px);
 	}
 	.btn-cntr .full-screen-btn:before {
-	  -webkit-mask: url(../images/fullscreen.svg) no-repeat center center;
-	  mask-image: url(../images/fullscreen.svg) no-repeat center center;
-	  	-webkit-mask-size: var(--icon-size, 18px);
-    	mask-size: var(--icon-size, 18px);
+	  -webkit-mask: url(../images/fullscreen.svg);
+	  mask-image: url(../images/fullscreen.svg);
+	  -webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
+	  -webkit-mask-size: var(--icon-size, 18px);
+    mask-size: var(--icon-size, 18px);
 	}
 	.btn-cntr .full-screen-btn.act:before {
-	  -webkit-mask: url(../images/fullscreen-exit.svg) no-repeat center center;
-	  mask-image: url(../images/fullscreen-exit.svg) no-repeat center center;
+	  -webkit-mask: url(../images/fullscreen-exit.svg);
+	  mask-image: url(../images/fullscreen-exit.svg);
+	  -webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
 	  -webkit-mask-size: var(--icon-size, 18px);
-    	mask-size: var(--icon-size, 18px);
+    mask-size: var(--icon-size, 18px);
 	}
 	.btn-cntr .auto-play-btn:before {
-	  -webkit-mask: url(../images/scroller-play.svg) no-repeat center center;
-	  mask-image: url(../images/scroller-play.svg) no-repeat center center;
+	  -webkit-mask: url(../images/scroller-play.svg);
+	  mask-image: url(../images/scroller-play.svg);
+	  -webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
   	-webkit-mask-size: var(--icon-size, 18px);
   	mask-size: var(--icon-size, 18px);
 	}
 	.btn-cntr .auto-play-btn.paused:before {
-	  -webkit-mask: url(../images/scroller-pause.svg) no-repeat center center;
-	  mask-image: url(../images/scroller-pause.svg) no-repeat center center;
+	  -webkit-mask: url(../images/scroller-pause.svg);
+	  mask-image: url(../images/scroller-pause.svg);
+	  -webkit-mask-repeat: no-repeat;
+		mask-repeat: no-repeat;
+		-webkit-mask-position: center;
+		mask-position: center;
 	  -webkit-mask-size: var(--icon-size, 18px);
   	mask-size: var(--icon-size, 18px);
 	}
@@ -530,8 +556,12 @@
 	}
 	.project-navigation a.back-to-list {
 		&:before {
-			-webkit-mask: url(../images/the7-grid-3x3-gap-fill.svg) no-repeat right center;
-  		mask-image: url(../images/the7-grid-3x3-gap-fill.svg) no-repeat right center;
+			-webkit-mask: url(../images/the7-grid-3x3-gap-fill.svg);
+  		mask-image: url(../images/the7-grid-3x3-gap-fill.svg);
+  		-webkit-mask-repeat: no-repeat;
+  		mask-repeat: no-repeat;
+  		-webkit-mask-position: right center;
+  		mask-position: right center;
 		}
 		margin: 0 10px;
 	}
@@ -610,12 +640,20 @@
   }
 }
 .project-navigation .prev-post:before {
-	-webkit-mask: url(../images/the7-chevron-left.svg) no-repeat right center;
-  mask-image: url(../images/the7-chevron-left.svg) no-repeat right center;
+	-webkit-mask: url(../images/the7-chevron-left.svg);
+  mask-image: url(../images/the7-chevron-left.svg);
+  -webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: right center;
+	mask-position: right center;
 }
 .project-navigation .next-post:before {
-	-webkit-mask: url(../images/the7-chevron-right.svg) no-repeat right center;
-  mask-image: url(../images/the7-chevron-right.svg) no-repeat right center;
+	-webkit-mask: url(../images/the7-chevron-right.svg);
+  mask-image: url(../images/the7-chevron-right.svg);
+  -webkit-mask-repeat: no-repeat;
+	mask-repeat: no-repeat;
+	-webkit-mask-position: right center;
+	mask-position: right center;
 	margin-right: -3px;
 }
 

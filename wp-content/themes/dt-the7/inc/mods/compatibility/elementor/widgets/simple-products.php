@@ -16,6 +16,8 @@ use The7\Mods\Compatibility\Elementor\Pro\Modules\Query_Control\The7_Group_Contr
 use The7\Mods\Compatibility\Elementor\Shortcode_Adapters\Query_Adapters\Products_Query;
 use The7\Mods\Compatibility\Elementor\Shortcode_Adapters\The7_Shortcode_Adapter_Interface;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Less_Vars_Decorator_Interface;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Pagination;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Woocommerce\Add_To_Cart_Button;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Woocommerce\Products_Query as Query;
@@ -42,7 +44,7 @@ class Simple_Products extends Simple_Widget_Base {
 	 * @return string
 	 */
 	protected function the7_title() {
-		return __( 'Simple Products', 'the7mk2' );
+		return esc_html__( 'Simple Products', 'the7mk2' );
 	}
 
 	/**
@@ -75,13 +77,6 @@ class Simple_Products extends Simple_Widget_Base {
 			$this->get_name(),
 			PRESSCORE_THEME_URI . '/js/compatibility/elementor/woocommerce-simple-products.js',
 			[ 'dt-main' ]
-		);
-
-		// Preview script.
-		the7_register_script_in_footer(
-			$this->get_name() . '-preview',
-			PRESSCORE_ADMIN_URI . '/assets/js/elementor/woocommerce-simple-products-preview.js',
-			[ 'the7-elementor-editor-common' ]
 		);
 	}
 
@@ -164,7 +159,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'layout_content_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -172,10 +167,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'show_widget_title',
 			[
-				'label'        => __( 'Widget Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Widget Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 			]
@@ -184,7 +179,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'widget_title_text',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
 				'default'   => 'Widget title',
 				'condition' => [
@@ -196,7 +191,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -243,7 +238,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 1,
 				'tablet_default' => 1,
@@ -258,10 +253,12 @@ class Simple_Products extends Simple_Widget_Base {
 			]
 		);
 
+		$this->template( Image_Size::class )->add_style_controls();
+
 		$this->add_basic_responsive_control(
 			'gap_between_posts',
 			[
-				'label'      => __( 'Columns Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Columns Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -282,7 +279,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'rows_gap',
 			[
-				'label'      => __( 'Rows Gap', 'the7mk2' ),
+				'label'      => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -302,10 +299,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'divider',
 			[
-				'label'     => __( 'Dividers', 'the7mk2' ),
+				'label'     => esc_html__( 'Dividers', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_off' => __( 'Off', 'elementor' ),
-				'label_on'  => __( 'On', 'elementor' ),
+				'label_off' => esc_html__( 'Off', 'elementor' ),
+				'label_on'  => esc_html__( 'On', 'elementor' ),
 				'separator' => 'before',
 			]
 		);
@@ -321,7 +318,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'product_content_section',
 			[
-				'label' => __( 'Product Content', 'the7mk2' ),
+				'label' => esc_html__( 'Product Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -329,12 +326,12 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'link_click',
 			[
-				'label'   => __( 'Apply Link & Hover', 'the7mk2' ),
+				'label'   => esc_html__( 'Apply Link & Hover', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'button',
 				'options' => [
-					'box'    => __( 'Whole box', 'the7mk2' ),
-					'button' => __( "Separate element's", 'the7mk2' ),
+					'box'    => esc_html__( 'Whole box', 'the7mk2' ),
+					'button' => esc_html__( "Separate element's", 'the7mk2' ),
 				],
 			]
 		);
@@ -342,10 +339,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'show_product_image',
 			[
-				'label'        => __( 'Image', 'the7mk2' ),
+				'label'        => esc_html__( 'Image', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -355,10 +352,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'show_title',
 			[
-				'label'        => __( 'Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -368,7 +365,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'product_title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -388,11 +385,11 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'title_width',
 			[
-				'label'     => __( 'Title Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Title Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'normal'      => __( 'Normal', 'the7mk2' ),
-					'crp-to-line' => __( 'Crop to one line', 'the7mk2' ),
+					'normal'      => esc_html__( 'Normal', 'the7mk2' ),
+					'crp-to-line' => esc_html__( 'Crop to one line', 'the7mk2' ),
 				],
 				'default'   => 'normal',
 				'condition' => [
@@ -404,8 +401,8 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'excerpt_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire title.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire title.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'min'         => 1,
@@ -420,10 +417,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'show_price',
 			[
-				'label'     => __( 'Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Price', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 				'separator' => 'before',
 			]
@@ -432,10 +429,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'show_rating',
 			[
-				'label'     => __( 'Rating', 'the7mk2' ),
+				'label'     => esc_html__( 'Rating', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 				'separator' => 'before',
 			]
@@ -444,10 +441,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'show_description',
 			[
-				'label'     => __( 'Short Description', 'the7mk2' ),
+				'label'     => esc_html__( 'Short Description', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 				'separator' => 'before',
 			]
@@ -456,11 +453,11 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'description_width',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'normal'      => __( 'Normal', 'the7mk2' ),
-					'crp-to-line' => __( 'Crop to one line', 'the7mk2' ),
+					'normal'      => esc_html__( 'Normal', 'the7mk2' ),
+					'crp-to-line' => esc_html__( 'Crop to one line', 'the7mk2' ),
 				],
 				'default'   => 'normal',
 				'condition' => [
@@ -472,8 +469,8 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'description_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire title.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire title.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'min'         => 1,
@@ -488,10 +485,10 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'show_add_to_cart',
 			[
-				'label'     => __( 'Add To Cart', 'the7mk2' ),
+				'label'     => esc_html__( 'Add To Cart', 'the7mk2' ),
 				'type'      => Controls_Manager::SWITCHER,
-				'label_on'  => __( 'Show', 'the7mk2' ),
-				'label_off' => __( 'Hide', 'the7mk2' ),
+				'label_on'  => esc_html__( 'Show', 'the7mk2' ),
+				'label_off' => esc_html__( 'Hide', 'the7mk2' ),
 				'default'   => 'yes',
 				'separator' => 'before',
 			]
@@ -604,10 +601,10 @@ class Simple_Products extends Simple_Widget_Base {
 			echo '<div class="post-content-wrapper">';
 
 			if ( $settings['show_product_image'] ) {
-				$post_media = $this->product_image( $settings, $product );
-				echo '<div class="the7-simple-post-thumb"><div class="the7-product-thumb">';
+				$post_media = $this->product_image( $product, 'post-thumbnail-rollover' );
+				echo '<div class="the7-simple-post-thumb">';
 				echo $post_media;
-				echo '</div></div>';
+				echo '</div>';
 			}
 
 			echo '<div class="post-entry-content">';
@@ -707,59 +704,32 @@ class Simple_Products extends Simple_Widget_Base {
 	}
 
 	/**
-	 * @param array      $settings Widget settings.
-	 * @param WC_Product $product Product object.
+	 * @param  \WC_Product   $product    Product object.
+	 * @param  string       $wrap_class  Wrapper class.
 	 *
 	 * @return string
 	 */
-	protected function product_image( $settings, $product ) {
-		if ( $product->get_image_id() ) {
-			$icons_html = $this->get_hover_icons_html_template( $settings );
-
-			$link_wrapper = '<a %HREF% %CLASS% %CUSTOM%><img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% />' . $icons_html . '</a>';
-			$link         = $product->get_permalink();
-
-			$thumb_args = [
-				'img_id'       => $product->get_image_id(),
-				'class'        => implode( ' ', [ 'post-thumbnail-rollover', 'img-ratio-wrapper' ] ),
-				'lazy_loading' => false,
-				'custom'       => the7_get_html_attributes_string(
-					[
-						'aria-label' => __( 'Product image', 'the7mk2' ),
-					]
-				),
-				'wrap'         => $link_wrapper,
-				'echo'         => false,
-			];
-
-			if ( $settings['link_click'] === 'box' ) {
-				$thumb_args['wrap'] = '<div %CLASS% %CUSTOM%><img %IMG_CLASS% %SRC% %ALT% %IMG_TITLE% %SIZE% />' . $icons_html . '</div>';
-			} else {
-				$thumb_args['href'] = $link;
-			}
-
-			$post_media = dt_get_thumb_img( $thumb_args );
-		} else {
-			$image = sprintf(
-				'<img class="%s" src="%s" width="%s" height="%s">',
-				'preload-me',
-				get_template_directory_uri() . '/images/gray-square.svg',
-				1500,
-				1500
-			);
-
-			$post_media = sprintf(
-				'<a %s>%s</a>',
-				the7_get_html_attributes_string(
-					[
-						'aria-label' => __( 'Product image', 'the7mk2' ),
-					]
-				),
-				$image
-			);
+	protected function product_image( $product, $wrap_class = '' ) {
+		$settings          = $this->get_settings_for_display();
+		$img_wrapper_class = implode( ' ', array_filter( [
+			$wrap_class,
+			$this->template( Image_Size::class )->get_wrapper_class(),
+			$this->template( Image_Aspect_Ratio::class )->get_wrapper_class(),
+		] ) );
+		$wrap_attributes   = [
+			'class'      => $img_wrapper_class,
+			'aria-label' => esc_html__( 'Product image', 'the7mk2' ),
+		];
+		$wrap_tag        = 'div';
+		if ( $settings['link_click'] !== 'box' ) {
+			$wrap_tag                = 'a';
+			$wrap_attributes['href'] = $product->get_permalink();
 		}
 
-		return $post_media;
+		$icons_html = $this->get_hover_icons_html_template( $settings );
+		$image      = $this->template( Image_Size::class )->get_image( $product->get_image_id() );
+
+		return '<' . $wrap_tag . ' ' . the7_get_html_attributes_string( $wrap_attributes ) . '>' . $image . $icons_html . '</' . $wrap_tag . '>';
 	}
 
 	/**
@@ -920,7 +890,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'widget_style_section',
 			[
-				'label'     => __( 'Widget Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Widget Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_widget_title' => 'y',
@@ -931,19 +901,19 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_title_align',
 			[
-				'label'     => __( 'Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -964,7 +934,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'widget_title_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -977,7 +947,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_title_bottom_margin',
 			[
-				'label'      => __( 'Spacing Below Title', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing Below Title', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1007,7 +977,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'widget_divider_section',
 			[
-				'label'     => __( 'Dividers', 'the7mk2' ),
+				'label'     => esc_html__( 'Dividers', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'divider' => 'yes',
@@ -1018,13 +988,13 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'divider_style',
 			[
-				'label'     => __( 'Style', 'the7mk2' ),
+				'label'     => esc_html__( 'Style', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
-					'solid'  => __( 'Solid', 'the7mk2' ),
-					'double' => __( 'Double', 'the7mk2' ),
-					'dotted' => __( 'Dotted', 'the7mk2' ),
-					'dashed' => __( 'Dashed', 'the7mk2' ),
+					'solid'  => esc_html__( 'Solid', 'the7mk2' ),
+					'double' => esc_html__( 'Double', 'the7mk2' ),
+					'dotted' => esc_html__( 'Dotted', 'the7mk2' ),
+					'dashed' => esc_html__( 'Dashed', 'the7mk2' ),
 				],
 				'default'   => 'solid',
 				'condition' => [
@@ -1039,7 +1009,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'divider_weight',
 			[
-				'label'     => __( 'Width', 'the7mk2' ),
+				'label'     => esc_html__( 'Width', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'default'   => [
 					'size' => 1,
@@ -1062,7 +1032,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'divider_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'condition' => [
 					'divider' => 'yes',
@@ -1083,7 +1053,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'content_area_style',
 			[
-				'label' => __( 'Content Area', 'the7mk2' ),
+				'label' => esc_html__( 'Content Area', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -1091,20 +1061,20 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'content_alignment',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'label_block'          => false,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -1124,7 +1094,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'content_area_padding',
 			[
-				'label'      => __( 'Content Area Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Content Area Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -1153,7 +1123,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'title_style',
 			[
-				'label'     => __( 'Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_title' => 'y',
@@ -1174,14 +1144,14 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_title_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'text_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .product-title' => 'color: {{VALUE}};',
@@ -1194,14 +1164,14 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_title_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'hover_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .product-title:hover' => 'color: {{VALUE}};',
@@ -1224,7 +1194,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'price_style',
 			[
-				'label'     => __( 'Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Price', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_price' => 'yes',
@@ -1236,7 +1206,7 @@ class Simple_Products extends Simple_Widget_Base {
 			'normal_price_heading',
 			[
 				'type'  => Controls_Manager::HEADING,
-				'label' => __( 'Normal Price', 'the7mk2' ),
+				'label' => esc_html__( 'Normal Price', 'the7mk2' ),
 			]
 		);
 
@@ -1244,7 +1214,7 @@ class Simple_Products extends Simple_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'price_typography',
-				'label'    => __( 'Normal Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Normal Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price',
 			]
 		);
@@ -1252,7 +1222,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'normal_price_text_color',
 			[
-				'label'     => __( 'Normal Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Normal Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price' => 'color: {{VALUE}};',
@@ -1264,7 +1234,7 @@ class Simple_Products extends Simple_Widget_Base {
 			'sale_price_heading',
 			[
 				'type'      => Controls_Manager::HEADING,
-				'label'     => __( 'Sale Price', 'the7mk2' ),
+				'label'     => esc_html__( 'Sale Price', 'the7mk2' ),
 				'separator' => 'before',
 			]
 		);
@@ -1273,7 +1243,7 @@ class Simple_Products extends Simple_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_price_typography',
-				'label'    => __( 'Old Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Old Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price del',
 			]
 		);
@@ -1281,7 +1251,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'sale_price_text_color',
 			[
-				'label'     => __( 'Old Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price del span' => 'color: {{VALUE}};',
@@ -1292,7 +1262,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'old_price_line_color',
 			[
-				'label'     => __( 'Old Price Line Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Old Price Line Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price del' => 'color: {{VALUE}};',
@@ -1304,7 +1274,7 @@ class Simple_Products extends Simple_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'sale_new_price_typography',
-				'label'    => __( 'New Price Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'New Price Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .price ins',
 			]
 		);
@@ -1312,7 +1282,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'sale_new_price_text_color',
 			[
-				'label'     => __( 'New Price Color', 'the7mk2' ),
+				'label'     => esc_html__( 'New Price Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .price ins span' => 'color: {{VALUE}};',
@@ -1323,7 +1293,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'price_space',
 			[
-				'label'      => __( 'Price Spacing Above', 'the7mk2' ),
+				'label'      => esc_html__( 'Price Spacing Above', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'range'      => [
 					'px' => [
@@ -1348,7 +1318,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'show_rating_style',
 			[
-				'label'     => __( 'Rating', 'the7mk2' ),
+				'label'     => esc_html__( 'Rating', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_rating' => 'yes',
@@ -1359,7 +1329,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'stars_size',
 			[
-				'label'     => __( 'Size', 'the7mk2' ),
+				'label'     => esc_html__( 'Size', 'the7mk2' ),
 				'type'      => Controls_Manager::SLIDER,
 				'range'     => [
 					'px' => [
@@ -1383,7 +1353,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'empty_star_color',
 			[
-				'label'     => __( 'Empty Star Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Empty Star Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1399,7 +1369,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_control(
 			'full_star_color',
 			[
-				'label'     => __( 'Filled Star Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Filled Star Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1415,7 +1385,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'gap_above_rating',
 			[
-				'label'      => __( 'Rating Spacing Above', 'the7mk2' ),
+				'label'      => esc_html__( 'Rating Spacing Above', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1441,7 +1411,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_section(
 			'short_description',
 			[
-				'label'     => __( 'Short Description', 'the7mk2' ),
+				'label'     => esc_html__( 'Short Description', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_description' => 'yes',
@@ -1462,14 +1432,14 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_desc_color_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'short_desc_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1484,14 +1454,14 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->start_controls_tab(
 			'tab_desc_color_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'short_desc_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -1509,7 +1479,7 @@ class Simple_Products extends Simple_Widget_Base {
 		$this->add_basic_responsive_control(
 			'gap_above_description',
 			[
-				'label'      => __( 'Description Spacing Above', 'the7mk2' ),
+				'label'      => esc_html__( 'Description Spacing Above', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ 'px' ],
 				'range'      => [

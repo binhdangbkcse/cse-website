@@ -9,6 +9,7 @@ namespace The7\Mods\Compatibility\Elementor;
 
 use Elementor\Core\DynamicTags\Dynamic_CSS;
 use Elementor\Plugin;
+use Elementor\Skin_Base;
 use Elementor\Widget_Base;
 use ElementorPro\Modules\GlobalWidget\Widgets\Global_Widget;
 use The7\Mods\Compatibility\Elementor\Modules\Extended_Widgets\Extend_Column;
@@ -79,6 +80,12 @@ class The7_Elementor_Widgets {
 		presscore_template_manager()->add_path( 'elementor', array( 'template-parts/elementor' ) );
 	}
 
+	/**
+	 * @param  \Elementor\Core\Files\CSS\Post $post_css  The post CSS object.
+	 * @param  \Elementor\Element_Base        $element   The element.
+	 *
+	 * @return void
+	 */
 	public function add_widget_css( $post_css, $element ) {
 		if ( $post_css instanceof Dynamic_CSS ) {
 			return;
@@ -96,7 +103,7 @@ class The7_Elementor_Widgets {
 			return;
 		}
 
-		$css = str_replace( array( "\n", "\r" ), '', $css );
+		$css = str_replace( [ "\n", "\r" ], '', $css );
 		$post_css->get_stylesheet()->add_raw_css( $css );
 	}
 
@@ -153,7 +160,7 @@ class The7_Elementor_Widgets {
 
 		require_once __DIR__ . '/widgets/class-the7-elementor-style-global-widget.php';
 
-		new The7_Query_Control_Module();
+		The7_Query_Control_Module::get_instance();
 
 		$terms_selector_mutator = new The7_Elementor_Widget_Terms_Selector_Mutator();
 		$terms_selector_mutator->bootstrap();
@@ -163,6 +170,7 @@ class The7_Elementor_Widgets {
 			'icon'                   => [],
 			'icon-box'               => [],
 			'icon-box-grid'          => [],
+			'image'        			 => [],
 			'image-box'              => [],
 			'image-box-grid'         => [],
 			'posts'                  => [],
@@ -171,6 +179,7 @@ class The7_Elementor_Widgets {
 			'photo-scroller'         => [],
 			'nav-menu'               => [],
 			'horizontal-menu'        => [],
+			'login'                  => [],
 			'text-and-icon-carousel' => [],
 			'testimonials-carousel'  => [],
 			'accordion'              => [],
@@ -181,13 +190,25 @@ class The7_Elementor_Widgets {
 			'taxonomy-filter'        => [],
 			'tabs'        => [],
 			'slider'        => [],
+			'categories-list'        => [],
+			'svg-image'              => [],
+			'heading'                => [],
+			'taxonomies'             => [],
 		];
+
+		// Get loop module.
+		$loop_module = The7_Elementor_Compatibility::instance()->modules->get_modules( 'loop' );
+		if ( $loop_module ) {
+			// Register widgets from loop module.
+			$init_widgets = array_merge( $init_widgets, array_fill_keys( $loop_module::WIDGETS, [] ) );
+		}
 
 		if ( class_exists( 'Woocommerce' ) ) {
 			$init_widgets['woocommerce/products']          = [];
 			$init_widgets['woocommerce/product-sorting']   = [];
 			$init_widgets['woocommerce/products-carousel'] = [];
 			$init_widgets['woocommerce/products-counter']  = [];
+			$init_widgets['woocommerce/login-register-form']  = [];
 
 			$document_types = Plugin::$instance->documents->get_document_types();
 			if ( array_key_exists( 'product-post', $document_types ) ) {
@@ -219,6 +240,7 @@ class The7_Elementor_Widgets {
 					'simple-product-categories',
 					'simple-product-categories-carousel',
 					'woocommerce/cart-preview',
+					'woocommerce/product-sale-flash',
 				];
 				// initialize native and the7 woocommerce widgets
 				foreach ( $sorted_wc_widgets as $class_name ) {
@@ -279,6 +301,10 @@ class The7_Elementor_Widgets {
 		the7_register_style(
 			'the7-carousel-widget',
 			PRESSCORE_THEME_URI . '/css/compatibility/elementor/the7-carousel-widget'
+		);
+		the7_register_style(
+			'the7-carousel-navigation',
+			PRESSCORE_THEME_URI . '/css/compatibility/elementor/the7-carousel-navigation'
 		);
 
 		the7_register_style(
@@ -344,6 +370,11 @@ class The7_Elementor_Widgets {
 		);
 
 		the7_register_style(
+			'the7-vertical-list-common',
+			PRESSCORE_THEME_URI . '/css/compatibility/elementor/the7-vertical-list-common.css'
+		);
+
+		the7_register_style(
 			'the7-image-box-widget',
 			THE7_ELEMENTOR_CSS_URI . '/the7-image-widget.css'
 		);
@@ -376,11 +407,15 @@ class The7_Elementor_Widgets {
 			PRESSCORE_THEME_URI . '/js/compatibility/elementor/woocommerce-filter-attribute.js',
 			[ 'jquery' ]
 		);
-
-		// Editor scripts.
 		the7_register_script_in_footer(
-			'the7-elementor-editor-common',
-			PRESSCORE_ADMIN_URI . '/assets/js/elementor/editor-common.js',
+			'the7-categories-handler',
+			PRESSCORE_THEME_URI . '/js/compatibility/elementor/the7-product-categories.js',
+			[ 'jquery' ]
+		);
+
+		the7_register_script_in_footer(
+			'the7-elementor-toggle',
+			PRESSCORE_THEME_URI . '/js/compatibility/elementor/the7-widget-toggle.js',
 			[ 'dt-main' ]
 		);
 
@@ -394,32 +429,29 @@ class The7_Elementor_Widgets {
 		// Previews.
 		the7_register_script_in_footer(
 			'the7-elements-carousel-widget-preview',
-			PRESSCORE_ADMIN_URI . '/assets/js/elementor/elements-carousel-widget-preview.js',
-			[ 'the7-elementor-editor-common' ]
+			PRESSCORE_ADMIN_URI . '/assets/js/elementor/elements-carousel-widget-preview.js'
 		);
 
 		the7_register_script_in_footer(
 			'the7-elements-widget-preview',
-			PRESSCORE_ADMIN_URI . '/assets/js/elementor/elements-widget-preview.js',
-			[ 'the7-elementor-editor-common' ]
+			PRESSCORE_ADMIN_URI . '/assets/js/elementor/elements-widget-preview.js'
 		);
 
 		the7_register_script_in_footer(
 			'the7-photo-scroller-widget-preview',
 			PRESSCORE_ADMIN_URI . '/assets/js/elementor/photo-scroller-widget-preview.js',
-			[ 'the7-elementor-editor-common', 'dt-photo-scroller' ]
+			[ 'dt-photo-scroller' ]
 		);
 
 		the7_register_script_in_footer(
 			'the7-single-product-tab-preview',
-			PRESSCORE_ADMIN_URI . '/assets/js/elementor/single-product-tab.js',
-			[ 'the7-elementor-editor-common' ]
+			PRESSCORE_ADMIN_URI . '/assets/js/elementor/single-product-tab.js'
 		);
 
 		the7_register_script_in_footer(
 			'the7-woocommerce-product-images-widget-preview',
 			PRESSCORE_ADMIN_URI . '/assets/js/elementor/wc-widget-preview.js',
-			[ 'the7-elementor-editor-common', 'the7-gallery-scroller' ]
+			[ 'the7-gallery-scroller' ]
 		);
 
 		wp_register_script(
@@ -429,6 +461,9 @@ class The7_Elementor_Widgets {
 			THE7_VERSION,
 			true
 		);
+
+		the7_register_style( 'the7-simple-grid', PRESSCORE_THEME_URI . '/lib/simple-grid/simple-grid');
+		the7_register_script_in_footer( 'the7-simple-grid', PRESSCORE_THEME_URI . '/lib/simple-grid/simple-grid', [ 'jquery' ] );
 	}
 
 	protected function collection_add_widget( $widget, $widget_position ) {

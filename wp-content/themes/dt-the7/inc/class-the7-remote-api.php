@@ -212,6 +212,24 @@ class The7_Remote_API {
 	}
 
 	/**
+	 * @return array
+	 */
+	public function get_available_theme_versions() {
+		$transient_key = 'the7_remote_api_theme_available_versions';
+		$versions      = get_transient( $transient_key );
+		if ( $versions === false ) {
+			$versions = [];
+			$data     = $this->remote_get_json( $this->api_theme_info_url );
+			if ( isset( $data['available_versions'] ) && is_array( $data['available_versions'] ) ) {
+				$versions = $data['available_versions'];
+			}
+			set_transient( $transient_key, $versions, MINUTE_IN_SECONDS * 15 );
+		}
+
+		return array_filter( (array) $versions );
+	}
+
+	/**
 	 * Return theme download url.
 	 *
 	 * @param string $version Required theme version.

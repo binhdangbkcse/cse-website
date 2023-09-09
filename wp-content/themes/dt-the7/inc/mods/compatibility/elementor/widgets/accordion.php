@@ -663,7 +663,7 @@ class Accordion extends The7_Elementor_Widget_Base {
 				'alpha'     => true,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-accordion-icon.elementor-accordion-tab-icon .elementor-icon' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-accordion-icon.elementor-accordion-tab-icon .elementor-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-accordion-icon.elementor-accordion-tab-icon .elementor-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -711,7 +711,7 @@ class Accordion extends The7_Elementor_Widget_Base {
 				'alpha'     => true,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-tab-title:hover .elementor-accordion-icon.elementor-accordion-tab-icon .elementor-icon' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-tab-title:hover .elementor-accordion-icon.elementor-accordion-tab-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-tab-title:hover .elementor-accordion-icon.elementor-accordion-tab-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -759,7 +759,7 @@ class Accordion extends The7_Elementor_Widget_Base {
 				'alpha'     => true,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-tab-title.elementor-active .elementor-accordion-icon.elementor-accordion-tab-icon .elementor-icon' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-tab-title.elementor-active .elementor-accordion-icon.elementor-accordion-tab-icon svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-tab-title.elementor-active .elementor-accordion-icon.elementor-accordion-tab-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -886,7 +886,7 @@ class Accordion extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-tab-title .elementor-accordion-icon:not(.elementor-accordion-tab-icon)' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-tab-title .elementor-accordion-icon:not(.elementor-accordion-tab-icon) svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-tab-title .elementor-accordion-icon:not(.elementor-accordion-tab-icon) svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -907,7 +907,7 @@ class Accordion extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-tab-title:hover .elementor-accordion-icon:not(.elementor-accordion-tab-icon)' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-tab-title:hover .elementor-accordion-icon:not(.elementor-accordion-tab-icon) svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-tab-title:hover .elementor-accordion-icon:not(.elementor-accordion-tab-icon) svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -928,7 +928,7 @@ class Accordion extends The7_Elementor_Widget_Base {
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .elementor-tab-title.elementor-active .elementor-accordion-icon:not(.elementor-accordion-tab-icon)' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .elementor-tab-title.elementor-active .elementor-accordion-icon:not(.elementor-accordion-tab-icon) svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .elementor-tab-title.elementor-active .elementor-accordion-icon:not(.elementor-accordion-tab-icon) svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);

@@ -18,6 +18,8 @@ use The7\Mods\Compatibility\Elementor\Style\Posts_Masonry_Style;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Less_Vars_Decorator_Interface;
 use The7\Mods\Compatibility\Elementor\The7_Elementor_Widget_Base;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Button;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio;
+use The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Size;
 use The7\Mods\Compatibility\Elementor\Widget_Templates\Pagination;
 use The7\Mods\Compatibility\Elementor\With_Post_Excerpt;
 use The7_Categorization_Request;
@@ -49,7 +51,14 @@ class Posts extends The7_Elementor_Widget_Base {
 	 * @return string|null
 	 */
 	protected function the7_title() {
-		return __( 'Posts Masonry & Grid', 'the7mk2' );
+		return esc_html__( 'Posts Masonry & Grid', 'the7mk2' );
+	}
+
+	/**
+	 * @return string[]
+	 */
+	protected function the7_keywords() {
+		return [ 'posts', 'masonry', 'grid', 'blog' ];
 	}
 
 	/**
@@ -164,8 +173,8 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'archive_posts_per_page',
 			[
-				'label'       => __( 'Number Of Posts On One Page', 'the7mk2' ),
-				'description' => __( 'Leave empty to display default archive posts amount.', 'the7mk2' ),
+				'label'       => esc_html__( 'Number Of Posts On One Page', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to display default archive posts amount.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -281,6 +290,11 @@ class Posts extends The7_Elementor_Widget_Base {
 
 			$link_attributes = $this->get_link_attributes( $settings );
 
+			// Do not send icon html to the tamplate if it is linkless.
+			if ( $this->is_hover_icon_linkless() ) {
+				$icons_html = '';
+			}
+
 			presscore_get_template_part(
 				'elementor',
 				'the7-elements/tpl-layout',
@@ -312,6 +326,97 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_image_hooks();
 	}
 
+	protected function get_post_image( $settings ) {
+		$img_wrapper_class = implode(
+			' ',
+			array_filter(
+				[
+					'post-thumbnail-rollover',
+					$this->template( Image_Size::class )->get_wrapper_class(),
+					$this->template( Image_Aspect_Ratio::class )->get_wrapper_class(),
+				]
+			)
+		);
+		$wrap_atts         = [
+			'class'      => $img_wrapper_class,
+			'aria-label' => esc_html__( 'Post image', 'the7mk2' ),
+		];
+
+		$link_attridutes = $this->get_link_attributes( $settings );
+		$wrap_tag        = 'div';
+		if ( $link_attridutes['href'] ) {
+			$wrap_tag            = 'a';
+			$wrap_atts['href']   = $link_attridutes['href'];
+			$wrap_atts['target'] = $link_attridutes['target'];
+		} else {
+			$wrap_atts['class'] .= ' not-clickable-item';
+		}
+
+		$show_image = in_array( $settings['classic_image_visibility'], [ null, 'show' ], true );
+		if ( $show_image && has_post_thumbnail() ) {
+			$img_html = $this->template( Image_Size::class )->get_image( get_post_thumbnail_id() );
+		} elseif ( $this->is_overlay_post_layout( $settings ) ) {
+			list( $src, $width, $height ) = the7_get_gray_square_svg();
+			$img_atts['src']              = $src;
+			$img_atts['width']            = $width;
+			$img_atts['height']           = $height;
+
+			$img_html = '<img ' . the7_get_html_attributes_string( $img_atts ) . '>';
+		}
+
+		if ( empty( $img_html ) ) {
+			return '';
+		}
+
+		$result_html  = '<' . $wrap_tag . ' ' . the7_get_html_attributes_string( $wrap_atts ) . '>';
+		$result_html .= $img_html;
+
+		// If icon linkless, add icon to image wrapper.
+		if ( $this->is_hover_icon_linkless() ) {
+			$result_html .= $this->get_linkless_hover_icon_html();
+		}
+
+		$result_html .= '</' . $wrap_tag . '>';
+
+		return $result_html;
+	}
+
+	/**
+	 * @param array $settings Widget settings.
+	 *
+	 * @return string
+	 */
+	protected function get_hover_icons_html_template( $settings ) {
+		if ( ! $this->get_settings_for_display( 'show_details_icon' ) ) {
+			return '';
+		}
+
+		$a_atts               = $this->get_link_attributes( $this->get_settings_for_display() );
+		$a_atts['class']      = 'the7-hover-icon';
+		$a_atts['aria-label'] = esc_html__( 'Details link', 'the7mk2' );
+
+		return sprintf(
+			'<a %s>%s</a>',
+			the7_get_html_attributes_string( $a_atts ),
+			$this->get_elementor_icon_html( $this->get_settings_for_display( 'project_link_icon' ), 'span' )
+		);
+	}
+
+	/**
+	 * @return string
+	 */
+	protected function get_linkless_hover_icon_html() {
+		if ( ! $this->get_settings_for_display( 'show_details_icon' ) ) {
+			return '';
+		}
+
+		return sprintf(
+			'<span %s>%s</span>',
+			the7_get_html_attributes_string( [ 'class' => 'the7-hover-icon' ] ),
+			$this->get_elementor_icon_html( $this->get_settings_for_display( 'project_link_icon' ), 'i' )
+		);
+	}
+
 	/**
 	 * @param array $settings Widget settings.
 	 *
@@ -341,7 +446,7 @@ class Posts extends The7_Elementor_Widget_Base {
 	 *
 	 * @return string
 	 */
-	protected function masonry_item_wrap_class( $class = array() ) {
+	protected function masonry_item_wrap_class( $class = [] ) {
 		global $post;
 
 		if ( ! is_array( $class ) ) {
@@ -391,13 +496,13 @@ class Posts extends The7_Elementor_Widget_Base {
 
 		$class[] = $this->is_masonry_layout( $settings ) ? 'mode-masonry' : 'mode-grid dt-css-grid-wrap';
 
-		$layout_classes = array(
+		$layout_classes = [
 			'classic'           => 'classic-layout-list',
 			'bottom_overlap'    => 'bottom-overlap-layout-list',
 			'gradient_overlap'  => 'gradient-overlap-layout-list',
 			'gradient_overlay'  => 'gradient-overlay-layout-list',
 			'gradient_rollover' => 'content-rollover-layout-list',
-		);
+		];
 
 		$layout = $settings['post_layout'];
 		if ( array_key_exists( $layout, $layout_classes ) ) {
@@ -691,12 +796,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		);
 
 		if ( 'browser_width_based' === $settings['responsiveness'] ) {
-			$columns = array(
+			$columns = [
 				'desktop'      => $settings['widget_columns'],
 				'tablet'       => $settings['widget_columns_tablet'],
 				'mobile'       => $settings['widget_columns_mobile'],
 				'wide-desktop' => $settings['widget_columns_wide_desktop'] ?: $settings['widget_columns'],
-			);
+			];
 
 			foreach ( $columns as $column => $val ) {
 				$less_vars->add_keyword( $column . '-columns', $val );
@@ -707,12 +812,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$less_vars->add_pixel_number( 'grid-post-min-width', $settings['pwb_column_min_width'] );
 
 		$less_vars->add_paddings(
-			array(
+			[
 				'post-content-padding-top',
 				'post-content-padding-right',
 				'post-content-padding-bottom',
 				'post-content-padding-left',
-			),
+			],
 			$settings['post_content_padding']
 		);
 		foreach ( $this->get_supported_devices() as $device => $dep ) {
@@ -734,7 +839,7 @@ class Posts extends The7_Elementor_Widget_Base {
 	 *
 	 * @return \The7\Mods\Compatibility\Elementor\WP_Query|\WP_Query
 	 */
-	protected function get_query( $request ) {
+	protected function get_query( $request = null ) {
 		$settings  = $this->get_settings_for_display();
 		$post_type = $settings['post_type'];
 
@@ -763,8 +868,11 @@ class Posts extends The7_Elementor_Widget_Base {
 
 		$query_builder->from_terms( $taxonomy, $terms );
 
-		if ( ! empty( $request->taxonomy ) || $this->template( Pagination::class )->get_loading_mode() === 'standard' ) {
-			$query_builder->with_categorizaition( $request );
+		if ( $request ) {
+			$loading_mode = $this->template( Pagination::class )->get_loading_mode();
+			if ( ! empty( $request->taxonomy ) || $loading_mode === 'standard' ) {
+				$query_builder->with_categorizaition( $request );
+			}
 		}
 
 		return $query_builder->query();
@@ -806,7 +914,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'categorization_section',
 			[
-				'label'     => __( 'Filter Bar', 'the7mk2' ),
+				'label'     => esc_html__( 'Filter Bar', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_CONTENT,
 				'condition' => [
 					'post_type!' => [ 'current_query', 'related' ],
@@ -815,15 +923,15 @@ class Posts extends The7_Elementor_Widget_Base {
 		);
 
 		$layouts            = [
-			'show' => __( 'Show', 'the7mk2' ),
-			'hide' => __( 'Hide', 'the7mk2' ),
+			'show' => esc_html__( 'Show', 'the7mk2' ),
+			'hide' => esc_html__( 'Hide', 'the7mk2' ),
 		];
-		$responsive_layouts = [ '' => __( 'No change', 'the7mk2' ) ] + $layouts;
+		$responsive_layouts = [ '' => esc_html__( 'No change', 'the7mk2' ) ] + $layouts;
 
 		$this->add_basic_responsive_control(
 			'show_categories_filter',
 			[
-				'label'       => __( 'Taxonomy Filter', 'the7mk2' ),
+				'label'       => esc_html__( 'Taxonomy Filter', 'the7mk2' ),
 				'type'        => Controls_Manager::SELECT,
 				'default'     => 'hide',
 				'options'     => $layouts,
@@ -841,10 +949,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_show_all',
 			[
-				'label'        => __( '"All" Filter', 'the7mk2' ),
+				'label'        => esc_html__( '"All" Filter', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'conditions'   => [
@@ -873,9 +981,9 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_all_text',
 			[
-				'label'       => __( '"All" Filter Label', 'the7mk2' ),
+				'label'       => esc_html__( '"All" Filter Label', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
-				'default'     => __( 'View all', 'the7mk2' ),
+				'default'     => esc_html__( 'View all', 'the7mk2' ),
 				'placeholder' => '',
 				'conditions'  => [
 					'relation' => 'or',
@@ -930,10 +1038,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'show_orderby_filter',
 			[
-				'label'                => __( 'Name / Date Ordering', 'the7mk2' ),
+				'label'                => esc_html__( 'Name / Date Ordering', 'the7mk2' ),
 				'type'                 => Controls_Manager::SWITCHER,
-				'label_on'             => __( 'Show', 'the7mk2' ),
-				'label_off'            => __( 'Hide', 'the7mk2' ),
+				'label_on'             => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'            => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value'         => 'y',
 				'default'              => '',
 				'selectors_dictionary' => [
@@ -958,10 +1066,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'show_order_filter',
 			[
-				'label'                => __( 'Asc. / Desc. Ordering', 'the7mk2' ),
+				'label'                => esc_html__( 'Asc. / Desc. Ordering', 'the7mk2' ),
 				'type'                 => Controls_Manager::SWITCHER,
-				'label_on'             => __( 'Show', 'the7mk2' ),
-				'label_off'            => __( 'Hide', 'the7mk2' ),
+				'label_on'             => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'            => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value'         => 'y',
 				'default'              => '',
 				'selectors_dictionary' => [
@@ -986,10 +1094,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'allow_filter_navigation_by_url',
 			[
-				'label'        => __( 'Allow Navigation By Url', 'the7mk2' ),
+				'label'        => esc_html__( 'Allow Navigation By Url', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => '',
 				'separator'    => 'before',
@@ -1051,7 +1159,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'query_section',
 			[
-				'label' => __( 'Query', 'the7mk2' ),
+				'label' => esc_html__( 'Query', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -1059,10 +1167,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_type',
 			[
-				'label'   => __( 'Source', 'the7mk2' ),
+				'label'   => esc_html__( 'Source', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT2,
 				'default' => 'post',
-				'options' => the7_elementor_elements_widget_post_types() + [ 'related' => __( 'Related', 'the7mk2' ) ],
+				'options' => the7_elementor_elements_widget_post_types() + [ 'related' => esc_html__( 'Related', 'the7mk2' ) ],
 				'classes' => 'select2-medium-width',
 			]
 		);
@@ -1070,7 +1178,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'taxonomy',
 			[
-				'label'     => __( 'Select Taxonomy', 'the7mk2' ),
+				'label'     => esc_html__( 'Select Taxonomy', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'category',
 				'options'   => [],
@@ -1084,7 +1192,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'terms',
 			[
-				'label'     => __( 'Select Terms', 'the7mk2' ),
+				'label'     => esc_html__( 'Select Terms', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT2,
 				'default'   => '',
 				'multiple'  => true,
@@ -1100,12 +1208,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'order',
 			[
-				'label'     => __( 'Order', 'the7mk2' ),
+				'label'     => esc_html__( 'Order', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'desc',
 				'options'   => [
-					'asc'  => __( 'Ascending', 'the7mk2' ),
-					'desc' => __( 'Descending', 'the7mk2' ),
+					'asc'  => esc_html__( 'Ascending', 'the7mk2' ),
+					'desc' => esc_html__( 'Descending', 'the7mk2' ),
 				],
 				'condition' => [
 					'post_type!' => 'current_query',
@@ -1116,17 +1224,17 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'orderby',
 			[
-				'label'     => __( 'Order By', 'the7mk2' ),
+				'label'     => esc_html__( 'Order By', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'date',
 				'options'   => [
-					'date'          => __( 'Date', 'the7mk2' ),
-					'title'         => __( 'Name', 'the7mk2' ),
-					'ID'            => __( 'ID', 'the7mk2' ),
-					'modified'      => __( 'Modified', 'the7mk2' ),
-					'comment_count' => __( 'Comment count', 'the7mk2' ),
-					'menu_order'    => __( 'Menu order', 'the7mk2' ),
-					'rand'          => __( 'Rand', 'the7mk2' ),
+					'date'          => esc_html__( 'Date', 'the7mk2' ),
+					'title'         => esc_html__( 'Name', 'the7mk2' ),
+					'ID'            => esc_html__( 'ID', 'the7mk2' ),
+					'modified'      => esc_html__( 'Modified', 'the7mk2' ),
+					'comment_count' => esc_html__( 'Comment count', 'the7mk2' ),
+					'menu_order'    => esc_html__( 'Menu order', 'the7mk2' ),
+					'rand'          => esc_html__( 'Rand', 'the7mk2' ),
 				],
 				'condition' => [
 					'post_type!' => 'current_query',
@@ -1144,7 +1252,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'content_section',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -1152,10 +1260,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'article_links',
 			[
-				'label'        => __( 'Links To A Single Post', 'the7mk2' ),
+				'label'        => esc_html__( 'Links To A Single Post', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 			]
@@ -1164,13 +1272,13 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'article_links_goes_to',
 			[
-				'label'     => __( 'Links Lead To', 'the7mk2' ),
+				'label'     => esc_html__( 'Links Lead To', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'posts',
 				'options'   => [
-					'posts'                => __( 'Posts', 'the7mk2' ),
-					'external_or_posts'    => __( 'External links or posts', 'the7mk2' ),
-					'external_or_disabled' => __( 'External links or disabled', 'the7mk2' ),
+					'posts'                => esc_html__( 'Posts', 'the7mk2' ),
+					'external_or_posts'    => esc_html__( 'External links or posts', 'the7mk2' ),
+					'external_or_disabled' => esc_html__( 'External links or disabled', 'the7mk2' ),
 				],
 				'condition' => [
 					'article_links' => 'y',
@@ -1182,10 +1290,10 @@ class Posts extends The7_Elementor_Widget_Base {
 			'article_link_meta_field',
 			[
 				'label'       => esc_html__( 'Link Meta Field', 'the7mk2' ),
-				'description' => esc_html__( 'Post meta field with external link.', 'the7mk2' ),
+				'description' => esc_html__( 'Post meta field name, f.e. site_link, with url.', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '',
-				'placeholder' => esc_html__( 'Meta Field Key', 'the7mk2' ),
+				'placeholder' => 'meta_field_name',
 				'condition'   => [
 					'post_type!'             => 'dt_portfolio',
 					'article_links_goes_to!' => 'posts',
@@ -1197,10 +1305,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_details_icon',
 			[
-				'label'        => __( 'Hover Icon', 'the7mk2' ),
+				'label'        => esc_html__( 'Hover Icon', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1210,7 +1318,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_link_icon',
 			[
-				'label'     => __( 'Choose Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Choose Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::ICONS,
 				'default'   => [
 					'value'   => 'fas fa-plus',
@@ -1225,10 +1333,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_post_title',
 			[
-				'label'        => __( 'Title', 'the7mk2' ),
+				'label'        => esc_html__( 'Title', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1238,7 +1346,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_tag',
 			[
-				'label'     => __( 'Title HTML Tag', 'the7mk2' ),
+				'label'     => esc_html__( 'Title HTML Tag', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'options'   => [
 					'h1' => 'H1',
@@ -1258,10 +1366,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_content',
 			[
-				'label'        => __( 'Excerpt', 'the7mk2' ),
+				'label'        => esc_html__( 'Excerpt', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'show_excerpt',
 				'default'      => 'show_excerpt',
 				'separator'    => 'before',
@@ -1271,8 +1379,8 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'excerpt_words_limit',
 			[
-				'label'       => __( 'Maximum Number Of Words', 'the7mk2' ),
-				'description' => __( 'Leave empty to show the entire excerpt.', 'the7mk2' ),
+				'label'       => esc_html__( 'Maximum Number Of Words', 'the7mk2' ),
+				'description' => esc_html__( 'Leave empty to show the entire excerpt.', 'the7mk2' ),
 				'type'        => Controls_Manager::NUMBER,
 				'default'     => '',
 				'condition'   => [
@@ -1284,10 +1392,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_terms',
 			[
-				'label'        => __( 'Category', 'the7mk2' ),
+				'label'        => esc_html__( 'Category', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1297,10 +1405,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_terms_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -1312,10 +1420,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_author',
 			[
-				'label'        => __( 'Author', 'the7mk2' ),
+				'label'        => esc_html__( 'Author', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1325,10 +1433,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_author_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -1340,10 +1448,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_date',
 			[
-				'label'        => __( 'Date', 'the7mk2' ),
+				'label'        => esc_html__( 'Date', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1353,10 +1461,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_date_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -1369,10 +1477,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_comments',
 			[
-				'label'        => __( 'Comments count', 'the7mk2' ),
+				'label'        => esc_html__( 'Comments count', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1382,10 +1490,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_comments_link',
 			[
-				'label'        => __( 'Link', 'the7mk2' ),
+				'label'        => esc_html__( 'Link', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Yes', 'the7mk2' ),
-				'label_off'    => __( 'No', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
+				'label_off'    => esc_html__( 'No', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'condition'    => [
@@ -1397,10 +1505,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'show_read_more_button',
 			[
-				'label'        => __( 'Read More', 'the7mk2' ),
+				'label'        => esc_html__( 'Read More', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'y',
 				'default'      => 'y',
 				'separator'    => 'before',
@@ -1410,9 +1518,9 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'read_more_button_text',
 			[
-				'label'     => __( 'Button Text', 'the7mk2' ),
+				'label'     => esc_html__( 'Button Text', 'the7mk2' ),
 				'type'      => Controls_Manager::TEXT,
-				'default'   => __( 'Read more', 'the7mk2' ),
+				'default'   => esc_html__( 'Read more', 'the7mk2' ),
 				'condition' => [
 					'show_read_more_button' => 'y',
 				],
@@ -1429,7 +1537,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'layout_section',
 			[
-				'label' => __( 'Layout', 'the7mk2' ),
+				'label' => esc_html__( 'Layout', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
@@ -1437,7 +1545,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'layout',
 			[
-				'label'        => __( 'Masonry', 'the7mk2' ),
+				'label'        => esc_html__( 'Masonry', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'masonry',
 				'default'      => 'masonry',
@@ -1447,19 +1555,19 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'loading_effect',
 			[
-				'label'   => __( 'Loading Effect', 'the7mk2' ),
+				'label'   => esc_html__( 'Loading Effect', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'none',
 				'options' => [
-					'none'             => __( 'None', 'the7mk2' ),
-					'fade_in'          => __( 'Fade in', 'the7mk2' ),
-					'move_up'          => __( 'Move up', 'the7mk2' ),
-					'scale_up'         => __( 'Scale up', 'the7mk2' ),
-					'fall_perspective' => __( 'Fall perspective', 'the7mk2' ),
-					'fly'              => __( 'Fly', 'the7mk2' ),
-					'flip'             => __( 'Flip', 'the7mk2' ),
-					'helix'            => __( 'Helix', 'the7mk2' ),
-					'scale'            => __( 'Scale', 'the7mk2' ),
+					'none'             => esc_html__( 'None', 'the7mk2' ),
+					'fade_in'          => esc_html__( 'Fade in', 'the7mk2' ),
+					'move_up'          => esc_html__( 'Move up', 'the7mk2' ),
+					'scale_up'         => esc_html__( 'Scale up', 'the7mk2' ),
+					'fall_perspective' => esc_html__( 'Fall perspective', 'the7mk2' ),
+					'fly'              => esc_html__( 'Fly', 'the7mk2' ),
+					'flip'             => esc_html__( 'Flip', 'the7mk2' ),
+					'helix'            => esc_html__( 'Helix', 'the7mk2' ),
+					'scale'            => esc_html__( 'Scale', 'the7mk2' ),
 				],
 			]
 		);
@@ -1467,12 +1575,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'responsiveness',
 			[
-				'label'     => __( 'Responsiveness Mode', 'the7mk2' ),
+				'label'     => esc_html__( 'Responsiveness Mode', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'browser_width_based',
 				'options'   => [
-					'browser_width_based' => __( 'Browser width based', 'the7mk2' ),
-					'post_width_based'    => __( 'Post width based', 'the7mk2' ),
+					'browser_width_based' => esc_html__( 'Browser width based', 'the7mk2' ),
+					'post_width_based'    => esc_html__( 'Post width based', 'the7mk2' ),
 				],
 				'separator' => 'before',
 			]
@@ -1510,7 +1618,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'widget_columns',
 			[
-				'label'          => __( 'Columns', 'the7mk2' ),
+				'label'          => esc_html__( 'Columns', 'the7mk2' ),
 				'type'           => Controls_Manager::NUMBER,
 				'default'        => 3,
 				'tablet_default' => 2,
@@ -1523,10 +1631,12 @@ class Posts extends The7_Elementor_Widget_Base {
 			]
 		);
 
+		$this->template( Image_Size::class )->add_style_controls();
+
 		$this->add_control(
 			'pwb_column_min_width',
 			[
-				'label'      => __( 'Column Minimum Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Column Minimum Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1549,7 +1659,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'pwb_columns',
 			[
-				'label'     => __( 'Desired Columns Number', 'the7mk2' ),
+				'label'     => esc_html__( 'Desired Columns Number', 'the7mk2' ),
 				'type'      => Controls_Manager::NUMBER,
 				'default'   => 3,
 				'min'       => 1,
@@ -1564,7 +1674,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'gap_between_posts',
 			[
-				'label'       => __( 'Gap Between Columns', 'the7mk2' ),
+				'label'       => esc_html__( 'Gap Between Columns', 'the7mk2' ),
 				'type'        => Controls_Manager::SLIDER,
 				'default'     => [
 					'unit' => 'px',
@@ -1591,7 +1701,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'rows_gap',
 			[
-				'label'       => __( 'Rows Gap', 'the7mk2' ),
+				'label'       => esc_html__( 'Rows Gap', 'the7mk2' ),
 				'type'        => Controls_Manager::SLIDER,
 				'size_units'  => [ 'px' ],
 				'default'     => [
@@ -1614,8 +1724,8 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'all_posts_the_same_width',
 			[
-				'label'        => __( 'Make All Posts The Same Width', 'the7mk2' ),
-				'description'  => __( 'Post wide/normal width can be chosen in single post options.', 'the7mk2' ),
+				'label'        => esc_html__( 'Make All Posts The Same Width', 'the7mk2' ),
+				'description'  => esc_html__( 'Post wide/normal width can be chosen in single post options.', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
 				'return_value' => 'y',
 				'default'      => '',
@@ -1632,7 +1742,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'skins_style_section',
 			[
-				'label' => __( 'Skin', 'the7mk2' ),
+				'label' => esc_html__( 'Skin', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -1640,15 +1750,15 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_layout',
 			[
-				'label'   => __( 'Choose Skin', 'the7mk2' ),
+				'label'   => esc_html__( 'Choose Skin', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'classic',
 				'options' => [
-					'classic'           => __( 'Classic', 'the7mk2' ),
-					'bottom_overlap'    => __( 'Overlapping content area', 'the7mk2' ),
-					'gradient_overlap'  => __( 'Blurred content area', 'the7mk2' ),
-					'gradient_overlay'  => __( 'Simple overlay on hover', 'the7mk2' ),
-					'gradient_rollover' => __( 'Blurred bottom overlay on hover', 'the7mk2' ),
+					'classic'           => esc_html__( 'Classic', 'the7mk2' ),
+					'bottom_overlap'    => esc_html__( 'Overlapping content area', 'the7mk2' ),
+					'gradient_overlap'  => esc_html__( 'Blurred content area', 'the7mk2' ),
+					'gradient_overlay'  => esc_html__( 'Simple overlay on hover', 'the7mk2' ),
+					'gradient_rollover' => esc_html__( 'Blurred bottom overlay on hover', 'the7mk2' ),
 				],
 			]
 		);
@@ -1656,10 +1766,10 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'classic_image_visibility',
 			[
-				'label'        => __( 'Image Visibility', 'the7mk2' ),
+				'label'        => esc_html__( 'Image Visibility', 'the7mk2' ),
 				'type'         => Controls_Manager::SWITCHER,
-				'label_on'     => __( 'Show', 'the7mk2' ),
-				'label_off'    => __( 'Hide', 'the7mk2' ),
+				'label_on'     => esc_html__( 'Show', 'the7mk2' ),
+				'label_off'    => esc_html__( 'Hide', 'the7mk2' ),
 				'return_value' => 'show',
 				'default'      => 'show',
 				'condition'    => [
@@ -1671,7 +1781,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'classic_image_max_width',
 			[
-				'label'      => __( 'Max Image Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Max Image Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => '%',
@@ -1703,7 +1813,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'bo_content_overlap',
 			[
-				'label'      => __( 'Content Box Overlap', 'the7mk2' ) . ' (px)',
+				'label'      => esc_html__( 'Content Box Overlap', 'the7mk2' ) . ' (px)',
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1719,7 +1829,6 @@ class Posts extends The7_Elementor_Widget_Base {
 				],
 				'selectors'  => [
 					'{{WRAPPER}} .bottom-overlap-layout-list article:not(.no-img) .post-entry-content' => 'margin-top: -{{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .bottom-overlap-layout-list article:not(.no-img) .project-links-container' => 'height: calc(100% - {{SIZE}}{{UNIT}});',
 				],
 				'condition'  => [
 					'post_layout' => 'bottom_overlap',
@@ -1730,14 +1839,14 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'go_animation',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'fade',
 				'options'   => [
-					'fade'              => __( 'Fade', 'the7mk2' ),
-					'direction_aware'   => __( 'Direction aware', 'the7mk2' ),
-					'redirection_aware' => __( 'Reverse direction aware', 'the7mk2' ),
-					'scale_in'          => __( 'Scale in', 'the7mk2' ),
+					'fade'              => esc_html__( 'Fade', 'the7mk2' ),
+					'direction_aware'   => esc_html__( 'Direction aware', 'the7mk2' ),
+					'redirection_aware' => esc_html__( 'Reverse direction aware', 'the7mk2' ),
+					'scale_in'          => esc_html__( 'Scale in', 'the7mk2' ),
 				],
 				'condition' => [
 					'post_layout' => 'gradient_overlay',
@@ -1755,7 +1864,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'box_section',
 			[
-				'label' => __( 'Box', 'the7mk2' ),
+				'label' => esc_html__( 'Box', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -1763,7 +1872,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -1781,7 +1890,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -1799,7 +1908,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'box_padding',
 			[
-				'label'      => __( 'Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'range'      => [
@@ -1823,7 +1932,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'classic_style_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
@@ -1838,7 +1947,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_background_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} article' => 'background-color: {{VALUE}}',
@@ -1849,7 +1958,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_color',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} article' => 'border-color: {{VALUE}}',
@@ -1862,7 +1971,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'classic_style_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
@@ -1877,7 +1986,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_background_color_hover',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} article:hover' => 'background-color: {{VALUE}}',
@@ -1888,7 +1997,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'box_border_color_hover',
 			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} article:hover' => 'border-color: {{VALUE}}',
@@ -1910,7 +2019,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'icon_style_section',
 			[
-				'label'     => __( 'Hover Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Hover Icon', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_details_icon' => 'y',
@@ -1921,7 +2030,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_size',
 			[
-				'label'      => __( 'Icon Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Icon Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1936,8 +2045,8 @@ class Posts extends The7_Elementor_Widget_Base {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .project-links-container a > span:before' => 'font-size: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .project-links-container a > svg' => 'width: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .the7-hover-icon' => 'font-size: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}} .the7-hover-icon svg' => 'width: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1945,7 +2054,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_bg_size',
 			[
-				'label'      => __( 'Background Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Background Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -1960,8 +2069,7 @@ class Posts extends The7_Elementor_Widget_Base {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .project-links-container a > span:before' => 'line-height: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .project-links-container a'               => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
+					'{{WRAPPER}} .the7-hover-icon' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}; line-height: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -1969,7 +2077,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_border_width',
 			[
-				'label'      => __( 'Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -1981,7 +2089,7 @@ class Posts extends The7_Elementor_Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .project-links-container a' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; border-style: solid;',
+					'{{WRAPPER}} .the7-hover-icon' => 'border-width: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}; border-style: solid;',
 				],
 			]
 		);
@@ -1989,7 +2097,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -2001,7 +2109,7 @@ class Posts extends The7_Elementor_Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .project-links-container a' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+					'{{WRAPPER}} .the7-hover-icon' => 'border-radius: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
 				],
 			]
 		);
@@ -2009,7 +2117,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_margin',
 			[
-				'label'      => __( 'Icon Margin', 'the7mk2' ),
+				'label'      => esc_html__( 'Icon Margin', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -2021,7 +2129,7 @@ class Posts extends The7_Elementor_Widget_Base {
 					'isLinked' => true,
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .project-links-container a' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
+					'{{WRAPPER}} .the7-hover-icon' => 'margin: {{TOP}}{{UNIT}} {{RIGHT}}{{UNIT}} {{BOTTOM}}{{UNIT}} {{LEFT}}{{UNIT}}',
 				],
 			]
 		);
@@ -2031,21 +2139,20 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'icons_colors',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'project_icon_color',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .portfolio-shortcode .project-links-container a:not(:hover) > span'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .portfolio-shortcode .project-links-container a > span'                 => 'color: {{VALUE}};',
-					'{{WRAPPER}} .portfolio-shortcode .project-links-container a > svg, {{WRAPPER}} .project-links-container a > svg'             => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .portfolio-shortcode .the7-hover-icon' => 'color: {{VALUE}};',
+					'{{WRAPPER}} .portfolio-shortcode .the7-hover-icon svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -2053,12 +2160,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_border_color',
 			[
-				'label'     => __( 'Icon Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .project-links-container a' => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .the7-hover-icon' => 'border-color: {{VALUE}};',
 				],
 			]
 		);
@@ -2066,12 +2173,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_bg_color',
 			[
-				'label'     => __( 'Icon Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .project-links-container a' => 'background: {{VALUE}};',
+					'{{WRAPPER}} .the7-hover-icon' => 'background: {{VALUE}};',
 				],
 			]
 		);
@@ -2081,20 +2188,20 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'icons_hover_colors',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'project_icon_color_hover',
 			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .portfolio-shortcode .project-links-container a:hover > span'     => 'color: {{VALUE}};',
-					'{{WRAPPER}} .portfolio-shortcode .project-links-container a:hover > svg, {{WRAPPER}} .project-links-container a:hover > svg' => 'fill: {{VALUE}};',
+					'{{WRAPPER}} .the7-hover-icon:hover'     => 'color: {{VALUE}};',
+					'{{WRAPPER}} .the7-hover-icon:hover > svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 				],
 			]
 		);
@@ -2102,13 +2209,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_border_color_hover',
 			[
-				'label'     => __( 'Icon Border Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Border Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .project-links-container a { transition: all 0.3s ease;}
-					{{WRAPPER}} .project-links-container a:hover'  => 'border-color: {{VALUE}};',
+					'{{WRAPPER}} .the7-hover-icon:hover'  => 'border-color: {{VALUE}};',
 
 				],
 			]
@@ -2117,13 +2223,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'project_icon_bg_color_hover',
 			[
-				'label'     => __( 'Icon Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Icon Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
 				'selectors' => [
-					'{{WRAPPER}} .project-links-container a { transition: all 0.3s ease;}
-					{{WRAPPER}} .project-links-container a:hover'  => 'background: {{VALUE}}; box-shadow: none;',
+					'{{WRAPPER}} .the7-hover-icon:hover'  => 'background: {{VALUE}}; box-shadow: none;',
 
 				],
 			]
@@ -2143,7 +2248,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'section_design_image',
 			[
-				'label'     => __( 'Image', 'the7mk2' ),
+				'label'     => esc_html__( 'Image', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'classic_image_visibility!' => '',
@@ -2151,29 +2256,12 @@ class Posts extends The7_Elementor_Widget_Base {
 			]
 		);
 
-		$this->add_control(
-			'item_ratio',
-			[
-				'label'       => __( 'Image Ratio', 'the7mk2' ),
-				'description' => __( 'Lieve empty to use original proportions', 'the7mk2' ),
-				'type'        => Controls_Manager::SLIDER,
-				'default'     => [
-					'size' => '',
-				],
-				'range'       => [
-					'px' => [
-						'min'  => 0.1,
-						'max'  => 2,
-						'step' => 0.01,
-					],
-				],
-			]
-		);
+		$this->template( Image_Aspect_Ratio::class )->add_style_controls();
 
 		$this->add_control(
 			'img_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'selectors'  => [
@@ -2188,13 +2276,13 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'image_scale_animation_on_hover',
 			[
-				'label'   => __( 'Scale Animation On Hover', 'the7mk2' ),
+				'label'   => esc_html__( 'Scale Animation On Hover', 'the7mk2' ),
 				'type'    => Controls_Manager::SELECT,
 				'default' => 'quick_scale',
 				'options' => [
-					'disabled'    => __( 'Disabled', 'the7mk2' ),
-					'quick_scale' => __( 'Quick scale', 'the7mk2' ),
-					'slow_scale'  => __( 'Slow scale', 'the7mk2' ),
+					'disabled'    => esc_html__( 'Disabled', 'the7mk2' ),
+					'quick_scale' => esc_html__( 'Quick scale', 'the7mk2' ),
+					'slow_scale'  => esc_html__( 'Slow scale', 'the7mk2' ),
 				],
 			]
 		);
@@ -2204,7 +2292,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
@@ -2216,7 +2304,7 @@ class Posts extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label' => __( 'Background Overlay', 'the7mk2' ),
+						'label' => esc_html__( 'Background Overlay', 'the7mk2' ),
 					],
 				],
 				'selector'       => '
@@ -2258,7 +2346,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_opacity',
 			[
-				'label'      => __( 'Opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Opacity', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -2280,7 +2368,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
@@ -2292,7 +2380,7 @@ class Posts extends The7_Elementor_Widget_Base {
 				'exclude'        => [ 'image' ],
 				'fields_options' => [
 					'background' => [
-						'label' => __( 'Background Overlay', 'the7mk2' ),
+						'label' => esc_html__( 'Background Overlay', 'the7mk2' ),
 					],
 					'color'      => [
 						'selectors' => [
@@ -2344,7 +2432,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'thumbnail_hover_opacity',
 			[
-				'label'      => __( 'Opacity', 'the7mk2' ),
+				'label'      => esc_html__( 'Opacity', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'size_units' => [ '%' ],
 				'range'      => [
@@ -2375,7 +2463,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'content_style_section',
 			[
-				'label' => __( 'Content', 'the7mk2' ),
+				'label' => esc_html__( 'Content', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_STYLE,
 			]
 		);
@@ -2383,7 +2471,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'custom_content_bg_color',
 			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2396,7 +2484,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'bo_content_width',
 			[
-				'label'      => __( 'Content Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Content Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => '%',
@@ -2424,7 +2512,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'post_content_padding',
 			[
-				'label'      => __( 'Content Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Content Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -2445,21 +2533,21 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'post_content_box_alignment',
 			[
-				'label'                => __( 'Horizontal Position', 'the7mk2' ),
+				'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'toggle'               => false,
 				'default'              => 'left',
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-h-align-right',
 					],
 				],
@@ -2471,7 +2559,6 @@ class Posts extends The7_Elementor_Widget_Base {
 				'selectors'            => [
 					'{{WRAPPER}} .description-under-image .post-entry-content'                       => 'align-self: {{VALUE}};',
 					'{{WRAPPER}} .description-on-hover .post-entry-content .post-entry-body'         => 'align-self: {{VALUE}};',
-					'{{WRAPPER}} .description-on-hover .post-entry-content .project-links-container' => 'justify-content: {{VALUE}};',
 				],
 			]
 		);
@@ -2479,21 +2566,21 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'post_content_alignment',
 			[
-				'label'     => __( 'Text Alignment', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Alignment', 'the7mk2' ),
 				'type'      => Controls_Manager::CHOOSE,
 				'toggle'    => false,
 				'default'   => 'left',
 				'options'   => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -2514,7 +2601,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'post_title_style_section',
 			[
-				'label'     => __( 'Post Title', 'the7mk2' ),
+				'label'     => esc_html__( 'Post Title', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'show_post_title' => 'y',
@@ -2526,7 +2613,7 @@ class Posts extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'post_title',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'selector'       => '{{WRAPPER}} .ele-entry-title',
 				'fields_options' => [
 					'font_family' => [
@@ -2556,14 +2643,14 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_title_normal_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'custom_title_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2580,14 +2667,14 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'post_title_hover_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'post_title_color_hover',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2604,7 +2691,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_title_bottom_margin',
 			[
-				'label'      => __( 'Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -2635,7 +2722,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'post_meta_style_section',
 			[
-				'label'      => __( 'Meta Information', 'the7mk2' ),
+				'label'      => esc_html__( 'Meta Information', 'the7mk2' ),
 				'tab'        => Controls_Manager::TAB_STYLE,
 				'conditions' => [
 					'relation' => 'or',
@@ -2668,7 +2755,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_meta_separator',
 			[
-				'label'       => __( 'Separator Between', 'the7mk2' ),
+				'label'       => esc_html__( 'Separator Between', 'the7mk2' ),
 				'type'        => Controls_Manager::TEXT,
 				'default'     => '•',
 				'placeholder' => '',
@@ -2682,7 +2769,7 @@ class Posts extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'post_meta',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'fields_options' => [
 					'font_family' => [
 						'default' => '',
@@ -2710,7 +2797,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_meta_font_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2724,7 +2811,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_meta_bottom_margin',
 			[
-				'label'      => __( 'Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -2755,7 +2842,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'post_text_style_section',
 			[
-				'label'     => __( 'Text', 'the7mk2' ),
+				'label'     => esc_html__( 'Text', 'the7mk2' ),
 				'tab'       => Controls_Manager::TAB_STYLE,
 				'condition' => [
 					'post_content' => 'show_excerpt',
@@ -2767,7 +2854,7 @@ class Posts extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'           => 'post_content',
-				'label'          => __( 'Typography', 'the7mk2' ),
+				'label'          => esc_html__( 'Typography', 'the7mk2' ),
 				'fields_options' => [
 					'font_family' => [
 						'default' => '',
@@ -2798,7 +2885,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_content_color',
 			[
-				'label'     => __( 'Font Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Font Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -2814,7 +2901,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'post_content_bottom_margin',
 			[
-				'label'      => __( 'Spacing', 'the7mk2' ),
+				'label'      => esc_html__( 'Spacing', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -2847,7 +2934,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_section(
 			'filter_bar_style_section',
 			[
-				'label'      => __( 'Filter Bar', 'the7mk2' ),
+				'label'      => esc_html__( 'Filter Bar', 'the7mk2' ),
 				'tab'        => Controls_Manager::TAB_STYLE,
 				'condition'  => [
 					'post_type!' => [ 'current_query', 'related' ],
@@ -2888,21 +2975,21 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'filter_position',
 			[
-				'label'                => __( 'Align', 'the7mk2' ),
+				'label'                => esc_html__( 'Align', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'toggle'               => false,
 				'default'              => 'center',
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
+						'title' => esc_html__( 'Center', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-center',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -2922,18 +3009,18 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_style',
 			[
-				'label'          => __( 'Pointer', 'the7mk2' ),
+				'label'          => esc_html__( 'Pointer', 'the7mk2' ),
 				'type'           => Controls_Manager::SELECT,
 				'default'        => 'default',
 				'options'        => [
-					'default'     => __( 'Default', 'the7mk2' ),
-					'none'        => __( 'None', 'the7mk2' ),
-					'underline'   => __( 'Underline', 'the7mk2' ),
-					'overline'    => __( 'Overline', 'the7mk2' ),
-					'double-line' => __( 'Double Line', 'the7mk2' ),
-					'framed'      => __( 'Framed', 'the7mk2' ),
-					'background'  => __( 'Background', 'the7mk2' ),
-					'text'        => __( 'Text', 'the7mk2' ),
+					'default'     => esc_html__( 'Default', 'the7mk2' ),
+					'none'        => esc_html__( 'None', 'the7mk2' ),
+					'underline'   => esc_html__( 'Underline', 'the7mk2' ),
+					'overline'    => esc_html__( 'Overline', 'the7mk2' ),
+					'double-line' => esc_html__( 'Double Line', 'the7mk2' ),
+					'framed'      => esc_html__( 'Framed', 'the7mk2' ),
+					'background'  => esc_html__( 'Background', 'the7mk2' ),
+					'text'        => esc_html__( 'Text', 'the7mk2' ),
 				],
 				'style_transfer' => true,
 				'conditions'     => [
@@ -2962,7 +3049,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_line',
 			[
-				'label'      => __( 'Animation', 'the7mk2' ),
+				'label'      => esc_html__( 'Animation', 'the7mk2' ),
 				'type'       => Controls_Manager::SELECT,
 				'default'    => 'fade',
 				'options'    => [
@@ -3026,7 +3113,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_framed',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'fade',
 				'options'   => [
@@ -3047,7 +3134,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_background',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'fade',
 				'options'   => [
@@ -3074,7 +3161,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'animation_text',
 			[
-				'label'     => __( 'Animation', 'the7mk2' ),
+				'label'     => esc_html__( 'Animation', 'the7mk2' ),
 				'type'      => Controls_Manager::SELECT,
 				'default'   => 'grow',
 				'options'   => [
@@ -3097,7 +3184,7 @@ class Posts extends The7_Elementor_Widget_Base {
 			Group_Control_Typography::get_type(),
 			[
 				'name'     => 'filter_typography',
-				'label'    => __( 'Typography', 'the7mk2' ),
+				'label'    => esc_html__( 'Typography', 'the7mk2' ),
 				'selector' => '{{WRAPPER}} .filter a',
 			]
 		);
@@ -3105,7 +3192,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_underline_height',
 			[
-				'label'      => __( 'Pointer Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Pointer Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
@@ -3133,14 +3220,14 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'filter_normal_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'navigation_font_color',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -3155,14 +3242,14 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'filter_hover_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'filter_hover_text_color',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -3175,7 +3262,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_hover_pointer_color',
 			[
-				'label'     => __( 'Pointer Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Pointer Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -3190,14 +3277,14 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'filter_active_style',
 			[
-				'label' => __( 'Active', 'the7mk2' ),
+				'label' => esc_html__( 'Active', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'filter_active_text_color',
 			[
-				'label'     => __( 'Text Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -3210,7 +3297,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_active_pointer_color',
 			[
-				'label'     => __( 'Pointer Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Pointer Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'alpha'     => true,
 				'default'   => '',
@@ -3227,7 +3314,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'filter_bg_border_radius',
 			[
-				'label'      => __( 'Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px', '%' ],
 				'default'    => [
@@ -3250,7 +3337,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'filter_element_padding',
 			[
-				'label'      => __( 'Item Padding', 'the7mk2' ),
+				'label'      => esc_html__( 'Item Padding', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -3272,7 +3359,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'filter_element_margin',
 			[
-				'label'      => __( 'Item Margin', 'the7mk2' ),
+				'label'      => esc_html__( 'Item Margin', 'the7mk2' ),
 				'type'       => Controls_Manager::DIMENSIONS,
 				'size_units' => [ 'px' ],
 				'default'    => [
@@ -3294,7 +3381,7 @@ class Posts extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'gap_below_category_filter',
 			[
-				'label'     => __( 'Filter Bar Spacing', 'the7mk2' ),
+				'label'     => esc_html__( 'Filter Bar Spacing', 'the7mk2' ),
 				'type'      => Controls_Manager::DIMENSIONS,
 				'default'   => [
 					'top'      => '',
@@ -3325,5 +3412,12 @@ class Posts extends The7_Elementor_Widget_Base {
 		$show_m = $this->get_responsive_setting( 'show_categories_filter', 'mobile' );
 
 		return isset( $show, $show_t, $show_m ) && ! ( $show === 'hide' && $show_t === 'hide' && $show_m === 'hide' );
+	}
+
+	/**
+	 * @return bool
+	 */
+	protected function is_hover_icon_linkless() {
+		return in_array( $this->get_settings_for_display( 'post_layout' ), [ 'classic', 'bottom_overlap', 'gradient_overlap' ], true );
 	}
 }

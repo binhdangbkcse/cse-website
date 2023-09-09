@@ -21,7 +21,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Product Images', 'the7mk2' );
+		return esc_html__( 'Product Images', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -189,22 +189,18 @@ class Product_Images extends The7_Elementor_Widget_Base {
 	protected function render_navigation( $settings ) {
 		?>
         <ul class="flex-direction-nav">
-            <li class="flex-nav-prev">
+            <li class="flex-nav-prev"><a href="#" class="flex-prev" aria-hidden ="true">
 				<?php
 				Icons_Manager::render_icon( $settings['arrow_prev'], [
 					'aria-hidden' => 'true',
-					'class'       => 'flex-prev',
-					'href'        => "#",
-				], 'a' ); ?>
-            </li>
-            <li class="flex-nav-next">
+				] ); ?>
+            </a></li>
+            <li class="flex-nav-next"><a href="#" class="flex-next" aria-hidden ="true">
 				<?php
 				Icons_Manager::render_icon( $settings['arrow_next'], [
 					'aria-hidden' => 'true',
-					'class'       => 'flex-next',
-					'href'        => "#",
-				], 'a' ); ?>
-            </li>
+				]); ?>
+            </a></li>
         </ul>
 		<?php
 	}
@@ -242,11 +238,13 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	private function get_thumbs_image_html( $attachment_id) {
 		presscore_remove_lazy_load_attrs();
-		$options = [ 'w' => 500 ];
-        apply_filters( 'elementor_product_image_thumbnail_options', $options, $options );
+		$options = apply_filters( 'elementor_product_image_thumbnail_options', [ 'w' => 500 ] );
 		$caption = _wp_specialchars( get_post_field( 'post_excerpt', $attachment_id ), ENT_QUOTES, 'UTF-8', true );
 		$full_size           = apply_filters( 'woocommerce_gallery_full_size', apply_filters( 'woocommerce_product_thumbnails_large_size', 'full' ) );
 		$src                 = wp_get_attachment_image_src( $attachment_id, $full_size );
+		if ( ! $src ) {
+			return '';
+		}
 
         $img_html = dt_get_thumb_img( [
             'img_id'  => $attachment_id,
@@ -300,12 +298,12 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_gallery_content_controls() {
 		$this->start_controls_section( 'gallery_section', [
-			'label' => __( 'Big image ', 'the7mk2' ),
+			'label' => esc_html__( 'Big image ', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 
 		$this->add_control( 'gallery_preserve_ratio', [
-			'label'        => __( 'Preserve Image Proportions', 'the7mk2' ),
+			'label'        => esc_html__( 'Preserve Image Proportions', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
 			'default'      => 'y',
 			'return_value' => 'y',
@@ -313,7 +311,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'gallery_ratio', [
-			'label'     => __( 'Big Image Container Ratio', 'the7mk2' ),
+			'label'     => esc_html__( 'Big Image Container Ratio', 'the7mk2' ),
 			'type'      => Controls_Manager::SLIDER,
 			'default'   => [
 				'size' => 1,
@@ -333,7 +331,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'gallery_ratio_helper', [
-			'label'                                                  => __( 'Big Image Ratio helper', 'the7mk2' ),
+			'label'                                                  => esc_html__( 'Big Image Ratio helper', 'the7mk2' ),
 			'type'                                                   => Controls_Manager::HIDDEN,
 			'condition'                                              => [
 				'gallery_ratio[size]!' => '',
@@ -348,7 +346,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 
 		$this->add_control( 'slider_animation', [
-			'label'   => __( 'Animation On Scroll:', 'the7mk2' ),
+			'label'   => esc_html__( 'Animation On Scroll:', 'the7mk2' ),
 			'type'    => Controls_Manager::SELECT,
 			'default' => 'slide',
 			'options' => [
@@ -358,10 +356,10 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'show_image_zoom', [
-			'label'        => __( 'Zoom Image On Hover', 'the7mk2' ),
+			'label'        => esc_html__( 'Zoom Image On Hover', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_off'    => __( 'No', 'the7mk2' ),
-			'label_on'     => __( 'Yes', 'the7mk2' ),
+			'label_off'    => esc_html__( 'No', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
 			'separator'    => 'before',
 			'default'      => 'yes',
 			'return_value' => 'yes',
@@ -369,20 +367,20 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'lightbox_on_click', [
-			'label'        => __( 'Open Lightbox On Click', 'the7mk2' ),
+			'label'        => esc_html__( 'Open Lightbox On Click', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_off'    => __( 'No', 'the7mk2' ),
-			'label_on'     => __( 'Yes', 'the7mk2' ),
+			'label_off'    => esc_html__( 'No', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
 			'separator'    => 'before',
 			'return_value' => 'y',
 			'prefix_class' => 'lightbox-on-click-',
 		] );
 
 		$this->add_control( 'show_onsale_flash', [
-			'label'        => __( 'Sale Flash', 'the7mk2' ),
+			'label'        => esc_html__( 'Sale Flash', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_off'    => __( 'No', 'the7mk2' ),
-			'label_on'     => __( 'Yes', 'the7mk2' ),
+			'label_off'    => esc_html__( 'No', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
 			'separator'    => 'before',
 			'default'      => 'yes',
 			'return_value' => 'yes',
@@ -392,17 +390,17 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'show_zoom', [
-			'label'        => __( 'Zoom Flash', 'the7mk2' ),
+			'label'        => esc_html__( 'Zoom Flash', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
-			'label_off'    => __( 'No', 'the7mk2' ),
-			'label_on'     => __( 'Yes', 'the7mk2' ),
+			'label_off'    => esc_html__( 'No', 'the7mk2' ),
+			'label_on'     => esc_html__( 'Yes', 'the7mk2' ),
 			'separator'    => 'before',
 			'default'      => 'yes',
 			'return_value' => 'yes',
 		] );
 
 		$this->add_control( 'zoom_icon', [
-			'label'     => __( 'Zoom Icon', 'the7mk2' ),
+			'label'     => esc_html__( 'Zoom Icon', 'the7mk2' ),
 			'type'      => Controls_Manager::ICONS,
 			'default'   => [
 				'value'   => 'fas fa-search-plus',
@@ -418,12 +416,12 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_thumbnails_content_controls() {
 		$this->start_controls_section( 'thumbnails_section', [
-			'label' => __( 'Thumbnails ', 'the7mk2' ),
+			'label' => esc_html__( 'Thumbnails ', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 
 		$this->add_control( 'thumbs_direction', [
-			'label'                => __( 'Thumbnails Position', 'the7mk2' ),
+			'label'                => esc_html__( 'Thumbnails Position', 'the7mk2' ),
 			'type'                 => Controls_Manager::SELECT,
 			'default'              => 'bottom',
 			'options'              => [
@@ -441,7 +439,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'thumbs_items', [
-			'label' => __( 'Number Of Thumbnails', 'the7mk2' ),
+			'label' => esc_html__( 'Number Of Thumbnails', 'the7mk2' ),
 
 			'type'         => Controls_Manager::NUMBER,
 			'default'      => 4,
@@ -465,7 +463,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'thumbs_preserve_ratio', [
-			'label'        => __( 'Preserve Image Proportions', 'the7mk2' ),
+			'label'        => esc_html__( 'Preserve Image Proportions', 'the7mk2' ),
 			'type'         => Controls_Manager::SWITCHER,
 			'default'      => 'y',
 			'return_value' => 'y',
@@ -482,7 +480,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'thumbs_side_ratio', [
-			'label'      => __( 'Thumbnails Ratio', 'the7mk2' ),
+			'label'      => esc_html__( 'Thumbnails Ratio', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'size' => 1,
@@ -516,7 +514,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'thumbnails_ratio', [
-			'label'      => __( 'Thumbnails Ratio', 'the7mk2' ),
+			'label'      => esc_html__( 'Thumbnails Ratio', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'size' => 0.66,
@@ -558,12 +556,12 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_arrows_content_controls() {
 		$this->start_controls_section( 'arrows_section', [
-			'label' => __( 'Arrows', 'the7mk2' ),
+			'label' => esc_html__( 'Arrows', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_CONTENT,
 		] );
 
 		$this->add_control( 'arrow_next', [
-			'label'   => __( 'Choose Next Arrow Icon', 'the7mk2' ),
+			'label'   => esc_html__( 'Choose Next Arrow Icon', 'the7mk2' ),
 			'type'    => Controls_Manager::ICONS,
 			'default' => [
 				'value'   => 'fas fa-chevron-right',
@@ -573,7 +571,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'arrow_prev', [
-			'label'   => __( 'Choose Previous Arrow Icon', 'the7mk2' ),
+			'label'   => esc_html__( 'Choose Previous Arrow Icon', 'the7mk2' ),
 			'type'    => Controls_Manager::ICONS,
 			'default' => [
 				'value'   => 'fas fa-chevron-left',
@@ -582,24 +580,24 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'gallery_arrows_display', [
-			'label'        => __( 'Show Big Image Arrows', 'the7mk2' ),
+			'label'        => esc_html__( 'Show Big Image Arrows', 'the7mk2' ),
 			'type'         => Controls_Manager::SELECT,
 			'options'      => [
-				'never'  => __( 'Never', 'the7mk2' ),
-				'always' => __( 'Always', 'the7mk2' ),
-				'hover'  => __( 'On Hover', 'the7mk2' ),
+				'never'  => esc_html__( 'Never', 'the7mk2' ),
+				'always' => esc_html__( 'Always', 'the7mk2' ),
+				'hover'  => esc_html__( 'On Hover', 'the7mk2' ),
 			],
 			'default'      => 'hover',
 			'prefix_class' => 'gallery-nav-display-',
 		] );
 
 		$this->add_control( 'thumbs_arrows_display', [
-			'label'        => __( 'Show Thumbnail Arrows', 'the7mk2' ),
+			'label'        => esc_html__( 'Show Thumbnail Arrows', 'the7mk2' ),
 			'type'         => Controls_Manager::SELECT,
 			'options'      => [
-				'never'  => __( 'Never', 'the7mk2' ),
-				'always' => __( 'Always', 'the7mk2' ),
-				'hover'  => __( 'On Hover', 'the7mk2' ),
+				'never'  => esc_html__( 'Never', 'the7mk2' ),
+				'always' => esc_html__( 'Always', 'the7mk2' ),
+				'hover'  => esc_html__( 'On Hover', 'the7mk2' ),
 			],
 			'default'      => 'hover',
 			'prefix_class' => 'thumbs-nav-display-',
@@ -610,7 +608,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_big_image_style_controls() {
 		$this->start_controls_section( 'section_gallery_style', [
-			'label' => __( 'Big Image', 'the7mk2' ),
+			'label' => esc_html__( 'Big Image', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
@@ -621,7 +619,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_basic_responsive_control( 'gallery_image_border_radius', [
-			'label'      => __( 'Border Radius', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', '%' ],
 			'selectors'  => [
@@ -630,7 +628,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'gallery_spacing', [
-			'label'      => __( 'Distance To Thumbnails', 'the7mk2' ),
+			'label'      => esc_html__( 'Distance To Thumbnails', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px' ],
 			'selectors'  => [
@@ -642,7 +640,6 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'gallery_spacing_empty', [
-			'label'        => __( '', 'the7mk2' ),
 			'type'         => Controls_Manager::HIDDEN,
 			'condition'    => [
 				'gallery_spacing[size]' => '',
@@ -659,7 +656,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_thumbnails_style_controls() {
 		$this->start_controls_section( 'section_thumbs_style', [
-			'label'      => __( 'Thumbnails', 'the7mk2' ),
+			'label'      => esc_html__( 'Thumbnails', 'the7mk2' ),
 			'tab'        => Controls_Manager::TAB_STYLE,
 			'conditions' => [
 				'terms' => [
@@ -678,7 +675,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_basic_responsive_control( 'thumbs_border_radius', [
-			'label'      => __( 'Border Radius', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 			'type'       => Controls_Manager::DIMENSIONS,
 			'size_units' => [ 'px', '%' ],
 			'selectors'  => [
@@ -687,7 +684,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'thumbs_spacing', [
-			'label'      => __( 'Distance Between Thumbnails', 'the7mk2' ),
+			'label'      => esc_html__( 'Distance Between Thumbnails', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px' ],
 			'selectors'  => [
@@ -699,7 +696,6 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'thumbs_spacing_empty', [
-			'label'        => __( '', 'the7mk2' ),
 			'type'         => Controls_Manager::HIDDEN,
 			'condition'    => [
 				'thumbs_spacing[size]' => '',
@@ -716,7 +712,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_sale_flash_style_controls() {
 		$this->start_controls_section( 'sale_flash_style', [
-			'label'     => __( 'Sale Flash', 'the7mk2' ),
+			'label'     => esc_html__( 'Sale Flash', 'the7mk2' ),
 			'tab'       => Controls_Manager::TAB_STYLE,
 			'condition' => [
 				'show_onsale_flash' => 'yes',
@@ -724,7 +720,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'onsale_text_color', [
-			'label'     => __( 'Text Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Text Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .onsale' => 'color: {{VALUE}}',
@@ -732,7 +728,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'onsale_text_background_color', [
-			'label'     => __( 'Background Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .onsale' => 'background-color: {{VALUE}}',
@@ -754,7 +750,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'onsale_border_radius', [
-			'label'      => __( 'Border Radius', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'selectors'  => [
@@ -763,7 +759,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'onsale_width', [
-			'label'      => __( 'Width', 'the7mk2' ),
+			'label'      => esc_html__( 'Width', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'selectors'  => [
@@ -772,7 +768,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'onsale_height', [
-			'label'      => __( 'Height', 'the7mk2' ),
+			'label'      => esc_html__( 'Height', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'selectors'  => [
@@ -781,15 +777,15 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'onsale_horizontal_position', [
-			'label'                => __( 'Horizontal Position', 'the7mk2' ),
+			'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
 			'type'                 => Controls_Manager::CHOOSE,
 			'options'              => [
 				'left'  => [
-					'title' => __( 'Left', 'the7mk2' ),
+					'title' => esc_html__( 'Left', 'the7mk2' ),
 					'icon'  => 'eicon-h-align-left',
 				],
 				'right' => [
-					'title' => __( 'Right', 'the7mk2' ),
+					'title' => esc_html__( 'Right', 'the7mk2' ),
 					'icon'  => 'eicon-h-align-right',
 				],
 			],
@@ -806,7 +802,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'onsale_horizontal_distance', [
-			'label'      => __( 'Offset', 'the7mk2' ),
+			'label'      => esc_html__( 'Offset', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'range'      => [
@@ -826,15 +822,15 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'onsale_vertical_position', [
-			'label'                => __( 'Vertical Position', 'the7mk2' ),
+			'label'                => esc_html__( 'Vertical Position', 'the7mk2' ),
 			'type'                 => Controls_Manager::CHOOSE,
 			'options'              => [
 				'top'    => [
-					'title' => __( 'Top', 'the7mk2' ),
+					'title' => esc_html__( 'Top', 'the7mk2' ),
 					'icon'  => 'eicon-v-align-top',
 				],
 				'bottom' => [
-					'title' => __( 'Bottom', 'the7mk2' ),
+					'title' => esc_html__( 'Bottom', 'the7mk2' ),
 					'icon'  => 'eicon-v-align-bottom',
 				],
 			],
@@ -851,7 +847,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'onsale_vertical_distance', [
-			'label'      => __( 'Offset', 'the7mk2' ),
+			'label'      => esc_html__( 'Offset', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'range'      => [
@@ -883,7 +879,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_zoom_flash_style_controls() {
 		$this->start_controls_section( 'zoom_style', [
-			'label'     => __( 'Zoom Flash', 'the7mk2' ),
+			'label'     => esc_html__( 'Zoom Flash', 'the7mk2' ),
 			'tab'       => Controls_Manager::TAB_STYLE,
 			'condition' => [
 				'show_zoom' => 'yes',
@@ -895,21 +891,21 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'zoom_colors_normal',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control( 'zoom_text_color', [
-			'label'     => __( 'Icon Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .zoom-flash i' => 'color: {{VALUE}}',
-				'{{WRAPPER}} .zoom-flash svg' => 'fill: {{VALUE}}',
+				'{{WRAPPER}} .zoom-flash svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 
 		$this->add_control( 'zoom_background_color', [
-			'label'     => __( 'Background Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .zoom-flash' => 'background-color: {{VALUE}}',
@@ -921,21 +917,21 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		$this->start_controls_tab(
 			'zoom_colors_hover',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control( 'zoom_text_color_hover', [
-			'label'     => __( 'Icon Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .zoom-flash:hover i' => 'color: {{VALUE}}',
-				'{{WRAPPER}} .zoom-flash:hover svg' => 'fill: {{VALUE}}',
+				'{{WRAPPER}} .zoom-flash:hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 
 		$this->add_control( 'zoom_background_color_hover', [
-			'label'     => __( 'Background Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Background Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'selectors' => [
 				'{{WRAPPER}} .zoom-flash:hover' => 'background-color: {{VALUE}}',
@@ -947,7 +943,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		$this->end_controls_tabs();
 
 		$this->add_responsive_control( 'zoom_text_size', [
-			'label'      => __( 'Icon Size', 'the7mk2' ),
+			'label'      => esc_html__( 'Icon Size', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'range'      => [
@@ -972,7 +968,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'zoom_border_radius', [
-			'label'      => __( 'Border Radius', 'the7mk2' ),
+			'label'      => esc_html__( 'Border Radius', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'selectors'  => [
@@ -981,7 +977,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'zoom_width', [
-			'label'      => __( 'Width', 'the7mk2' ),
+			'label'      => esc_html__( 'Width', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'selectors'  => [
@@ -990,7 +986,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'zoom_height', [
-			'label'      => __( 'Height', 'the7mk2' ),
+			'label'      => esc_html__( 'Height', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'selectors'  => [
@@ -999,15 +995,15 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'zoom_horizontal_position', [
-			'label'                => __( 'Horizontal Position', 'the7mk2' ),
+			'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
 			'type'                 => Controls_Manager::CHOOSE,
 			'options'              => [
 				'left'  => [
-					'title' => __( 'Left', 'the7mk2' ),
+					'title' => esc_html__( 'Left', 'the7mk2' ),
 					'icon'  => 'eicon-h-align-left',
 				],
 				'right' => [
-					'title' => __( 'Right', 'the7mk2' ),
+					'title' => esc_html__( 'Right', 'the7mk2' ),
 					'icon'  => 'eicon-h-align-right',
 				],
 			],
@@ -1024,7 +1020,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'zoom_horizontal_distance', [
-			'label'      => __( 'Offset', 'the7mk2' ),
+			'label'      => esc_html__( 'Offset', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'range'      => [
@@ -1044,15 +1040,15 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_control( 'zoom_vertical_position', [
-			'label'                => __( 'Vertical Position', 'the7mk2' ),
+			'label'                => esc_html__( 'Vertical Position', 'the7mk2' ),
 			'type'                 => Controls_Manager::CHOOSE,
 			'options'              => [
 				'top'    => [
-					'title' => __( 'Top', 'the7mk2' ),
+					'title' => esc_html__( 'Top', 'the7mk2' ),
 					'icon'  => 'eicon-v-align-top',
 				],
 				'bottom' => [
-					'title' => __( 'Bottom', 'the7mk2' ),
+					'title' => esc_html__( 'Bottom', 'the7mk2' ),
 					'icon'  => 'eicon-v-align-bottom',
 				],
 			],
@@ -1069,7 +1065,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'zoom_vertical_distance', [
-			'label'      => __( 'Offset', 'the7mk2' ),
+			'label'      => esc_html__( 'Offset', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'size_units' => [ 'px', 'em' ],
 			'range'      => [
@@ -1101,7 +1097,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 	protected function add_arrows_style_controls() {
 		$this->start_controls_section( 'arrows_style', [
-			'label'      => __( 'Arrows', 'the7mk2' ),
+			'label'      => esc_html__( 'Arrows', 'the7mk2' ),
 			'tab'        => Controls_Manager::TAB_STYLE,
 			'conditions' => [
 				'relation' => 'or',
@@ -1122,7 +1118,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 
 
 		$this->add_responsive_control( 'gallery_arrow_icon_size', [
-			'label'      => __( 'Big Image Arrows Icon Size', 'the7mk2' ),
+			'label'      => esc_html__( 'Big Image Arrows Icon Size', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1148,12 +1144,12 @@ class Product_Images extends The7_Elementor_Widget_Base {
 			],
 			'selectors'  => [
 				'{{WRAPPER}}  .dt-product-gallery .flex-direction-nav > li > a' => 'font-size: {{SIZE}}{{UNIT}};',
-				'{{WRAPPER}}  .dt-product-gallery .flex-direction-nav > li > svg' => 'min-width: {{SIZE}}{{UNIT}};min-height: {{SIZE}}{{UNIT}};',
+				'{{WRAPPER}}  .dt-product-gallery .flex-direction-nav > li > a svg' => 'min-width: {{SIZE}}{{UNIT}};min-height: {{SIZE}}{{UNIT}};',
 			],
 		] );
 
 		$this->add_responsive_control( 'gallery_arrow_h_offset', [
-			'label'      => __( 'Big Image Arrows Offset', 'the7mk2' ),
+			'label'      => esc_html__( 'Big Image Arrows Offset', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1184,7 +1180,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'thumbs_arrow_icon_size', [
-			'label'      => __( 'Thumbnail Arrows Icon Size', 'the7mk2' ),
+			'label'      => esc_html__( 'Thumbnail Arrows Icon Size', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1214,12 +1210,12 @@ class Product_Images extends The7_Elementor_Widget_Base {
 			],
 			'selectors'  => [
 				'{{WRAPPER}} .dt-product-thumbs .flex-direction-nav > li > a' => 'font-size: {{SIZE}}{{UNIT}};',
-				'{{WRAPPER}} .dt-product-thumbs .flex-direction-nav > li > svg' => 'min-width: {{SIZE}}{{UNIT}};min-height: {{SIZE}}{{UNIT}};',
+				'{{WRAPPER}} .dt-product-thumbs .flex-direction-nav > li > a svg' => 'min-width: {{SIZE}}{{UNIT}};min-height: {{SIZE}}{{UNIT}};',
 			],
 		] );
 
 		$this->add_responsive_control( 'thumbs_arrow_h_offset_bottom', [
-			'label'      => __( 'Thumbnail Arrows Offset', 'the7mk2' ),
+			'label'      => esc_html__( 'Thumbnail Arrows Offset', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1259,7 +1255,7 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		] );
 
 		$this->add_responsive_control( 'thumbs_arrow_v_offset_not_bottom', [
-			'label'      => __( 'Thumbnail Arrows Offset', 'the7mk2' ),
+			'label'      => esc_html__( 'Thumbnail Arrows Offset', 'the7mk2' ),
 			'type'       => Controls_Manager::SLIDER,
 			'default'    => [
 				'unit' => 'px',
@@ -1296,33 +1292,33 @@ class Product_Images extends The7_Elementor_Widget_Base {
 		$this->start_controls_tabs( 'arrows_style_tabs' );
 
 		$this->start_controls_tab( 'arrows_colors', [
-			'label' => __( 'Normal', 'the7mk2' ),
+			'label' => esc_html__( 'Normal', 'the7mk2' ),
 		] );
 
 		$this->add_control( 'arrow_icon_color', [
-			'label'     => __( 'Arrow Icon Color', 'the7mk2' ),
+			'label'     => esc_html__( 'Arrow Icon Color', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'alpha'     => true,
 			'default'   => '',
 			'selectors' => [
 				'{{WRAPPER}} .flex-direction-nav > li > a' => 'color: {{VALUE}};',
-				'{{WRAPPER}} .flex-direction-nav > li > svg' => 'fill: {{VALUE}};',
+				'{{WRAPPER}} .flex-direction-nav > li > a svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 		$this->end_controls_tab();
 
 		$this->start_controls_tab( 'arrows_hover_colors', [
-			'label' => __( 'Hover', 'the7mk2' ),
+			'label' => esc_html__( 'Hover', 'the7mk2' ),
 		] );
 
 		$this->add_control( 'arrow_icon_color_hover', [
-			'label'     => __( 'Arrow Icon Color Hover', 'the7mk2' ),
+			'label'     => esc_html__( 'Arrow Icon Color Hover', 'the7mk2' ),
 			'type'      => Controls_Manager::COLOR,
 			'alpha'     => true,
 			'default'   => '',
 			'selectors' => [
-				'{{WRAPPER}} .flex-direction-nav > li > a:hover ' => 'color: {{VALUE}};',
-				'{{WRAPPER}} .flex-direction-nav > li > svg:hover ' => 'fill: {{VALUE}};',
+				'{{WRAPPER}} .flex-direction-nav > li > a:hover' => 'color: {{VALUE}};',
+				'{{WRAPPER}} .flex-direction-nav > li > a:hover svg' => 'fill: {{VALUE}}; color: {{VALUE}};',
 			],
 		] );
 		$this->end_controls_tab();

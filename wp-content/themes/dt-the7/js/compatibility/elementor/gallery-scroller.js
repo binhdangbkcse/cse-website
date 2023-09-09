@@ -10,8 +10,12 @@
             $gallerySlider = $gallery.find('.flexslider'),
             $thumbsSlider = $thumbs.find('.flexslider'),
             product_gallery,
-            navSelector = '.flex-direction-nav a, .flex-direction-nav svg',
-            methods = {};
+            navSelector = '.flex-direction-nav a',
+            isTouchEvents = !!$('html.touchevents').length,
+            methods = {},
+            classes = {
+                imgZoomHandled: "zoom-handled",
+            };
         $widget.vars = { };
         // Store a reference to the slider object
         $.data(el, "productGallery", $widget);
@@ -27,7 +31,6 @@
                     $widget.vars.colNum = the7Utils.parseIntParam($widget.css("--thumbs-items"), 3);
                 }
                 $widget.vars.isVertical = $widget.vars.scrollMode === "vertical";
-                $widget.vars.blockedRefresh = false;
             },
             init: function () {
                 methods.initVars();
@@ -77,6 +80,7 @@
                     sync: $thumbsSlider,
                     init: function (slider) {
                         slider.find('.slides li img').the7ImageRatio();
+                        methods.deInitZoomInSlide(slider);
                         methods.productInitZoomForCurrentSlide(slider);
                         if (isInit && $thumbsSlider.find(".slides > li").length > 1) {
                             isInit = false;
@@ -122,13 +126,6 @@
                         }
                     });
                 }
-
-                $(window).on("debouncedresize", function () {
-                    if (!$widget.vars.blockedRefresh) {
-                        $widget.refresh();
-                        $widget.vars.blockedRefresh = false;
-                    }
-                });
             },
             thumbs: {
                 init: function () {
@@ -396,40 +393,53 @@
             prepareImages: function ($thumbs, isPreserve) {
                 $thumbs.the7ImageRatio('update', isPreserve);
             },
+            deInitZoom: function ($target){
+                $target.hasClass(classes.imgZoomHandled);
+                {
+                    $target.removeClass(classes.imgZoomHandled);
+                    $target.trigger('zoom.destroy');
+                }
+            },
+            deInitZoomInSlide: function (slider){
+                slider.slides.each(function (index, target) {
+                    methods.deInitZoom( $(target));
+                });
+            },
             productInitZoomForCurrentSlide: function (slider) {
                 if (typeof $.fn.zoom !== "function") return;
-                var imageZoom = !!$widget.hasClass('show-image-zoom-yes'),
-                    zoomTarget = slider.slides.eq(slider.currentSlide),
-                    galleryWidth = slider.computedW;
-                zoomTarget.trigger('zoom.destroy');
-                if (!imageZoom) {
+                var imageZoom = $widget.hasClass('show-image-zoom-yes');
+                var $zoomTarget = slider.slides.eq(slider.currentSlide);
+                if (isTouchEvents || !imageZoom) {
+                    methods.deInitZoom($zoomTarget);
                     return false;
                 }
-                var zoomEnabled = false;
 
-                $(zoomTarget).each(function (index, target) {
+                if ($zoomTarget.hasClass(classes.imgZoomHandled)){
+                    return false;
+                }
+
+                $zoomTarget.addClass(classes.imgZoomHandled);
+                var enableZoom = false;
+                var galleryWidth = slider.computedW;
+                $zoomTarget.each(function (index, target) {
                     var image = $(target).find('img');
 
                     if (image.data('large_image_width') > galleryWidth) {
-                        zoomEnabled = true;
+                        enableZoom = true;
                         return false;
                     }
                 });
 
                 // But only zoom if the img is larger than its container.
-                if (zoomEnabled) {
+                if (enableZoom) {
                     var zoom_options = {
                         touch: false
                     };
 
-                    if ('ontouchstart' in document.documentElement) {
-                        zoom_options.on = 'click';
-                    }
-
-                    zoomTarget.zoom(zoom_options);
+                    $zoomTarget.zoom(zoom_options);
                     setTimeout(function () {
-                        if (zoomTarget.find(':hover').length) {
-                            zoomTarget.trigger('mouseover');
+                        if ($zoomTarget.find(':hover').length) {
+                            $zoomTarget.trigger('mouseover');
                         }
                     }, 100);
                 }
@@ -569,10 +579,6 @@
             methods.prepareImages($thumbLi, isPreserve);
         };
 
-        $widget.blockRefreshOnce = function () {
-            $widget.vars.blockedRefresh = true;
-        };
-
         methods.init();
     };
 
@@ -631,13 +637,9 @@
             var slideToImage = $thumbs.find('li img[data-src="' + variation.image.full_src + '"]');
 
             if (slideToImage.length > 0) {
-                if (typeof galleryData !== 'undefined') {
-                    galleryData.blockRefreshOnce();
-                }
                 slideToImage.trigger('click');
                 $form.attr('dt-current-image', variation.image_id);
                 window.setTimeout(function () {
-                    //$(window).trigger('resize');
                     $product_gallery.trigger('woocommerce_gallery_init_zoom');
                 }, 20);
                 return;
@@ -763,7 +765,7 @@
                     if (typeof galleryData !== 'undefined') {
                         galleryData.refresh();
                     }
-                }, 600);
+                }, 250, false);
                 var $gallery = $widget.find(".dt-wc-product-gallery");
                 var lastWidth = $gallery.width();
 
@@ -774,7 +776,7 @@
                     }
                 }
 
-                setInterval(checkWidthChanges, 500);
+                setInterval(checkWidthChanges, 100);
             });
         });
 
@@ -786,7 +788,7 @@
                     if (typeof data !== 'undefined') {
                         data.refresh();
                     }
-                }, 600);
+                }, 600, false);
             });
         });
 

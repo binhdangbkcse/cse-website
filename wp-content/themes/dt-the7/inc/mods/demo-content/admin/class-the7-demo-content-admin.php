@@ -268,13 +268,10 @@ class The7_Demo_Content_Admin {
 				break;
 
 			case 'import_post_types':
-				$import_manager->import_woocommerce_attributes();
 				$import_manager->import_post_types();
 				$import_manager->import_wp_settings();
 				$import_manager->import_vc_settings();
 				$import_manager->import_the7_fontawesome();
-				$import_manager->import_woocommerce_settings();
-				$import_manager->do_woocommerce_post_import_actions();
 
 				$content_tracker->add( 'post_types', true );
 				break;

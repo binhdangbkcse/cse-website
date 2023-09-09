@@ -71,8 +71,6 @@ class Module extends The7_Elementor_Module_Base {
 	 * When in the editor we populate this on page load as we can't rely on the woocoommerce js to re-add the fragments
 	 * each time a widget us re-rendered.
 	 */
-
-
 	public static function get_cart_content() {
 		if ( null === WC()->cart ) {
 			return '';
@@ -125,11 +123,14 @@ class Module extends The7_Elementor_Module_Base {
 				<?php
 				$thumbnail = apply_filters( 'woocommerce_cart_item_thumbnail', $_product->get_image(), $cart_item, $cart_item_key );
 
-				if ( ! $product_permalink ) :
+				if ( $product_permalink ) {
+					/**
+					 * @see \The7\Mods\Compatibility\Elementor\Widget_Templates\Image_Aspect_Ratio::get_wrapper_class()
+					 */
+					printf( '<a class="img-css-resize-wrapper" href="%s">%s</a>', esc_url( $product_permalink ), wp_kses_post( $thumbnail ) );
+				} else {
 					echo wp_kses_post( $thumbnail );
-				else :
-					printf( '<a class="img-ratio-wrapper" href="%s">%s</a>', esc_url( $product_permalink ), wp_kses_post( $thumbnail ) );
-				endif;
+				}
 				?>
             </div>
             <div class="cart-info">

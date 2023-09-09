@@ -625,7 +625,7 @@ if ( ! function_exists( 'presscore_get_share_buttons_list' ) ) :
 							$url = add_query_arg( array(
 													  'url'         => rawurlencode( $u ),
 													  'media'       => rawurlencode( $image[0] ),
-													  'description' => rawurlencode( apply_filters( 'get_the_excerpt', $_post->post_content ) )
+													  'description' => rawurlencode( apply_filters( 'get_the_excerpt', $_post->post_content, $_post ) )
 												  ), $url );
 							$custom = ' data-pin-config="above" data-pin-do="buttonPin"';
 							$icon_class = 'pinterest';
@@ -1260,6 +1260,19 @@ if ( ! function_exists( 'presscore_gallery_post_exclude_featured_image_from_gall
 	 */
 	function presscore_gallery_post_exclude_featured_image_from_gallery( $args = array(), $default_args = array(), $options = array() ) {
 		return $args;
+	}
+
+endif;
+
+if ( ! function_exists( 'presscore_js_resize_event_hack' ) ) :
+
+	/**
+	 * Not used anymore.
+	 *
+	 * @deprecated 11.4.0
+	 */
+	function presscore_js_resize_event_hack() {
+		// Do nothing.
 	}
 
 endif;

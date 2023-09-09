@@ -1,17 +1,15 @@
 
 /* #Layzr loading
 ================================================== */
-
 img.lazy-load,
-img.blog-thumb-lazy-load {
-	opacity: 0;
+img.lazy-scroll,
+img.owl-thumb-lazy-load-show{
 	transition: opacity 0.38s;
-	&.vc_single_image-img {
-		.mobile-true & {
-			opacity: 1;
-		}
+	&:not(.is-loaded) {
+		opacity: 0 !important;
 	}
 }
+
 img.is-loaded {
 	opacity: 1;
 }

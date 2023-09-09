@@ -10,6 +10,7 @@ use Elementor\Core\Files\File_Types\Svg;
 use Elementor\Plugin;
 use stdClass;
 use The7_Admin_Dashboard_Settings;
+use The7_Elementor_Compatibility;
 use The7_Option_Field_Spacing;
 use WP_Post;
 
@@ -320,7 +321,7 @@ class Mega_Menu {
 					//$local_html .= $document->get_content();
 					$this->remove_hooks();
 					do_action( 'presscore_mega_menu_before_template', $args );
-					$local_html .= Plugin::instance()->frontend->get_builder_content_for_display( $document->get_id() );
+					$local_html .= The7_Elementor_Compatibility::get_builder_content_for_display( $document->get_id() );
 					do_action( 'presscore_mega_menu_after_template', $args );
 					$this->add_hooks();
 				}

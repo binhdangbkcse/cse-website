@@ -226,18 +226,6 @@ jQuery(function ($) {
                 }
             }
         });
-        //change default values in order to fix settings saving
-        elementor.saver.on("save", function (args) {
-            const settings = args.document.container.settings;
-            jQuery.each(settings.changed, function (key) {
-                if (settings !== 'undefined' && settings.controls !== 'undefined' && 'the7_save' in settings.controls[key] && settings.controls[key]['the7_save'] === true) {
-                    if (key in elementor.settings.page.model.controls && key in settings.attributes) {
-                        elementor.settings.page.model.controls[key].default = settings.attributes[key];
-                    }
-                }
-            });
-        });
-
         /*elementor.settings.page.addChangeCallback("the7_scroll_to_top_button_icon", function (newValue) {
             elementor.saver.update.apply().then(function () {
                 elementor.reloadPreview();
@@ -245,3 +233,44 @@ jQuery(function ($) {
         });*/
     });
 });
+
+(function ($) {
+    "use strict";
+
+    $(window).on("elementor:init", function () {
+        class The7AfterSave extends $e.modules.hookData.After {
+            getCommand() {
+                return 'document/save/save';
+            }
+
+            getConditions(args) {
+                /**
+                 * Conditions was copied from elementor code base.
+                 * Search for 'document/save/save' in elementor/assets/js/editor.js
+                 */
+                const status = args.status,
+                    _args$document = args.document,
+                    document = _args$document === void 0 ? elementor.documents.getCurrent() : _args$document;
+                return 'publish' === status && 'kit' === document.config.type;
+            }
+
+            getId() {
+                return 'the7-saver-after-save';
+            }
+
+            apply(args) {
+                const settings = args.document.container.settings;
+                jQuery.each(settings.changed, function (key) {
+                    if (settings !== 'undefined' && settings.controls !== 'undefined' && 'the7_save' in settings.controls[key] && settings.controls[key]['the7_save'] === true) {
+                        if (key in elementor.settings.page.model.controls && key in settings.attributes) {
+                            elementor.settings.page.model.controls[key].default = settings.attributes[key];
+                        }
+                    }
+                });
+            }
+        }
+
+        // Change default values in order to fix settings saving.
+        $e.hooks.registerDataAfter(new The7AfterSave());
+    });
+})(jQuery);

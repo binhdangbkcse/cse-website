@@ -22,10 +22,6 @@
   max-width: 100%;
   width: 100%;
 }
-.img-align-right .post-entry-content,
-.img-align-left .post-entry-content {
-  width: calc(100% - var(--image-size) - var(--image-spacing));
-}
 .the7-simple-widget-posts .post-title {
   color: var(--the7-h5-color);
   display: inline-block;
@@ -68,17 +64,6 @@
 .the7-simple-widget-posts .post-entry-content ul {
   margin-left: 0;
   margin-right: 0;
-}
-.elementor-widget .the7-simple-widget-posts .img-ratio-wrapper.compat-object-fit img {
-  display: none;
-}
-.elementor-widget .the7-simple-widget-posts .img-ratio-wrapper.compat-object-fit {
-  background-size: cover;
-  background-position: center center;
-}
-.elementor-widget.preserve-img-ratio-y .the7-simple-widget-posts .img-ratio-wrapper.compat-object-fit {
-  background-size: contain;
-  background-repeat: no-repeat;
 }
 .paginator a.button-load-more {
   width: auto;

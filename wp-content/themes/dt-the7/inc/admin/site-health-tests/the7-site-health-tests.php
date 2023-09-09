@@ -42,7 +42,7 @@ add_filter( 'site_status_tests', 'the7_add_site_health_tests' );
  * @since 7.6.1
  */
 function the7_site_health_server_availability_test() {
-	wp_verify_nonce( 'health-check-site-status' );
+	check_ajax_referer( 'health-check-site-status' );
 
 	if ( ! current_user_can( 'install_plugins' ) ) {
 		wp_send_json_error();
@@ -147,7 +147,7 @@ function the7_site_health_orphaned_terms() {
 				'color' => 'blue',
 			],
 			'description' => '<p>' . __( 'You may want to delete terms from disabled taxonomies', 'the7mk2' ) . ': </p>' . $orphaned_terms_list_html,
-			'actions'     => $actions,
+//			'actions'     => $actions,
 		];
 	}
 

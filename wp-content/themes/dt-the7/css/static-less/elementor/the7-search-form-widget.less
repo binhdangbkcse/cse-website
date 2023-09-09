@@ -92,6 +92,7 @@
 
     .elementor-widget-the7-search-form-widget .the7-search-form__submit svg {
       fill: var(--e-search-form-submit-text-color, #fff);
+      color: var(--e-search-form-submit-text-color, #fff);
       width: var(--e-search-form-submit-icon-size, 16px);
       height: var(--e-search-form-submit-icon-size, 16px);
     }
@@ -112,12 +113,13 @@
     background-color: var(--the7-accent-color);
     color: var(--e-search-form-submit-text-color, #fff);
     & svg {
-      transition: fill 0.3s;
+      transition: all 0.3s;
     }
     &:hover {
       color: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
       & svg {
          fill: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
+         color: var(--e-search-form-submit-text-hover-color, var(--the7-accent-color));
       }
     }
   }
@@ -142,9 +144,10 @@
     transition: all 0.3s;
     & svg {
       fill: var(--clear-color, var(--the7-base-color));
+      color: var(--clear-color, var(--the7-base-color));
       width: 1em;
       height: auto;
-      transition: fill 0.3s;
+      transition: all 0.3s;
     }
     .show-clear & {
       display: inline-flex;

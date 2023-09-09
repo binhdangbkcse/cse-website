@@ -23,7 +23,7 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 	}
 
 	protected function the7_title() {
-		return __( 'Additional Information', 'the7mk2' );
+		return esc_html__( 'Additional Information', 'the7mk2' );
 	}
 
 	protected function the7_icon() {
@@ -44,7 +44,7 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 
 	protected function register_controls() {
 		$this->start_controls_section( 'section_product_attribute_title_style', [
-			'label' => __( 'Attribute title', 'the7mk2' ),
+			'label' => esc_html__( 'Attribute title', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
@@ -52,7 +52,7 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'title_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -72,14 +72,14 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section( 'section_product_attribute_value_style', [
-			'label' => __( 'Attribute value', 'the7mk2' ),
+			'label' => esc_html__( 'Attribute value', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
 		$this->add_control(
 			'attribute_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'   => '',
 				'selectors' => [
@@ -99,15 +99,15 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_basic_responsive_control(
 			'align_items',
 			[
-				'label'                => __( 'Alignment', 'the7mk2' ),
+				'label'                => esc_html__( 'Alignment', 'the7mk2' ),
 				'type'                 => Controls_Manager::CHOOSE,
 				'options'              => [
 					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
+						'title' => esc_html__( 'Left', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-left',
 					],
 					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
+						'title' => esc_html__( 'Right', 'the7mk2' ),
 						'icon'  => 'eicon-text-align-right',
 					],
 				],
@@ -122,7 +122,7 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 			'attribute_value_link_heading',
 			[
 				'type'      	=> \Elementor\Controls_Manager::RAW_HTML,
-				'label'     	=> __( 'Link', 'the7mk2' ),
+				'label'     	=> esc_html__( 'Link', 'the7mk2' ),
 			]
 		);
 
@@ -130,14 +130,14 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tab( 'normal_tabs_style',
 			[
-				'label' => __( 'Normal', 'the7mk2' ),
+				'label' => esc_html__( 'Normal', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'tab_text_color',
 			[
-				'label' => __( 'Color', 'the7mk2' ),
+				'label' => esc_html__( 'Color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .woocommerce-product-attributes .woocommerce-product-attributes-item__value a' => 'color: {{VALUE}}',
@@ -148,11 +148,11 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'tab_text_decoration',
 			[
-				'label' => __( 'Decoration', 'the7mk2' ),
+				'label' => esc_html__( 'Decoration', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '',
 				'options' => [
-					'' => __( 'Default', 'the7mk2' ),
+					'' => esc_html__( 'Default', 'the7mk2' ),
 					'underline' => _x( 'Underline', 'Typography Control', 'the7mk2' ),
 					'overline' => _x( 'Overline', 'Typography Control', 'the7mk2' ),
 					'line-through' => _x( 'Line Through', 'Typography Control', 'the7mk2' ),
@@ -168,14 +168,14 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 
 		$this->start_controls_tab( 'active_tabs_style',
 			[
-				'label' => __( 'Hover', 'the7mk2' ),
+				'label' => esc_html__( 'Hover', 'the7mk2' ),
 			]
 		);
 
 		$this->add_control(
 			'active_tab_text_color',
 			[
-				'label' => __( 'Color', 'the7mk2' ),
+				'label' => esc_html__( 'Color', 'the7mk2' ),
 				'type' => Controls_Manager::COLOR,
 				'selectors' => [
 					'{{WRAPPER}} .woocommerce-product-attributes .woocommerce-product-attributes-item__value a:hover' => 'color: {{VALUE}}',
@@ -186,11 +186,11 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'active_tab_text_decoration',
 			[
-				'label' => __( 'Decoration', 'the7mk2' ),
+				'label' => esc_html__( 'Decoration', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'default' => '',
 				'options' => [
-					'' => __( 'Default', 'the7mk2' ),
+					'' => esc_html__( 'Default', 'the7mk2' ),
 					'underline' => _x( 'Underline', 'Typography Control', 'the7mk2' ),
 					'overline' => _x( 'Overline', 'Typography Control', 'the7mk2' ),
 					'line-through' => _x( 'Line Through', 'Typography Control', 'the7mk2' ),
@@ -209,14 +209,14 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->end_controls_section();
 
 		$this->start_controls_section( 'section_product_attribute_list_style', [
-			'label' => __( 'List', 'the7mk2' ),
+			'label' => esc_html__( 'List', 'the7mk2' ),
 			'tab'   => Controls_Manager::TAB_STYLE,
 		] );
 
 		$this->add_basic_responsive_control(
 			'space_between',
 			[
-				'label' => __( 'Space Between', 'the7mk2' ),
+				'label' => esc_html__( 'Space Between', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 10,
@@ -240,10 +240,10 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider',
 			[
-				'label' => __( 'Dividers', 'the7mk2' ),
+				'label' => esc_html__( 'Dividers', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_off' => __( 'Off', 'the7mk2' ),
-				'label_on' => __( 'On', 'the7mk2' ),
+				'label_off' => esc_html__( 'Off', 'the7mk2' ),
+				'label_on' => esc_html__( 'On', 'the7mk2' ),
 				'default' => 'yes',
 				'separator' => 'before',
 				'prefix_class' => 'wc-product-info-',
@@ -253,10 +253,10 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'top_divider',
 			[
-				'label' => __( 'Top Divider', 'the7mk2' ),
+				'label' => esc_html__( 'Top Divider', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_off' => __( 'Off', 'the7mk2' ),
-				'label_on' => __( 'On', 'the7mk2' ),
+				'label_off' => esc_html__( 'Off', 'the7mk2' ),
+				'label_on' => esc_html__( 'On', 'the7mk2' ),
 				'default' => 'no',
 				'prefix_class' => 'wc-product-info-top-border-',
 				'condition' => [
@@ -268,10 +268,10 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'bottm_divider',
 			[
-				'label' => __( 'Bottom Divider', 'the7mk2' ),
+				'label' => esc_html__( 'Bottom Divider', 'the7mk2' ),
 				'type' => Controls_Manager::SWITCHER,
-				'label_off' => __( 'Off', 'the7mk2' ),
-				'label_on' => __( 'On', 'the7mk2' ),
+				'label_off' => esc_html__( 'Off', 'the7mk2' ),
+				'label_on' => esc_html__( 'On', 'the7mk2' ),
 				'default' => 'no',
 				'prefix_class' => 'wc-product-info-bottom-border-',
 				'condition' => [
@@ -283,13 +283,13 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_style',
 			[
-				'label' => __( 'Style', 'the7mk2' ),
+				'label' => esc_html__( 'Style', 'the7mk2' ),
 				'type' => Controls_Manager::SELECT,
 				'options' => [
-					'solid' => __( 'Solid', 'the7mk2' ),
-					'double' => __( 'Double', 'the7mk2' ),
-					'dotted' => __( 'Dotted', 'the7mk2' ),
-					'dashed' => __( 'Dashed', 'the7mk2' ),
+					'solid' => esc_html__( 'Solid', 'the7mk2' ),
+					'double' => esc_html__( 'Double', 'the7mk2' ),
+					'dotted' => esc_html__( 'Dotted', 'the7mk2' ),
+					'dashed' => esc_html__( 'Dashed', 'the7mk2' ),
 				],
 				'default' => 'solid',
 				'condition' => [
@@ -306,7 +306,7 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_weight',
 			[
-				'label' => __( 'Weight', 'the7mk2' ),
+				'label' => esc_html__( 'Weight', 'the7mk2' ),
 				'type' => Controls_Manager::SLIDER,
 				'default' => [
 					'size' => 1,
@@ -331,7 +331,7 @@ class Product_Additional_Information extends The7_Elementor_Widget_Base {
 		$this->add_control(
 			'divider_color',
 			[
-				'label'     => __( 'Color', 'the7mk2' ),
+				'label'     => esc_html__( 'Color', 'the7mk2' ),
 				'type'      => Controls_Manager::COLOR,
 				'default'	=> '',
 				'condition' => [

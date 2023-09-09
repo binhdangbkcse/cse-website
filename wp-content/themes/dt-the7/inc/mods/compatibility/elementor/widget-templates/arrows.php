@@ -7,7 +7,6 @@ namespace The7\Mods\Compatibility\Elementor\Widget_Templates;
 
 use Elementor\Controls_Manager;
 use Elementor\Icons_Manager;
-use The7\Mods\Compatibility\Elementor\The7_Elementor_Less_Vars_Decorator_Interface;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -23,27 +22,27 @@ class Arrows extends Abstract_Template {
 		$this->widget->start_controls_section(
 			'arrows_section',
 			[
-				'label' => __( 'Arrows', 'the7mk2' ),
+				'label' => esc_html__( 'Arrows', 'the7mk2' ),
 				'tab'   => Controls_Manager::TAB_CONTENT,
 			]
 		);
 
 		$arrow_options            = [
-			'never'  => __( 'Never', 'the7mk2' ),
-			'always' => __( 'Always', 'the7mk2' ),
-			'hover'  => __( 'On Hover', 'the7mk2' ),
+			'never'  => esc_html__( 'Never', 'the7mk2' ),
+			'always' => esc_html__( 'Always', 'the7mk2' ),
+			'hover'  => esc_html__( 'On Hover', 'the7mk2' ),
 		];
 		$arrow_options_on_devices = [
-			'' => __( 'Default', 'the7mk2' ),
+			'' => esc_html__( 'Default', 'the7mk2' ),
 		] + $arrow_options;
 
 		$this->widget->add_basic_responsive_control(
 			'arrows',
 			[
-				'label'       => __( 'Show Arrows', 'the7mk2' ),
-				'type'        => Controls_Manager::SELECT,
-				'options'     => $arrow_options,
-				'device_args' => [
+				'label'                => esc_html__( 'Show Arrows', 'the7mk2' ),
+				'type'                 => Controls_Manager::SELECT,
+				'options'              => $arrow_options,
+				'device_args'          => [
 					'tablet' => [
 						'default' => '',
 						'options' => $arrow_options_on_devices,
@@ -53,7 +52,15 @@ class Arrows extends Abstract_Template {
 						'options' => $arrow_options_on_devices,
 					],
 				],
-				'default'     => 'always',
+				'default'              => 'always',
+				'selectors'            => [
+					'{{WRAPPER}}' => '{{VALUE}}',
+				],
+				'selectors_dictionary' => [
+					'never'  => '--arrow-display: none;',
+					'always' => '--arrow-display: inline-flex;--arrow-opacity:1;',
+					'hover'  => '--arrow-display: inline-flex;--arrow-opacity:0;',
+				],
 			]
 		);
 
@@ -62,13 +69,13 @@ class Arrows extends Abstract_Template {
 			'image'    => 'Image',
 		];
 		$arrow_position_options_on_devices = [
-			'' => __( 'Default', 'the7mk2' ),
+			'' => esc_html__( 'Default', 'the7mk2' ),
 		] + $arrow_position_options;
 
 		$this->widget->add_basic_responsive_control(
 			'arrows_position',
 			[
-				'label'                => __( 'Vertically aligned to', 'the7mk2' ),
+				'label'                => esc_html__( 'Vertically aligned to', 'the7mk2' ),
 				'type'                 => Controls_Manager::SELECT,
 				'default'              => 'box_area',
 				'options'              => $arrow_position_options,
@@ -106,6 +113,7 @@ class Arrows extends Abstract_Template {
 				'selectors'            => [
 					'{{WRAPPER}} .owl-carousel' => '{{VALUE}}',
 				],
+				'render_type'          => 'template',
 				'prefix_class'         => 'arrows%s-relative-to-',
 			]
 		);
@@ -120,7 +128,7 @@ class Arrows extends Abstract_Template {
 		$this->widget->start_controls_section(
 			'arrows_style',
 			[
-				'label'      => __( 'Arrows', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrows', 'the7mk2' ),
 				'tab'        => Controls_Manager::TAB_STYLE,
 				'conditions' => [
 					'relation' => 'or',
@@ -148,7 +156,7 @@ class Arrows extends Abstract_Template {
 		$this->widget->add_control(
 			'arrows_heading',
 			[
-				'label'     => __( 'Arrow Icon', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrow Icon', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
@@ -157,41 +165,35 @@ class Arrows extends Abstract_Template {
 		$this->widget->add_control(
 			'next_icon',
 			[
-				'label'       => __( 'Next Arrow', 'the7mk2' ),
-				'type'        => Controls_Manager::ICONS,
-				'default'     => [
+				'label'   => esc_html__( 'Next Arrow', 'the7mk2' ),
+				'type'    => Controls_Manager::ICONS,
+				'default' => [
 					'value'   => 'fas fa-chevron-right',
 					'library' => 'fa-solid',
 				],
-				'skin'        => 'inline',
-				'label_block' => false,
-				'classes'     => [ 'elementor-control-icons-svg-uploader-hidden' ],
 			]
 		);
 
 		$this->widget->add_control(
 			'prev_icon',
 			[
-				'label'       => __( 'Previous Arrow', 'the7mk2' ),
-				'type'        => Controls_Manager::ICONS,
-				'default'     => [
+				'label'   => esc_html__( 'Previous Arrow', 'the7mk2' ),
+				'type'    => Controls_Manager::ICONS,
+				'default' => [
 					'value'   => 'fas fa-chevron-left',
 					'library' => 'fa-solid',
 				],
-				'skin'        => 'inline',
-				'label_block' => false,
-				'classes'     => [ 'elementor-control-icons-svg-uploader-hidden' ],
 			]
 		);
 
-		$this->widget->add_basic_responsive_control(
+		$this->widget->add_responsive_control(
 			'arrow_icon_size',
 			[
-				'label'      => __( 'Arrow Icon Size', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow Icon Size', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
-					'size' => 16,
+					'size' => 24,
 				],
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -202,9 +204,7 @@ class Arrows extends Abstract_Template {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .owl-carousel'  => '--arrow-icon-size: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .owl-nav i'     => 'font-size: {{SIZE}}{{UNIT}}',
-					'{{WRAPPER}} .owl-nav a svg' => 'width: {{SIZE}}{{UNIT}}; height: {{SIZE}}{{UNIT}}',
+					'{{WRAPPER}}' => '--arrow-icon-size: {{SIZE}}{{UNIT}};',
 				],
 			]
 		);
@@ -212,20 +212,22 @@ class Arrows extends Abstract_Template {
 		$this->widget->add_control(
 			'arrows_background_heading',
 			[
-				'label'     => __( 'Arrow style', 'the7mk2' ),
+				'label'     => esc_html__( 'Arrow style', 'the7mk2' ),
 				'type'      => Controls_Manager::HEADING,
 				'separator' => 'before',
 			]
 		);
 
-		$this->widget->add_basic_responsive_control(
+		$arrow_selector = '{{WRAPPER}} .owl-nav a';
+
+		$this->widget->add_responsive_control(
 			'arrow_bg_width',
 			[
-				'label'      => __( 'Background Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Background Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
-					'size' => 30,
+					'size' => 40,
 				],
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -236,19 +238,19 @@ class Arrows extends Abstract_Template {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .owl-nav a' => 'width: {{SIZE}}{{UNIT}}',
+					$arrow_selector => 'width: max({{SIZE}}{{UNIT}}, var(--arrow-icon-size, 1em))',
 				],
 			]
 		);
 
-		$this->widget->add_basic_responsive_control(
+		$this->widget->add_responsive_control(
 			'arrow_bg_height',
 			[
-				'label'      => __( 'Background Height', 'the7mk2' ),
+				'label'      => esc_html__( 'Background Height', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
-					'size' => 30,
+					'size' => 40,
 				],
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -260,7 +262,7 @@ class Arrows extends Abstract_Template {
 				],
 				'selectors'  => [
 					'{{WRAPPER}} .owl-carousel' => '--arrow-bg-height: {{SIZE}}{{UNIT}};',
-					'{{WRAPPER}} .owl-nav a'    => 'height: {{SIZE}}{{UNIT}}',
+					$arrow_selector             => 'height: max({{SIZE}}{{UNIT}}, var(--arrow-icon-size, 1em))',
 				],
 			]
 		);
@@ -268,11 +270,11 @@ class Arrows extends Abstract_Template {
 		$this->widget->add_control(
 			'arrow_border_radius',
 			[
-				'label'      => __( 'Arrow Border Radius', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow Border Radius', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
-					'size' => 500,
+					'size' => 0,
 				],
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -283,7 +285,7 @@ class Arrows extends Abstract_Template {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .owl-nav a' => 'border-radius: {{SIZE}}{{UNIT}}',
+					$arrow_selector => 'border-radius: {{SIZE}}{{UNIT}}',
 				],
 			]
 		);
@@ -291,11 +293,11 @@ class Arrows extends Abstract_Template {
 		$this->widget->add_control(
 			'arrow_border_width',
 			[
-				'label'      => __( 'Arrow Border Width', 'the7mk2' ),
+				'label'      => esc_html__( 'Arrow Border Width', 'the7mk2' ),
 				'type'       => Controls_Manager::SLIDER,
 				'default'    => [
 					'unit' => 'px',
-					'size' => 2,
+					'size' => 0,
 				],
 				'size_units' => [ 'px' ],
 				'range'      => [
@@ -306,315 +308,224 @@ class Arrows extends Abstract_Template {
 					],
 				],
 				'selectors'  => [
-					'{{WRAPPER}} .owl-nav a' => 'border-width: {{SIZE}}{{UNIT}}; border-style: solid',
+					$arrow_selector => 'border-width: {{SIZE}}{{UNIT}}; border-style: solid',
 				],
 			]
 		);
 
 		$this->widget->start_controls_tabs( 'arrows_style_tabs' );
 
-		$this->widget->start_controls_tab(
-			'arrows_colors',
-			[
-				'label' => __( 'Normal', 'the7mk2' ),
-			]
-		);
-
-		$this->widget->add_control(
-			'arrow_icon_color',
-			[
-				'label'     => __( 'Icon Color', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}} .owl-nav a i, {{WRAPPER}} .owl-nav a i:before' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .owl-nav a svg' => 'fill: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->widget->add_control(
-			'arrow_border_color',
-			[
-				'label'     => __( 'Border Color', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}} .owl-nav a'       => 'border-color: {{VALUE}};',
-					'{{WRAPPER}} .owl-nav a:hover' => 'border-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->widget->add_control(
-			'arrow_bg_color',
-			[
-				'label'     => __( 'Background Color', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}} .owl-nav a'       => 'background: {{VALUE}};',
-					'{{WRAPPER}} .owl-nav a:hover' => 'background: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->widget->end_controls_tab();
-
-		$this->widget->start_controls_tab(
-			'arrows_hover_colors',
-			[
-				'label' => __( 'Hover', 'the7mk2' ),
-			]
-		);
-
-		$this->widget->add_control(
-			'arrow_icon_color_hover',
-			[
-				'label'     => __( 'Icon Color Hover', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					'{{WRAPPER}} .owl-nav a:hover i' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .owl-nav a i:before { transition: color 0.3s; } {{WRAPPER}} .owl-nav a svg { transition: fill 0.3s; } {{WRAPPER}} .owl-nav a:hover i:before' => 'color: {{VALUE}};',
-					'{{WRAPPER}} .owl-nav a:hover svg' => 'fill: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->widget->add_control(
-			'arrow_border_color_hover',
-			[
-				'label'     => __( 'Border Color Hover', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					'
-					{{WRAPPER}} .owl-nav a { transition: all 0.3s; }
-					{{WRAPPER}} .owl-nav a:hover' => 'border-color: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->widget->add_control(
-			'arrow_bg_color_hover',
-			[
-				'label'     => __( 'Background Hover Color', 'the7mk2' ),
-				'type'      => Controls_Manager::COLOR,
-				'alpha'     => true,
-				'default'   => '',
-				'selectors' => [
-					'
-					{{WRAPPER}} .owl-nav a { transition: all 0.3s; }
-					{{WRAPPER}} .owl-nav a:hover' => 'background: {{VALUE}};',
-				],
-			]
-		);
-
-		$this->widget->end_controls_tab();
+		$this->add_arrow_style_states_controls( 'normal_', esc_html__( 'Normal', 'the7mk2' ) );
+		$this->add_arrow_style_states_controls( 'hover_', esc_html__( 'Hover', 'the7mk2' ) );
 
 		$this->widget->end_controls_tabs();
 
-		$this->widget->add_control(
-			'left_arrow_position_heading',
-			[
-				'label'     => __( 'Left Arrow Position', 'the7mk2' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'l_arrow_v_position',
-			[
-				'label'       => __( 'Vertical Position', 'the7mk2' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options'     => [
-					'top'    => [
-						'title' => __( 'Top', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-top',
-					],
-					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-middle',
-					],
-					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-bottom',
-					],
-				],
-				'default'     => 'center',
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'l_arrow_h_position',
-			[
-				'label'       => __( 'Horizontal Position', 'the7mk2' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options'     => [
-					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-center',
-					],
-					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-right',
-					],
-				],
-				'default'     => 'left',
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'l_arrow_v_offset',
-			[
-				'label'      => __( 'Vertical Offset', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => 0,
-				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => -1000,
-						'max'  => 1000,
-						'step' => 1,
-					],
-				],
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'l_arrow_h_offset',
-			[
-				'label'      => __( 'Horizontal Offset', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => -15,
-				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => -1000,
-						'max'  => 1000,
-						'step' => 1,
-					],
-				],
-			]
-		);
-
-		$this->widget->add_control(
-			'right_arrow_position_heading',
-			[
-				'label'     => __( 'Right Arrow Position', 'the7mk2' ),
-				'type'      => Controls_Manager::HEADING,
-				'separator' => 'before',
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'r_arrow_v_position',
-			[
-				'label'       => __( 'Vertical Position', 'the7mk2' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options'     => [
-					'top'    => [
-						'title' => __( 'Top', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-top',
-					],
-					'center' => [
-						'title' => __( 'Middle', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-middle',
-					],
-					'bottom' => [
-						'title' => __( 'Bottom', 'the7mk2' ),
-						'icon'  => 'eicon-v-align-bottom',
-					],
-				],
-				'default'     => 'center',
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'r_arrow_h_position',
-			[
-				'label'       => __( 'Horizontal Position', 'the7mk2' ),
-				'type'        => Controls_Manager::CHOOSE,
-				'label_block' => false,
-				'options'     => [
-					'left'   => [
-						'title' => __( 'Left', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-left',
-					],
-					'center' => [
-						'title' => __( 'Center', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-center',
-					],
-					'right'  => [
-						'title' => __( 'Right', 'the7mk2' ),
-						'icon'  => 'eicon-h-align-right',
-					],
-				],
-				'default'     => 'right',
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'r_arrow_v_offset',
-			[
-				'label'      => __( 'Vertical Offset', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => 0,
-				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => -1000,
-						'max'  => 1000,
-						'step' => 1,
-					],
-				],
-			]
-		);
-
-		$this->widget->add_basic_responsive_control(
-			'r_arrow_h_offset',
-			[
-				'label'      => __( 'Horizontal Offset', 'the7mk2' ),
-				'type'       => Controls_Manager::SLIDER,
-				'default'    => [
-					'unit' => 'px',
-					'size' => -15,
-				],
-				'size_units' => [ 'px' ],
-				'range'      => [
-					'px' => [
-						'min'  => -1000,
-						'max'  => 1000,
-						'step' => 1,
-					],
-				],
-			]
-		);
+		$this->add_arrow_position_styles( 'prev_', esc_html__( 'Prev Arrow Position', 'the7mk2' ) );
+		$this->add_arrow_position_styles( 'next_', esc_html__( 'Next Arrow Position', 'the7mk2' ) );
 
 		$this->widget->end_controls_section();
+	}
+
+	/**
+	 * @param string $prefix_name Prefix.
+	 * @param string $box_name    Box.
+	 *
+	 * @return void
+	 */
+	protected function add_arrow_style_states_controls( $prefix_name, $box_name ) {
+		$is_hover = '';
+		if ( strpos( $prefix_name, 'hover_' ) === 0 ) {
+			$is_hover = ':hover';
+		}
+
+		$selector = '{{WRAPPER}} .owl-nav a' . $is_hover;
+
+		$this->widget->start_controls_tab(
+			$prefix_name . 'arrows_colors',
+			[
+				'label' => $box_name,
+			]
+		);
+
+		$this->widget->add_control(
+			$prefix_name . 'arrow_icon_color',
+			[
+				'label'     => esc_html__( 'Icon Color', 'the7mk2' ),
+				'type'      => Controls_Manager::COLOR,
+				'alpha'     => true,
+				'default'   => '',
+				'selectors' => [
+					$selector . '> i'   => 'color: {{VALUE}};',
+					$selector . '> svg' => 'fill: {{VALUE}};color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->widget->add_control(
+			$prefix_name . 'arrow_border_color',
+			[
+				'label'     => esc_html__( 'Border Color', 'the7mk2' ),
+				'type'      => Controls_Manager::COLOR,
+				'alpha'     => true,
+				'default'   => '',
+				'selectors' => [
+					$selector => 'border-color: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->widget->add_control(
+			$prefix_name . 'arrow_bg_color',
+			[
+				'label'     => esc_html__( 'Background Color', 'the7mk2' ),
+				'type'      => Controls_Manager::COLOR,
+				'alpha'     => true,
+				'default'   => '',
+				'selectors' => [
+					$selector => 'background: {{VALUE}};',
+				],
+			]
+		);
+
+		$this->widget->end_controls_tab();
+	}
+
+	/**
+	 * @param string $prefix     Prefix.
+	 * @param string $heading_name Heading name.
+	 *
+	 * @return void
+	 */
+	protected function add_arrow_position_styles( $prefix, $heading_name ) {
+		$button_class  = '';
+		$default_h_pos = 'left';
+		if ( $prefix === 'next_' ) {
+			$button_class  = '.owl-next';
+			$default_h_pos = 'right';
+		} elseif ( $prefix === 'prev_' ) {
+			$button_class = '.owl-prev';
+		}
+
+		$selector = '{{WRAPPER}} .owl-nav a' . $button_class;
+
+		$this->widget->add_control(
+			$prefix . 'arrow_position_heading',
+			[
+				'label'     => $heading_name,
+				'type'      => Controls_Manager::HEADING,
+				'separator' => 'before',
+			]
+		);
+
+		$this->widget->add_responsive_control(
+			$prefix . 'arrow_v_position',
+			[
+				'label'                => esc_html__( 'Vertical Position', 'the7mk2' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'label_block'          => false,
+				'options'              => [
+					'top'    => [
+						'title' => esc_html__( 'Top', 'the7mk2' ),
+						'icon'  => 'eicon-v-align-top',
+					],
+					'center' => [
+						'title' => esc_html__( 'Middle', 'the7mk2' ),
+						'icon'  => 'eicon-v-align-middle',
+					],
+					'bottom' => [
+						'title' => esc_html__( 'Bottom', 'the7mk2' ),
+						'icon'  => 'eicon-v-align-bottom',
+					],
+				],
+				'default'              => 'center',
+				'selectors_dictionary' => [
+					'top'    => 'top: calc(var(--arrow-v-offset) + var(--offset-v-t-img)); --arrow-translate-y:0;',
+					'center' => 'top: var(--offset-v-m-img); --arrow-translate-y:calc(-50% + var(--arrow-v-offset));',
+					'bottom' => 'top: calc(var(--top-b-img) + var(--arrow-v-offset) + var(--offset-v-b-img)); --arrow-translate-y:0;',
+				],
+				'selectors'            => [
+					$selector => '{{VALUE}};',
+				],
+			]
+		);
+
+		$this->widget->add_responsive_control(
+			$prefix . 'arrow_h_position',
+			[
+				'label'                => esc_html__( 'Horizontal Position', 'the7mk2' ),
+				'type'                 => Controls_Manager::CHOOSE,
+				'label_block'          => false,
+				'options'              => [
+					'left'   => [
+						'title' => esc_html__( 'Left', 'the7mk2' ),
+						'icon'  => 'eicon-h-align-left',
+					],
+					'center' => [
+						'title' => esc_html__( 'Center', 'the7mk2' ),
+						'icon'  => 'eicon-h-align-center',
+					],
+					'right'  => [
+						'title' => esc_html__( 'Right', 'the7mk2' ),
+						'icon'  => 'eicon-h-align-right',
+					],
+				],
+				'default'              => $default_h_pos,
+				'selectors_dictionary' => [
+					'left'   => 'left: var(--arrow-h-offset); --arrow-translate-x:0;',
+					'center' => 'left: calc(50% + var(--arrow-h-offset)); --arrow-translate-x:-50%;',
+					'right'  => 'left: calc(100% - var(--arrow-h-offset)); --arrow-translate-x:-100%;',
+				],
+				'selectors'            => [
+					$selector => '{{VALUE}};',
+				],
+			]
+		);
+
+		$this->widget->add_responsive_control(
+			$prefix . 'arrow_v_offset',
+			[
+				'label'      => esc_html__( 'Vertical Offset', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
+					'unit' => 'px',
+					'size' => 0,
+				],
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min'  => - 1000,
+						'max'  => 1000,
+						'step' => 1,
+					],
+				],
+				'selectors'  => [
+					$selector => '--arrow-v-offset: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
+
+		$this->widget->add_responsive_control(
+			$prefix . 'arrow_h_offset',
+			[
+				'label'      => esc_html__( 'Horizontal Offset', 'the7mk2' ),
+				'type'       => Controls_Manager::SLIDER,
+				'default'    => [
+					'unit' => 'px',
+					'size' => 0,
+				],
+				'size_units' => [ 'px' ],
+				'range'      => [
+					'px' => [
+						'min'  => - 1000,
+						'max'  => 1000,
+						'step' => 1,
+					],
+				],
+				'selectors'  => [
+					$selector => '--arrow-h-offset: {{SIZE}}{{UNIT}};',
+				],
+			]
+		);
 	}
 
 	/**
@@ -652,73 +563,11 @@ class Arrows extends Abstract_Template {
 			),
 		];
 
-		if ( $settings['arrow_bg_color'] === $settings['arrow_bg_color_hover'] ) {
+		if ( $settings['normal_arrow_bg_color'] === $settings['hover_arrow_bg_color'] ) {
 			$class[] = 'disable-arrows-hover-bg';
 		}
 
 		$this->widget->add_render_attribute( $element, 'class', $class );
-
-		$this->widget->add_render_attribute(
-			$element,
-			[
-				'data-arrows'        => $settings['arrows'] !== 'never' ? 'true' : 'false',
-				'data-arrows_tablet' => $settings['arrows_tablet'] !== 'never' ? 'true' : 'false',
-				'data-arrows_mobile' => $settings['arrows_mobile'] !== 'never' ? 'true' : 'false',
-			]
-		);
-	}
-
-	/**
-	 * @param The7_Elementor_Less_Vars_Decorator_Interface $less_vars Less vars manager.
-	 *
-	 * @return void
-	 */
-	public function add_less_vars( $less_vars ) {
-		$settings = $this->widget->get_settings_for_display();
-
-		$less_vars->add_pixel_number( 'arrow-bg-width', $settings['arrow_bg_width'] );
-
-		if ( $settings['arrows'] !== 'never' || $settings['arrows_tablet'] !== 'never' || $settings['arrows_mobile'] !== 'never' ) {
-			foreach ( $this->widget->get_supported_devices() as $device => $dep ) {
-				$less_vars->start_device_section( $device );
-
-				$less_vars->add_keyword(
-					'arrow-right-v-position',
-					$this->widget->get_responsive_setting( 'r_arrow_v_position' ) ?: 'center'
-				);
-				$less_vars->add_keyword(
-					'arrow-right-h-position',
-					$this->widget->get_responsive_setting( 'r_arrow_h_position' ) ?: 'right'
-				);
-				$less_vars->add_unitized_number(
-					'r-arrow-v-position',
-					$this->widget->get_responsive_setting( 'r_arrow_v_offset' )
-				);
-				$less_vars->add_unitized_number(
-					'r-arrow-h-position',
-					$this->widget->get_responsive_setting( 'r_arrow_h_offset' )
-				);
-
-				$less_vars->add_keyword(
-					'arrow-left-v-position',
-					$this->widget->get_responsive_setting( 'l_arrow_v_position' ) ?: 'center'
-				);
-				$less_vars->add_keyword(
-					'arrow-left-h-position',
-					$this->widget->get_responsive_setting( 'l_arrow_h_position' ) ?: 'left'
-				);
-				$less_vars->add_unitized_number(
-					'l-arrow-v-position',
-					$this->widget->get_responsive_setting( 'l_arrow_v_offset' )
-				);
-				$less_vars->add_unitized_number(
-					'l-arrow-h-position',
-					$this->widget->get_responsive_setting( 'l_arrow_h_offset' )
-				);
-
-				$less_vars->close_device_section();
-			}
-		}
 	}
 
 	/**

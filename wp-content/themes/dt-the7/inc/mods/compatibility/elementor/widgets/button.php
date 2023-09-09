@@ -48,6 +48,10 @@ class Button extends The7_Elementor_Widget_Base {
 		return 'eicon-button';
 	}
 
+	protected function the7_keywords() {
+		return [ 'button' ];
+	}
+
 	/**
 	 * Register button widget controls.
 	 */
@@ -122,7 +126,7 @@ class Button extends The7_Elementor_Widget_Base {
 				],
 				'default'     => '',
 				'title'       => esc_html__( 'Add your custom id WITHOUT the Pound key. e.g: my-id', 'the7mk2' ),
-				'description' => esc_html__( 'Please make sure the ID is unique and not used elsewhere on the page this form is displayed. This field allows <code>A-z 0-9</code> & underscore chars without spaces.', 'the7mk2' ),
+				'description' => esc_html__( 'Please make sure the ID is unique and not used elsewhere on the page this form is displayed. This field allows A-z 0-9 & underscore chars without spaces.', 'the7mk2' ),
 				'separator'   => 'before',
 			]
 		);

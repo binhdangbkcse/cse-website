@@ -152,7 +152,17 @@ class The7_Demo_Content_Import_Manager {
 		$this->rename_existing_menus();
 
 		$this->tracker->track_imported_items();
+
+		$wc_importer = new The7_WC_Importer( $this->importer );
+		$wc_importer->import_wc_attributes( $this->get_site_meta( 'wc_attributes' ) );
+		$wc_importer->add_hooks();
+
 		$this->import_file( $this->xml_file_to_import );
+
+		$wc_importer->remove_hooks();
+		$wc_importer->import_wc_settings( $this->get_site_meta( 'woocommerce' ) );
+		$wc_importer->regenerate_wc_cache();
+
 		$this->importer->cache_processed_data();
 	}
 
@@ -217,6 +227,9 @@ class The7_Demo_Content_Import_Manager {
 
 			update_option( 'widget_text', json_decode( $widgets_str, true ) );
 		}
+
+		$wc_importer = new The7_WC_Importer( $this->importer );
+		$wc_importer->fix_product_cat_thumbnail_id();
 
 		return $status;
 	}
@@ -297,7 +310,6 @@ class The7_Demo_Content_Import_Manager {
 		}
 
 		add_filter( 'wp_import_post_meta', [ $this, 'fix_menus_for_microsite' ] );
-		add_filter( 'wp_import_post_meta', [ $this, 'remove_wc_product_reviews_meta' ] );
 		add_filter( 'wxr_menu_item_args', [ $this, 'menu_item_args_filter' ] );
 
 		$this->importer->log_reset();
@@ -405,29 +417,6 @@ class The7_Demo_Content_Import_Manager {
 		foreach ( $post_meta as $meta_index => $meta ) {
 			if ( array_key_exists( $meta['value'], $processed_terms ) && in_array( $meta['key'], $keys_to_migrate, true ) ) {
 				$post_meta[ $meta_index ]['value'] = $processed_terms[ $meta['value'] ];
-			}
-		}
-
-		return $post_meta;
-	}
-
-	/**
-	 * We should take care of product reviews meta since we do not import any comments.
-	 *
-	 * @param array $post_meta Imported post meta.
-	 *
-	 * @return array
-	 */
-	public function remove_wc_product_reviews_meta( $post_meta ) {
-		$reviews_meta = [
-			'_wc_average_rating',
-			'_wc_rating_count',
-			'_wc_review_count',
-		];
-
-		foreach ( $post_meta as $meta_index => $meta ) {
-			if ( in_array( $meta['key'], $reviews_meta, true ) ) {
-				unset( $post_meta[ $meta_index ] );
 			}
 		}
 
@@ -627,136 +616,6 @@ class The7_Demo_Content_Import_Manager {
 				update_option( $option_id, $settings_to_import[ $option_id ] );
 			}
 		}
-	}
-
-	public function import_woocommerce_settings() {
-		if ( ! the7_is_woocommerce_enabled() ) {
-			return;
-		}
-
-		$wc_settings = $this->get_site_meta( 'woocommerce' );
-
-		if ( ! $wc_settings ) {
-			return;
-		}
-
-		if ( ! function_exists( 'WC' ) ) {
-			return;
-		}
-
-		$this->importer->log_add( 'WC settings importing...' );
-
-		$wc_settings = (array) $wc_settings;
-
-		$wc_page_settings                     = [
-			'woocommerce_shop_page_id',
-			'woocommerce_cart_page_id',
-			'woocommerce_checkout_page_id',
-			'woocommerce_myaccount_page_id',
-			'woocommerce_terms_page_id',
-		];
-
-		foreach ( $wc_page_settings as $id ) {
-			if ( isset( $wc_settings[ $id ] ) ) {
-				$val = $wc_settings[ $id ];
-				$imported_post_id = $this->importer->get_processed_post( $val );
-				if ( $imported_post_id ) {
-					$val = $imported_post_id;
-				}
-
-				update_option( $id, $val );
-			}
-		}
-
-		$wc_image_settings = [
-			'woocommerce_single_image_width',
-			'woocommerce_thumbnail_image_width',
-			'woocommerce_thumbnail_cropping',
-			'woocommerce_thumbnail_cropping_custom_width',
-			'woocommerce_thumbnail_cropping_custom_height',
-		];
-
-		foreach ( $wc_image_settings as $id ) {
-			if ( isset( $wc_settings[ $id ] ) ) {
-				update_option( $id, $wc_settings[ $id ] );
-			}
-		}
-
-		// Clear any unwanted data and flush rules.
-		update_option( 'woocommerce_queue_flush_rewrite_rules', 'yes' );
-		WC()->query->init_query_vars();
-		WC()->query->add_endpoints();
-
-		$this->importer->log_add( 'Done' );
-	}
-
-	/**
-	 * Import WooCommerce attributes.
-	 *
-	 * @since 9.6.1
-	 */
-	public function import_woocommerce_attributes() {
-		if ( ! the7_is_woocommerce_enabled() ) {
-			return;
-		}
-
-		$attributes = $this->get_site_meta( 'wc_attributes' );
-
-		if ( ! $attributes ) {
-			return;
-		}
-
-		$this->importer->log_add( 'WC attributes importing...' );
-
-		foreach ( $attributes as $attribute ) {
-			wc_create_attribute(
-				[
-					'name'         => $attribute['attribute_label'],
-					'slug'         => $attribute['attribute_name'],
-					'type'         => $attribute['attribute_type'],
-					'order_by'     => $attribute['attribute_orderby'],
-					'has_archives' => (bool) $attribute['attribute_public'],
-				]
-			);
-		}
-
-		the7_wc_flush_attributes_cache();
-
-		$this->importer->log_add( 'Done' );
-	}
-
-	/**
-	 * Recount WC terms and regenerate product lookup tables. Has to be launched after WC content import.
-	 */
-	public function do_woocommerce_post_import_actions() {
-		if ( ! the7_is_woocommerce_enabled() ) {
-			return;
-		}
-
-		if ( ! class_exists( 'WC_REST_System_Status_Tools_Controller' ) ) {
-			return;
-		}
-
-		$this->importer->log_add( 'WC post-import sequence...' );
-
-		$tools_controller = new \WC_REST_System_Status_Tools_Controller();
-		$tools            = $tools_controller->get_tools();
-		$actions          = [
-			'recount_terms',
-			'regenerate_product_lookup_tables',
-			'clear_transients',
-			'clear_template_cache',
-		];
-
-		foreach ( $actions as $action ) {
-			if ( ! array_key_exists( $action, $tools ) ) {
-				return;
-			}
-
-			$tools_controller->execute_tool( $action );
-		}
-
-		$this->importer->log_add( 'Done' );
 	}
 
 	/**

@@ -171,7 +171,19 @@
                 panel: panel,
                 model: model
             });
+
         });
+
+        elementor.hooks.addAction("panel/open_editor/widget",handlePanel);
+
+        function  handlePanel (panel, model, view) {
+            var widgetType = model.attributes.widgetType;
+            if (widgetType && widgetType.startsWith('the7')){
+                let $title =  panel.$el.find('#elementor-panel-header-title');
+                if ($title.children('img, i.the7-widget').length) return;
+                $title.append('<i class="the7-widget"></i>');
+            }
+        }
 
         elementor.on('preview:loaded', function () {
             elementor.addControlView('the7-query',

@@ -60,8 +60,8 @@ jQuery(function ($) {
                         $elementsThatTriggerDropdown.on("touchend", function(e) {
                             let touchEX = e.originalEvent.changedTouches[0].pageX;
                             let touchEY = e.originalEvent.changedTouches[0].pageY;
-
-                            if( origY === touchEY || origX === touchEX ){
+                            const dist = 20;
+                            if( Math.abs(origY- touchEY) < dist  ||  Math.abs( origX - touchEX) < dist){
                                 let $this = $(this);
 
                                 if (!parentsAreNotClickable && e.originalEvent && !e.originalEvent.composedPath().includes($this.children(".next-level-button").get(0))) {

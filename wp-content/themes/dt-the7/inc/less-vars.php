@@ -169,7 +169,7 @@ function presscore_action_add_less_vars( The7_Less_Vars_Manager_Interface $less_
 				'header-menu-decoration-other-hover-line-gradient',
 			),
 			'opacity'        => 'header-menu-decoration-other-hover-line-opacity',
-			'gradient_angle' => 'left',
+			'gradient_angle' => 'to left',
 		),
 		array(
 			'vars'      => array( 'menu-hover-decor-color', 'menu-hover-decor-color-2' ),
@@ -197,7 +197,7 @@ function presscore_action_add_less_vars( The7_Less_Vars_Manager_Interface $less_
 				'header-menu-decoration-other-active-line-gradient',
 			),
 			'opacity'        => 'header-menu-decoration-other-active-line-opacity',
-			'gradient_angle' => 'left',
+			'gradient_angle' => 'to left',
 		),
 		array(
 			'vars'           => array( 'menu-hover-color', 'menu-hover-color-2' ),
@@ -387,7 +387,7 @@ function presscore_action_add_less_vars( The7_Less_Vars_Manager_Interface $less_
 				'header-elements-button-1-icon-color-mono',
 				'header-elements-button-1-icon-color-gradient',
 			),
-			'gradient_angle' => 'left',
+			'gradient_angle' => 'to left',
 		),
 		array(
 			'vars'           => array( 'microwidget-button-hover-color', 'microwidget-button-hover-color-2' ),
@@ -396,7 +396,7 @@ function presscore_action_add_less_vars( The7_Less_Vars_Manager_Interface $less_
 				'header-elements-button-1-hover-icon-color-mono',
 				'header-elements-button-1-hover-icon-color-gradient',
 			),
-			'gradient_angle' => 'left',
+			'gradient_angle' => 'to left',
 		),
 		array(
 			'vars'      => array( 'microwidget-button-border-color', 'microwidget-button-border-color-2' ),
@@ -438,7 +438,7 @@ function presscore_action_add_less_vars( The7_Less_Vars_Manager_Interface $less_
 				'header-elements-button-2-icon-color-mono',
 				'header-elements-button-2-icon-color-gradient',
 			),
-			'gradient_angle' => 'left',
+			'gradient_angle' => 'to left',
 		),
 		array(
 			'vars'           => array( 'microwidget-button-2-hover-color', 'microwidget-button-2-hover-color-2' ),
@@ -447,7 +447,7 @@ function presscore_action_add_less_vars( The7_Less_Vars_Manager_Interface $less_
 				'header-elements-button-2-hover-icon-color-mono',
 				'header-elements-button-2-hover-icon-color-gradient',
 			),
-			'gradient_angle' => 'left',
+			'gradient_angle' => 'to left',
 		),
 		array(
 			'vars'      => array( 'microwidget-button-2-border-color', 'microwidget-button-2-border-color-2' ),
@@ -517,7 +517,7 @@ function presscore_action_add_less_vars( The7_Less_Vars_Manager_Interface $less_
 				'header-menu-decoration-underline-color',
 				'header-menu-decoration-underline-gradient',
 			),
-			'gradient_angle' => 'left',
+			'gradient_angle' => 'to left',
 		);
 
 		$less_vars->add_pixel_number(
