@@ -2280,8 +2280,8 @@ a.mini-contacts:hover {
   height: 2px;
   background-color: rgba(255,255,255,0.23);
   background: rgba(255,255,255,0.23);
-  background: -webkit-linear-gradient(left, rgba(255,255,255,0.23) 30%, rgba(0,0,0,0.23) 100%);
-  background: linear-gradient(left, rgba(255,255,255,0.23) 30%, rgba(0,0,0,0.23) 100%);
+  background: -webkit-linear-gradient(to left, rgba(255,255,255,0.23) 30%, rgba(0,0,0,0.23) 100%);
+  background: linear-gradient(to left, rgba(255,255,255,0.23) 30%, rgba(0,0,0,0.23) 100%);
 }
 .top-header .active-line-decoration > li.act > a .decoration-line {
   height: 2px;
@@ -2427,6 +2427,7 @@ li:not(.dt-mega-menu) .sub-nav {
 .sub-downwards .sub-nav.level-arrows-on li.has-children.act > a svg,
 .sub-downwards .sub-nav .next-level-button {
   fill: rgba(255,255,255,0.27);
+  color: rgba(255,255,255,0.27);
 }
 .sub-downwards .main-nav.level-arrows-on > li.has-children > a {
   max-width: calc(100% - 30px - 14px - 14px);
@@ -2903,11 +2904,7 @@ html:not(.touchevents) .dt-mobile-header::-webkit-scrollbar-track {
 #main-slideshow.fixed,
 #main-slideshow.fix,
 #main-slideshow.layer-fixed {
-  background:     ;
   background-color: rgba(133,134,140,0.08);
-}
-#main-slideshow.fixed {
-  min-height: 60px;
 }
 #main-slideshow.fixed > .royalSlider,
 #main-slideshow.fixed .ts-wrap {
@@ -3249,10 +3246,12 @@ a.rsswidget,
 .sidebar-content .custom-menu li.act > a svg,
 .sidebar-content:not(.solid-bg) .widget:not(.widget_icl_lang_sel_widget) .custom-menu li.act > a svg {
   fill: var(--the7-accent-color);
+  color: var(--the7-accent-color);
 }
 .footer .custom-menu a:hover svg,
 .footer .custom-menu li.act > a svg {
   fill: var(--the7-accent-color);
+  color: var(--the7-accent-color);
 }
 .widget .menu li,
 .widget_pages li,
@@ -3475,6 +3474,7 @@ a.rsswidget:hover {
 #page .widget .searchform .submit svg,
 #page .content .searchform .submit svg {
   fill: var(--the7-input-color);
+  color: var(--the7-input-color);
 }
 .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper {
   padding: 0;
@@ -3503,30 +3503,38 @@ a.rsswidget:hover {
 }
 .custom-menu a svg {
   fill: var(--the7-secondary-text-color);
+  color: var(--the7-secondary-text-color);
 }
 .sidebar-content .custom-menu a svg {
   fill: rgba(133,134,140,0.5);
+  color: rgba(133,134,140,0.5);
 }
 .footer .custom-menu a svg {
   fill: rgba(133,134,140,0.5);
+  color: rgba(133,134,140,0.5);
 }
 .custom-nav a svg {
   fill: #85868c;
+  color: #85868c;
 }
 .footer .custom-nav a svg {
   fill: #85868c;
+  color: #85868c;
 }
 .custom-menu a:hover svg,
 .custom-menu .act > a svg {
   fill: var(--the7-secondary-text-color);
+  color: var(--the7-secondary-text-color);
 }
 .sidebar-content .custom-menu a:hover svg,
 .sidebar-content .custom-menu .act > a svg {
   fill: rgba(20,139,169,0.999);
+  color: rgba(20,139,169,0.999);
 }
 .footer .custom-menu a:hover svg,
 .footer .custom-menu .act > a svg {
   fill: rgba(20,139,169,0.999);
+  color: rgba(20,139,169,0.999);
 }
 .sidebar .skill,
 .sidebar-content .skill {
@@ -4172,9 +4180,11 @@ article.product-category .woocom-list-content .entry-title a:hover .count {
 }
 .post-navigation .nav-links svg {
   fill: rgba(34,34,34,0.12);
+  color: rgba(34,34,34,0.12);
 }
 .post-navigation .nav-links a svg:hover {
   fill: rgba(34,34,34,0.23);
+  color: rgba(34,34,34,0.23);
 }
 #page .post-navigation .nav-links a .post-title:hover {
   color: var(--the7-accent-color);
@@ -6062,6 +6072,7 @@ select:not(.elementor-field),
   background-position: calc(100% - var(--the7-right-input-padding) - 5px) 50%, calc(100% - var(--the7-right-input-padding)) 50%, 100% 0;
   background-size: 5px 5px, 5px 5px, 2.5em 2.5em;
   background-repeat: no-repeat;
+  padding-right: calc(var(--the7-right-input-padding) + 15px);
 }
 .woocommerce div.elementor .the7-elementor-widget form.cart table.variations td.value select:not(.elementor-field) {
   background-image: linear-gradient(45deg,transparent 50%,var(--the7-input-color) 50%), linear-gradient(135deg,var(--the7-input-color) 50%,transparent 50%);
@@ -6083,6 +6094,7 @@ select:not(.elementor-field),
 }
 .owl-carousel .owl-nav svg {
   fill: var(--the7-accent-color);
+  color: var(--the7-accent-color);
 }
 .owl-carousel .owl-nav i,
 .owl-carousel .owl-nav i:before {
@@ -6090,6 +6102,7 @@ select:not(.elementor-field),
 }
 .owl-carousel .owl-nav a:hover svg {
   fill: var(--the7-accent-color);
+  color: var(--the7-accent-color);
 }
 .owl-carousel .owl-nav a:hover i {
   color: var(--the7-accent-color);
@@ -6136,6 +6149,7 @@ select:not(.elementor-field),
 }
 .dt-owl-item-icon svg {
   fill: var(--the7-accent-color);
+  color: var(--the7-accent-color);
 }
 .text-and-icon-carousel .owl-nav i,
 .testimonials-carousel .owl-nav i,
@@ -6192,6 +6206,7 @@ select:not(.elementor-field),
 }
 .filter svg {
   fill: var(--the7-h5-color);
+  color: var(--the7-h5-color);
 }
 .filter-categories a,
 .filter-extras > div {
@@ -6358,6 +6373,7 @@ select:not(.elementor-field),
 }
 #bottom-bar .menu-select svg {
   fill: #ffffff;
+  color: #ffffff;
 }
 #bottom-bar .mini-search,
 #bottom-bar .mini-contacts:before {
@@ -6383,6 +6399,7 @@ select:not(.elementor-field),
 }
 .testim-no-avatar svg {
   fill: var(--the7-divider-color);
+  color: var(--the7-divider-color);
 }
 .no-avatar,
 .no-avatar svg,
@@ -6618,7 +6635,8 @@ a.clear-form,
   color: var(--the7-secondary-text-color);
 }
 .gform_wrapper .gsection {
-  border-bottom-style:  !important;
+  border-bottom-style: solid !important;
+  border-bottom-width: var(--the7-bottom-input-border-width);
   border-bottom-color: var(--the7-divider-color);
 }
 .gform_wrapper .ginput_complex label,
